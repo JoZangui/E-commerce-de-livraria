@@ -1,0 +1,49 @@
+/* ------ Dissertare --------- */
+.search-button {
+    border: none;
+}
+.font-bold {
+    font-weight: bold;
+}
+.book-cover-size {
+    width: 196px;
+    height: 293px;
+}
+.home--image-container{
+    overflow: hidden;
+}
+.home--image-container img {
+    width: 196px;
+    height: 293px;
+    object-fit: fill;
+}
+.text-container-width {
+    width: 196px;
+    box-sizing: border-box;
+}
+.title-height {
+    height: 48px;
+    overflow: hidden;
+}
+.overflow {
+    overflow: hidden;
+}
+.detail--book-cover {
+    width: 234px;
+    height: 345px;
+}
+.detail--book-cover img {
+    width: 234px;
+    height: 345px;
+    object-fit: fill;
+}
+.delete--book-cover {
+    width: 234px;
+    height: 345px;
+    overflow: hidden;
+}
+.delete--book-cover img {
+    width: 234px;
+    height: 345px;
+    object-fit: fill;
+}
