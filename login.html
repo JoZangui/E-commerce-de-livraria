@@ -49,7 +49,7 @@
                 
                 <!-- buttons -->
                 <div class="container w-25 d-inline d-lg-flex justify-content-lg-end justify-content-sm-start px-0 mx-0">
-                    <a href="book_create_form.html" class="me-4" title="upload book">
+                    <a href="#" class="me-4" title="upload book">
                         <span class="iconify" data-icon="tabler:book-upload" style="color: #000000; font-size: 27px;"></span>
                     </a>
                     
@@ -62,42 +62,30 @@
     </nav>
 
     <!-- main content -->
-    <div class="container py-5">
-        <div class="row d-flex flex-column flex-lg-row  border py-3">
-            <!-- info -->
-            <div class="col col-lg-4 d-flex flex-column flex-md-row flex-lg-column justify-content-between justify-content-lg-center align-items-center">
-                <div class="alert alert-info border border-info border-2" style="width: 300px">
-                    <p>Escolha de preferência uma imagem com 300px de largura e 300px de altura</p>
+    <div class="container-fluid w-100 d-flex position-fixed px-0" style="height: 91%;">
+        <div class="col d-none d-lg-flex flex-column-reverse login-background-image">
+            <small class="pe-3 py-2 text-end">
+                <a class="font-bold text-dark" href="https://www.pexels.com/photo/man-reading-a-book-2861798/">Photo by Oladimeji Ajegbile</a>
+            </small>
+        </div>
+        <div class="col p-5">
+            <h1 class="text-center">Bem-vindo <br> ao <br> Dissertare</h1>
+            <form action="" method="post">
+                <div class="mb-3">
+                    <label for="InputTitle" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="InputTitle" placeholder="add your Username" maxlength="50" autofocus> 
                 </div>
-                <div class="alert alert-warning border border-warning border-2 mt-3" style="width: 300px;">
-                    <p>Por favor tenha em atenção os direitos autorais tanto do livro como da imagem de capa, qualquer problema do gênero fica por sua conta e risco</p>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="password">
                 </div>
-            </div>
-
-            <!-- form -->
-            <div class="col">
-                <form method="post">
-                    <div class="mb-3">
-                        <label for="BookFile" class="form-label">Upload a book file <span class="text-danger">*</span></label>
-                        <input class="form-control" type="file" id="BookFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="BookCoverFile" class="form-label">Upload a image to book <span class="text-danger">*</span></label>
-                        <input class="form-control" type="file" id="BookCoverFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="InputTitle" class="form-label">Title <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="InputTitle" placeholder="add the book title" maxlength="50" autofocus>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Description <span class="text-danger">*</span></label>
-                        <textarea name="" class="form-control not-resizable" id="exampleInputPassword1" cols="30" rows="10" placeholder="add the book description" maxlength="400"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <br>
+            <small>Ainda não tem uma conta, <a class="text-decoration-none" href="#">clique aqui para se cadastrar</a></small>
         </div>
     </div>
+    
 
     <!-- bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>

@@ -50,3 +50,9 @@
 .not-resizable {
     resize: none;
 }
+.login-background-image {
+    background-image: url("../images/generic_images/pexels-oladimeji-ajegbile-2861798.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

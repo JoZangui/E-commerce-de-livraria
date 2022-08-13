@@ -1,5 +1,0 @@
-alert icon - &#x26A0;
-exclametion signel - &excl;
-
-------------------------------
-d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center align-items-md-start text-center text-md-start
