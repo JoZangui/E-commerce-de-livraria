@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from .pdf_file_validator import pdf_format_validator
 
 
 def books_pdf_file_path(instance, filename):
@@ -20,7 +21,7 @@ def books_image_file_path(instance, filename):
 
 
 class Books(models.Model):
-    book_file = models.FileField(upload_to=books_pdf_file_path, verbose_name='livro')
+    book_file = models.FileField(upload_to=books_pdf_file_path, verbose_name='livro', validators=[pdf_format_validator])
     book_title = models.CharField(max_length=50, verbose_name='Título do livro')
     book_description = models.TextField(max_length=400, verbose_name='Descrição do livro')
     book_cover = models.ImageField(
