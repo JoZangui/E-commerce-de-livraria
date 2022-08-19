@@ -1,7 +1,9 @@
+import imp
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from .pdf_file_validator import pdf_format_validator
+from django.urls import reverse
 
 
 def books_pdf_file_path(instance, filename):
@@ -32,3 +34,10 @@ class Books(models.Model):
 
     def __str__(self) -> str:
         return self.book_title
+
+    def get_absolute_url(self):
+        """
+        retorna para a página especificada (página de detalhes dos livros)
+        quando um objecto books for creado
+        """
+        return reverse("book-detail", kwargs={"pk": self.pk})
