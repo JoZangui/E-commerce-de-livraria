@@ -18,14 +18,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <a class="navbar-brand font-bold" href="home.html">Dissertare</a>
+            <a class="navbar-brand font-bold" href="{% url 'books' %}">Dissertare</a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <!-- nav list elements -->
                 <ul class="navbar-nav mb-2 mb-lg-0 me-lg-5">
                     <li class="nav-item me-3">
-                        <a class="nav-link active" aria-current="page" href="home.html" title="Home">
+                        <a class="nav-link active" aria-current="page" href="{% url 'books' %}" title="Home">
                             <span class="iconify" data-icon="gg:home-alt" style="font-size: 25px;"></span>
                             <span class="font-bold d-lg-none">Home</span>
                         </a>
@@ -50,7 +50,7 @@
                 
                 <!-- buttons -->
                 <div class="container w-25 d-inline d-lg-flex justify-content-lg-end justify-content-sm-start px-0 mx-0">
-                    <a href="book_create_form.html" class="me-4 d-none" title="upload book">
+                    <a href="{% url 'upload-book' %}" class="me-4" title="upload book">
                         <span class="iconify" data-icon="tabler:book-upload" style="color: #000000; font-size: 27px;"></span>
                     </a>
                     

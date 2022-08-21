@@ -38,6 +38,6 @@ class Books(models.Model):
     def get_absolute_url(self):
         """
         retorna para a página especificada (página de detalhes dos livros)
-        quando um objecto books for creado
+        quando um objecto books for criado
         """
         return reverse("book-detail", kwargs={"pk": self.pk})
