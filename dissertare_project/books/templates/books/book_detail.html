@@ -25,7 +25,7 @@
             <!-- edit and delete button -->
             <div class="d-flex d-md-block justify-content-center">
                 <a href="{% url 'book-update' book.id %}" class="btn btn-sm btn-outline-primary me-3 me-md-2">Edit</a>
-                <a href="book_delete_confirm.html" class="btn btn-sm btn-outline-danger">Delete</a>
+                <a href="{% url 'book-delete' book.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
             </div>
 
             <!-- author name and pub date -->

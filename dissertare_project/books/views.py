@@ -77,3 +77,16 @@ def update_book(request, book_id):
         book_form = BookForm(instance=book)
 
         return render(request, 'books/book_create_form.html', {'book_form': book_form})
+
+
+@login_required
+def delete_book(request, book_id):
+    """ Apenas admin deven usar essa página """
+    book = Books.objects.get(pk=book_id)
+
+    if request.method == 'POST':
+        book.delete()
+
+        return HttpResponseRedirect(reverse('books'))
+
+    return render(request, 'books/delete_book_form.html', {'book': book})

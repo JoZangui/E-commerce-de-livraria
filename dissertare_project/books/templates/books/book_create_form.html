@@ -14,7 +14,7 @@
 
         <!-- form -->
         <div class="col">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label" for="{{book_form.book_file.id_for_label}}">{{book_form.book_file.label}}<span class="text-danger">*</span></label>
@@ -38,4 +38,3 @@
     </div>
 </div>
 {% endblock main_content %}
-<!-- {{book_form.as_p}} -->
