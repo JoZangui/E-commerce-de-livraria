@@ -1,0 +1,45 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+<div class="container py-5">
+    <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center justify-content-lg-start align-items-center align-items-md-start">
+        <!-- book cover and download button container -->
+        <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
+            <!-- book cover -->
+            <div class="detail--book-cover rounded overflow">
+                <img src="{{book.book_cover.url}}" class="" alt="book-cover">
+            </div>
+
+            <!-- download button -->
+            <div class="mt-4">
+                <a href="#" class="btn btn-lg btn-success px-5">Download</a>
+            </div>
+        </div>
+
+        <!-- book info container -->
+        <div class="col py-md-0 py-4">
+            <!-- book title -->
+            <div class="title text-center text-md-start">
+                <h1 title="Assassin's Creed The Chain">{{book.book_title}}</h1>
+            </div>
+
+            <!-- edit and delete button -->
+            <div class="d-flex d-md-block justify-content-center">
+                <a href="{% url 'book-update' book.id %}" class="btn btn-sm btn-outline-primary me-3 me-md-2">Edit</a>
+                <a href="{% url 'book-delete' book.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </div>
+
+            <!-- author name and pub date -->
+            <br>
+            <div class="autor-date text-center text-md-start">
+                <h4><span class="font-bold">{{book.book_owner}}</span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
+            </div>
+
+            <!-- book description -->
+            <br>
+            <div class="content">
+                <p>{{book.book_description}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

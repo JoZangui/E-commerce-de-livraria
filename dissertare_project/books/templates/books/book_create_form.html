@@ -1,0 +1,45 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+<div class="container py-5">
+    <div class="row d-flex flex-column flex-lg-row  border py-3">
+        <!-- info -->
+        <div class="col col-lg-4 d-flex flex-column flex-md-row flex-lg-column justify-content-between justify-content-lg-center align-items-center">
+            <div class="alert alert-info border border-info border-2" style="width: 300px">
+                <p>Escolha de preferência uma imagem com 300px de largura e 300px de altura</p>
+            </div>
+            <div class="alert alert-warning border border-warning border-2 mt-3" style="width: 300px;">
+                <p>Por favor tenha em atenção os direitos autorais tanto do livro como da imagem de capa, qualquer problema do gênero fica por sua conta e risco</p>
+            </div>
+        </div>
+
+        <!-- form -->
+        <div class="col">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ book_form.non_field_errors }}
+                <div class="mb-3">
+                    {{book_form.book_file.errors}}
+                    <label class="form-label" for="{{book_form.book_file.id_for_label}}">{{book_form.book_file.label}}<span class="text-danger">*</span></label>
+                    {{book_form.book_file}}
+                </div>
+                <div class="mb-3">
+                    {{book_form.book_title.errors}}
+                    <label class="form-label" for="{{book_form.book_title.id_for_label}}">{{book_form.book_title.label}}<span class="text-danger">*</span></label>
+                    {{book_form.book_title}}
+                </div>
+                <div class="mb-3">
+                    {{book_form.book_cover.errors}}
+                    <label class="form-label" for="{{book_form.book_cover.id_for_label}}">{{book_form.book_cover.label}}<span class="text-danger">*</span></label>
+                    {{book_form.book_cover}}
+                </div>
+                <div class="mb-3">
+                    {{book_form.book_description.errors}}
+                    <label class="form-label" for="{{book_form.book_description.id_for_label}}">{{book_form.book_description.label}}<span class="text-danger">*</span></label>
+                    {{book_form.book_description}}
+                </div>
+                <button class="btn btn-primary" type="submit">Carregar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
