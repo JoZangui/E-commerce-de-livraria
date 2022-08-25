@@ -51,6 +51,10 @@ def upload_book(request):
                 'book-detail',
                 kwargs={'book_id': final_form.pk}
             ))
+        else:
+            # print(book_form.errors.as_data())
+            # print(book_form.errors['book_file'])
+            return render(request, 'books/book_create_form.html', {'book_form': book_form, 'book_form_erros': book_form.errors})
 
     book_form = BookForm()
 
