@@ -44,7 +44,7 @@ def upload_book(request):
         
         if book_form.is_valid():
             final_form = book_form.save(commit=False)
-            final_form.book_owner = request.user
+            final_form.uploaded_by = request.user
             final_form.save()
             
             return HttpResponseRedirect(reverse(
@@ -52,8 +52,6 @@ def upload_book(request):
                 kwargs={'book_id': final_form.pk}
             ))
         else:
-            # print(book_form.errors.as_data())
-            # print(book_form.errors['book_file'])
             return render(request, 'books/book_create_form.html', {'book_form': book_form, 'book_form_erros': book_form.errors})
 
     book_form = BookForm()

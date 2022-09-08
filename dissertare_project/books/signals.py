@@ -12,5 +12,5 @@ def delete_post_signal(sender, instance:Books,**kwargs):
     O argumento opcional save controla se a instância do modelo é salva ou não após a exclusão do arquivo associado a este campo. Padrões para True.
     https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.fields.files.FieldFile.delete
     """
-    instance.book_file.delete(save=False)
-    instance.book_cover.delete(save=False)
+    instance.file.delete(save=False)
+    instance.cover.delete(save=False)
