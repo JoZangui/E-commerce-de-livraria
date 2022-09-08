@@ -6,7 +6,7 @@
         <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
             <!-- book cover -->
             <div class="detail--book-cover rounded overflow">
-                <img src="{{book.book_cover.url}}" class="" alt="book-cover">
+                <img src="{{book.cover.url}}" class="" alt="book-cover">
             </div>
 
             <!-- download button -->
@@ -19,7 +19,7 @@
         <div class="col py-md-0 py-4">
             <!-- book title -->
             <div class="title text-center text-md-start">
-                <h1 title="Assassin's Creed The Chain">{{book.book_title}}</h1>
+                <h1 title="Assassin's Creed The Chain">{{book.title}}</h1>
             </div>
 
             <!-- edit and delete button -->
@@ -31,13 +31,13 @@
             <!-- author name and pub date -->
             <br>
             <div class="autor-date text-center text-md-start">
-                <h4><span class="font-bold">{{book.book_owner}}</span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
+                <h4><span class="font-bold">{{book.uploaded_by}}</span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
             </div>
 
             <!-- book description -->
             <br>
             <div class="content">
-                <p>{{book.book_description}}</p>
+                <p>{{book.description}}</p>
             </div>
         </div>
     </div>

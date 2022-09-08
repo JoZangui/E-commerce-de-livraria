@@ -39,11 +39,11 @@
         {% for book in page_obj %}
             <div class="col d-flex flex-column align-items-center">
                 <div class="rounded-3 book-cover-size home--image-container">
-                    <a href="{% url 'book-detail' book.id %}"><img src="{{book.book_cover.url}}" alt="book-image-cover"></a>
+                    <a href="{% url 'book-detail' book.id %}"><img src="{{book.cover.url}}" alt="book-image-cover"></a>
                 </div>
                 <div class="text-container-width">
-                    <h5 class="font-bold title-height"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.book_title}}</a></h5>
-                    <span><a href="#" class="font-bold text-decoration-none text-dark">{{book.book_owner}}</a> <br> <small>{{book.date_posted|date:"d b, Y"}}</small></span>
+                    <h5 class="font-bold title-height"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
+                    <span><a href="#" class="font-bold text-decoration-none text-dark">{{book.uploaded_by}}</a> <br> <small>{{book.date_posted|date:"d b, Y"}}</small></span>
                 </div>
             </div>
         {% endfor %}

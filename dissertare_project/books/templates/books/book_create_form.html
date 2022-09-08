@@ -18,24 +18,24 @@
                 {% csrf_token %}
                 {{ book_form.non_field_errors }}
                 <div class="mb-3">
-                    {{book_form.book_file.errors}}
-                    <label class="form-label" for="{{book_form.book_file.id_for_label}}">{{book_form.book_file.label}}<span class="text-danger">*</span></label>
-                    {{book_form.book_file}}
+                    {{book_form.file.errors}}
+                    <label class="form-label" for="{{book_form.file.id_for_label}}">{{book_form.file.label}}<span class="text-danger">*</span></label>
+                    {{book_form.file}}
                 </div>
                 <div class="mb-3">
-                    {{book_form.book_title.errors}}
-                    <label class="form-label" for="{{book_form.book_title.id_for_label}}">{{book_form.book_title.label}}<span class="text-danger">*</span></label>
-                    {{book_form.book_title}}
+                    {{book_form.title.errors}}
+                    <label class="form-label" for="{{book_form.title.id_for_label}}">{{book_form.title.label}}<span class="text-danger">*</span></label>
+                    {{book_form.title}}
                 </div>
                 <div class="mb-3">
-                    {{book_form.book_cover.errors}}
-                    <label class="form-label" for="{{book_form.book_cover.id_for_label}}">{{book_form.book_cover.label}}<span class="text-danger">*</span></label>
-                    {{book_form.book_cover}}
+                    {{book_form.cover.errors}}
+                    <label class="form-label" for="{{book_form.cover.id_for_label}}">{{book_form.cover.label}}<span class="text-danger">*</span></label>
+                    {{book_form.cover}}
                 </div>
                 <div class="mb-3">
-                    {{book_form.book_description.errors}}
-                    <label class="form-label" for="{{book_form.book_description.id_for_label}}">{{book_form.book_description.label}}<span class="text-danger">*</span></label>
-                    {{book_form.book_description}}
+                    {{book_form.description.errors}}
+                    <label class="form-label" for="{{book_form.description.id_for_label}}">{{book_form.description.label}}<span class="text-danger">*</span></label>
+                    {{book_form.description}}
                 </div>
                 <button class="btn btn-primary" type="submit">Carregar</button>
             </form>
