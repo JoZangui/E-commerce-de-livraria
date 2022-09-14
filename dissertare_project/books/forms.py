@@ -7,7 +7,7 @@ from .models import Books, Authors
 class BookForm(ModelForm):
     class Meta:
         model = Books
-        fields = ['file', 'title', 'cover', 'description']
+        fields = ['file', 'title', 'cover', 'description', 'author']
 
         widgets = {
             'file': forms.FileInput(attrs={'class': 'form-control'}),
@@ -32,3 +32,20 @@ class AuthorsForm(ModelForm):
     class Meta:
         model = Authors
         fields = ['name', 'image', 'biography']
+
+    widgets = {
+        'name': forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder':'Nome do autor',
+            'maxlength': '50',
+            'autofocus': True}),
+        
+        'image': forms.FileInput(attrs={'class': 'form-control'}),
+
+        'biography': forms.Textarea(attrs={
+            'class': 'form-control not-resizable',
+            'cols':'30',
+            'rows': '10',
+            'placeholder': 'adicione uma biografia para o autor',
+            'maxlength': '400'})
+    }

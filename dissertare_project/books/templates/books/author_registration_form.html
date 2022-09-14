@@ -1,0 +1,30 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+<div class="container py-5">
+    <div class="row d-flex flex-column flex-lg-row  border py-3">
+        <!-- form -->
+        <div class="col">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ author_form.non_field_errors }}
+                <div class="mb-3">
+                    {{author_form.name.errors}}
+                    <label class="form-label" for="{{author_form.name.id_for_label}}">{{author_form.name.label}}<span class="text-danger">*</span></label>
+                    {{author_form.name}}
+                </div>
+                <div class="mb-3">
+                    {{author_form.image.errors}}
+                    <label class="form-label" for="{{author_form.image.id_for_label}}">{{author_form.image.label}}<span class="text-danger">*</span></label>
+                    {{author_form.image}}
+                </div>
+                <div class="mb-3">
+                    {{author_form.biography.errors}}
+                    <label class="form-label" for="{{author_form.biography.id_for_label}}">{{author_form.biography.label}}<span class="text-danger">*</span></label>
+                    {{author_form.biography}}
+                </div>
+                <button class="btn btn-primary" type="submit">Registar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
