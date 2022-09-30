@@ -11,7 +11,7 @@ def books_pdf_file_path(instance, filename):
     configura o diretório dos arquivos livros (PDF)
     para um directório com o nome do usuário
     """
-    return f'books/pdfs/{instance.upload_by.username}/{filename}'
+    return f'books/pdfs/{instance.author.name}/{filename}'
 
 
 def books_image_file_path(instance, filename):
@@ -19,7 +19,7 @@ def books_image_file_path(instance, filename):
     configura o diretório das capas dos livros (img)
     para um directório com o nome do usuário
     """
-    return f'books/images/{instance.upload_by.username}/{filename}'
+    return f'books/images/{instance.author.name}/{filename}'
 
 
 def authors_image_file_path(instance, filename):
@@ -31,6 +31,7 @@ def authors_image_file_path(instance, filename):
 
 
 class Authors(models.Model):
+
     name = models.CharField(max_length=30, verbose_name='Nome do autor')
     image = models.ImageField(
         upload_to=authors_image_file_path,
@@ -43,8 +44,13 @@ class Authors(models.Model):
 
 
 class Books(models.Model):
+
     author = models.ForeignKey(Authors, on_delete=models.CASCADE, verbose_name='Autor do livro')
-    file = models.FileField(upload_to=books_pdf_file_path, verbose_name='Arquivo', validators=[pdf_format_validator])
+    file = models.FileField(
+        upload_to=books_pdf_file_path,
+        verbose_name='Arquivo',
+        validators=[pdf_format_validator]
+    )
     title = models.CharField(max_length=50, verbose_name='Título do livro')
     description = models.TextField(max_length=400, verbose_name='Descrição do livro')
     cover = models.ImageField(
@@ -56,7 +62,7 @@ class Books(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super().save()
 
         img = Image.open(self.cover.path)

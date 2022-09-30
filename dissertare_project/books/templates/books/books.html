@@ -42,8 +42,8 @@
                     <a href="{% url 'book-detail' book.id %}"><img src="{{book.cover.url}}" alt="book-image-cover"></a>
                 </div>
                 <div class="text-container-width">
-                    <h5 class="font-bold title-height"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
-                    <span><a href="#" class="font-bold text-decoration-none text-dark">{{book.uploaded_by}}</a> <br> <small>{{book.date_posted|date:"d b, Y"}}</small></span>
+                    <h5 class="font-bold title-height" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title|truncatechars:26}}</a></h5>
+                    <span title="{{book.author}}"><a href="{% url 'author-detail' book.author.name %}" class="font-bold text-decoration-none text-dark">{{book.author|truncatechars:8}}</a> <br> <small>{{book.date_posted|date:"d b, Y"}}</small></span>
                 </div>
             </div>
         {% endfor %}

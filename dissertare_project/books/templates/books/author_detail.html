@@ -1,0 +1,33 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+<div class="container py-5">
+    <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center justify-content-lg-start align-items-center align-items-md-start">
+        <!-- author image and download button container -->
+        <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
+            <!-- author image -->
+            {% if author.image %}  
+                <div class="detail--book-image rounded overflow">
+                    <img src="{{author.image.url}}" alt="author-image">
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- author info container -->
+        <div class="col py-md-0 py-4">
+            <!-- se o usuário logado é um administrador do site então apresenta as opções de editar e eliminar -->
+            {% if user.is_superuser %}
+                <!-- edit and delete button -->
+                <div class="d-flex d-md-block justify-content-center">
+                    <a href="{% url 'author-update' author.name %}" class="btn btn-sm btn-outline-primary me-3 me-md-2">Edit</a>
+                    <a href="{% url 'author-delete' author.name %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            {% endif %}
+            <!-- author biography -->
+            <br>
+            <div class="content">
+                <p>{{author.biography}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
