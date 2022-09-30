@@ -34,7 +34,7 @@
             <!-- author name and pub date -->
             <br>
             <div class="autor-date text-center text-md-start">
-                <h4><span class="font-bold">{{book.uploaded_by}}</span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
+                <h4><span class="font-bold"><a href="{% url 'author-detail' book.author.name %}" class="text-decoration-none text-dark">{{book.author}}</a></span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
             </div>
 
             <!-- book description -->

@@ -14,12 +14,12 @@
                 </div>
                 <div class="mb-3">
                     {{author_form.image.errors}}
-                    <label class="form-label" for="{{author_form.image.id_for_label}}">{{author_form.image.label}}<span class="text-danger">*</span></label>
+                    <label class="form-label" for="{{author_form.image.id_for_label}}">{{author_form.image.label}}</label>
                     {{author_form.image}}
                 </div>
                 <div class="mb-3">
                     {{author_form.biography.errors}}
-                    <label class="form-label" for="{{author_form.biography.id_for_label}}">{{author_form.biography.label}}<span class="text-danger">*</span></label>
+                    <label class="form-label" for="{{author_form.biography.id_for_label}}">{{author_form.biography.label}}</label>
                     {{author_form.biography}}
                 </div>
                 <button class="btn btn-primary" type="submit">Registar</button>
@@ -28,3 +28,10 @@
     </div>
 </div>
 {% endblock main_content %}
+{% block script %}
+    <script>
+        const authorInput = document.querySelector('#id_name');
+
+        authorInput.style.textTransform = "capitalize";
+    </script>
+{% endblock script %}

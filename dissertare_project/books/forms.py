@@ -33,19 +33,19 @@ class AuthorsForm(ModelForm):
         model = Authors
         fields = ['name', 'image', 'biography']
 
-    widgets = {
-        'name': forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder':'Nome do autor',
-            'maxlength': '50',
-            'autofocus': True}),
-        
-        'image': forms.FileInput(attrs={'class': 'form-control'}),
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder':'Nome do autor',
+                'maxlength': '50',
+                'autofocus': True}),
+            
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
 
-        'biography': forms.Textarea(attrs={
-            'class': 'form-control not-resizable',
-            'cols':'30',
-            'rows': '10',
-            'placeholder': 'adicione uma biografia para o autor',
-            'maxlength': '400'})
-    }
+            'biography': forms.Textarea(attrs={
+                'class': 'form-control not-resizable',
+                'cols':'30',
+                'rows': '10',
+                'placeholder': 'adicione uma biografia para o autor',
+                'maxlength': '400'})
+        }

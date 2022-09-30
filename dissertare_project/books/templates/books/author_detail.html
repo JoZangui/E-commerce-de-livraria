@@ -5,9 +5,11 @@
         <!-- author image and download button container -->
         <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
             <!-- author image -->
-            <div class="detail--book-image rounded overflow">
-                <img src="{{author.image.url}}" class="" alt="author-image">
-            </div>
+            {% if author.image %}  
+                <div class="detail--book-image rounded overflow">
+                    <img src="{{author.image.url}}" alt="author-image">
+                </div>
+            {% endif %}
         </div>
 
         <!-- author info container -->
