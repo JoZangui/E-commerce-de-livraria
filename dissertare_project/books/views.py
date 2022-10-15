@@ -1,9 +1,11 @@
+from django.forms import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
 from django.http import JsonResponse, Http404
+from django.utils.translation import gettext_lazy as _
 
 from .models import Authors, Books
 from .forms import AuthorsForm, BookForm
@@ -83,10 +85,33 @@ def update_book(request, book_id):
             return HttpResponseRedirect(reverse(
                 'book-detail',
                 kwargs={'book_id': book_id}))
-    else:
-        book_form = BookForm(instance=book)
+        else:
 
-        return render(request, 'books/book_create_form.html', {'book_form': book_form})
+            # print(book_form.errors.as_data().values())
+
+            for value in book_form.errors.as_data().values():
+                print(value[0])
+            
+            # raise ValidationError(
+            #     _('Invalid value: %(value)s'),
+            #     code= 'invalid',
+            #     params={'value': '42'}
+            # )
+
+            # book_form_errors_dict = book_form.errors.as_data()
+            
+            # validationErrors_list = []
+
+            # for key, value in book_form_errors_dict.items():
+                
+
+            # ValidationError(
+            #     ValidationError(_(f'Este campo é obrigatório'))
+            # )
+
+    book_form = BookForm(instance=book)
+
+    return render(request, 'books/book_create_form.html', {'book_form': book_form})
 
 
 @user_passes_test(_user_is_superuser)
