@@ -57,11 +57,13 @@ def upload_book(request):
             final_form.uploaded_by = request.user
             final_form.save()
 
+
             return HttpResponseRedirect(reverse(
                 'book-detail',
                 kwargs={'book_id': final_form.pk}
             ))
         else:
+            print(book_form.errors.as_data())
             return render(request, 'books/book_create_form.html', {'book_form': book_form, 'book_form_erros': book_form.errors})
 
     book_form = BookForm()
@@ -72,6 +74,7 @@ def upload_book(request):
 @user_passes_test(_user_is_superuser)
 def update_book(request, book_id):
     """ Apenas admin deven usar essa página """
+
     book = Books.objects.get(pk=book_id)
 
     if request.method == 'POST':
@@ -79,35 +82,13 @@ def update_book(request, book_id):
             request.POST,
             request.FILES,
             instance=book)
+
         if book_form.is_valid():
             book_form.save()
 
             return HttpResponseRedirect(reverse(
                 'book-detail',
                 kwargs={'book_id': book_id}))
-        else:
-
-            # print(book_form.errors.as_data().values())
-
-            for value in book_form.errors.as_data().values():
-                print(value[0])
-            
-            # raise ValidationError(
-            #     _('Invalid value: %(value)s'),
-            #     code= 'invalid',
-            #     params={'value': '42'}
-            # )
-
-            # book_form_errors_dict = book_form.errors.as_data()
-            
-            # validationErrors_list = []
-
-            # for key, value in book_form_errors_dict.items():
-                
-
-            # ValidationError(
-            #     ValidationError(_(f'Este campo é obrigatório'))
-            # )
 
     book_form = BookForm(instance=book)
 
@@ -140,7 +121,7 @@ def register_author(request):
 
             return HttpResponseRedirect(reverse(
                 'author-detail',
-                kwargs={'author_id': author_form.pk}
+                kwargs={'author_name': author_form.instance.name}
             ))
         return render(
             request,
@@ -168,12 +149,13 @@ def author_update(request, author_name):
             request.POST,
             request.FILES,
             instance=author)
+
         if author_form.is_valid():
             author_form.save()
 
             return HttpResponseRedirect(reverse(
                 'author-detail',
-                kwargs={'author_name': author_name}))
+                kwargs={'author_name': author.name}))
     else:
         author_form = AuthorsForm(instance=author)
 

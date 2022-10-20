@@ -11,7 +11,6 @@ class BooksTestCase(TestCase):
     def setUp(self) -> None:
         image_path = './media/books/images/joaquim/Assassins_Creed_The_Chain_Cover.jpg'
 
-        # font: https://stackoverflow.com/questions/26298821/django-testing-model-with-imagefield
         new_cover_image = SimpleUploadedFile(
             name='Assassins_Creed_The_Chain_Cover.jpg',
             content=open(image_path, 'rb').read(),

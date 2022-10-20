@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .pdf_file_validator import pdf_format_validator
 
 from PIL import Image
+
+from .pdf_file_validator import pdf_format_validator
 
 
 def books_pdf_file_path(instance, filename):

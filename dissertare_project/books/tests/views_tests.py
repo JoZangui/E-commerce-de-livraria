@@ -1,14 +1,13 @@
-from urllib import response
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib import auth
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from books.models import Books,  Authors
+from books.models import Books, Authors
 
 
 class BooksViewTestCase(TestCase):
+    """ Teste para views relacionadas aos autores dos livros """
 
     def setUp(self) -> None:
 
@@ -21,40 +20,48 @@ class BooksViewTestCase(TestCase):
 
         self.author = Authors.objects.create(name='Quim', biography='Lorem ipsum')
 
-        image_path = './media/books/images/joaquim/Assassins_Creed_The_Chain_Cover.jpg'
+        self.image_path = './media/books/images/arquivos_de_Teste/Assassins_Creed_The_Chain_Cover.jpg'
 
-        self.new_cover_image = SimpleUploadedFile(
-            name='Assassins_Creed_The_Chain_Cover.jpg',
-            content=open(image_path, 'rb').read(),
-            content_type='image/jpg'
-        )
+        self.pdf_path = './media/books/pdfs/arquivos_de_Teste/caelum-csharp-dotnet-fn13.pdf'
+
+        pdf_file = self.upload_file(self.pdf_path, 'application/pdf')
+        
+        image_file = self.upload_file(self.image_path, 'image/jpg')
 
         self.book = Books.objects.create(
             author=self.author,
             title='Lorem',
-            cover=self.new_cover_image,
+            file=pdf_file,
+            cover=image_file,
             description='Lorem ipsum',
             uploaded_by=self.user
         )
 
+    def upload_file(self, path:str, file_type:str) -> SimpleUploadedFile:
+        """ simula o upload de um arquivo """
+
+        with open(path, 'rb') as file:
+            final_file = SimpleUploadedFile(file.name, file.read(), content_type=file_type)
+
+        return final_file
+
     def get_views_response(self, view=str, **kwargs):
-        """ Simula uma requisição get para uma determinada view """
+        """ Simula uma solicitação get para uma determinada view """
 
         return self.client.get(
-            reverse(view, kwargs={key: value for key, value in kwargs.items()})
+            reverse(view, kwargs=kwargs)
         )
 
     def post_views_response(self, view=str, post_values=dict, **kwargs):
-        """ Simula uma requisição post para uma determinada view """
+        """ Simula uma solicitação post para uma determinada view """
 
-        result = self.client.post(
-            # path
-            reverse(view, kwargs={key: value for key, value in kwargs.items()}),
-            # values
-            {key: value for key, value in post_values.items()}
-        )
-
-        return result
+        return self.client.post(
+            # url
+            reverse(view, kwargs=kwargs),
+            # valor
+            post_values,
+            # aceitar o redirecionamento
+            follow=True)
 
     # books
     def test_books_view_status_200(self):
@@ -64,13 +71,6 @@ class BooksViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_books_view_template_used(self):
-        """ testa se está a retornar um template e se o template retornado é o template esperado """
-
-        response = self.get_views_response('books')
-
-        self.assertTemplateUsed(response, 'books/books.html')
-
     # book detail
     def test_book_detail_status_200(self):
         """ testa o status code de uma requisição get para a view book detail """
@@ -78,13 +78,6 @@ class BooksViewTestCase(TestCase):
         response = self.get_views_response('book-detail', book_id=self.book.id)
 
         self.assertEqual(response.status_code, 200)
-
-    def test_book_detail_view_template_used(self):
-        """ testa se está a retornar um template e se o template retornado é o template esperado """
-
-        response = self.get_views_response('book-detail', book_id=self.book.id)
-        
-        self.assertTemplateUsed(response, 'books/book_detail.html')
 
     # upload book
     def test_upload_book_status_200__get(self):
@@ -94,24 +87,23 @@ class BooksViewTestCase(TestCase):
         response = self.get_views_response('upload-book')
         self.assertEqual(response.status_code, 200)
 
-    def test_upload_book_status_200__post(self):
+    def test_upload_book_status_302__post(self):
+
+        pdf_file = self.upload_file(self.pdf_path, 'application/pdf')
+        
+        image_file = self.upload_file(self.image_path, 'image/jpg')
+
         book_data = {
-            'author': self.author,
-            'title': 'Lorem',
-            'cover': self.new_cover_image,
+            'author': self.author.id,
+            'file': pdf_file,
+            'title': 'Lorem 1',
             'description': 'Lorem ipsum',
+            'cover': image_file,
             'uploaded_by': self.user
         }
 
         response = self.post_views_response('upload-book', book_data)
-        self.assertEqual(response.status_code, 200)
-
-    def test_upload_book_view_template_used(self):
-        """ testa se está a retornar um template e se o template retornado é o template esperado """
-
-        response = self.get_views_response('upload-book')
-
-        self.assertTemplateUsed(response, 'books/book_create_form.html')
+        self.assertEqual(response.redirect_chain[0][1], 302)
 
     # update book
     def test_update_book_status_200__get(self):
@@ -121,22 +113,147 @@ class BooksViewTestCase(TestCase):
         response = self.get_views_response('book-update', book_id=self.book.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_book_status_200__post(self):
+    def test_update_book_status_302__post(self):
+
+        pdf_file = self.upload_file(self.pdf_path, 'application/pdf')
+
+        image_file = self.upload_file(self.image_path, 'image/jpg')
 
         book_data = {
-            'author': self.author,
-            'title': 'Lorem',
-            'cover': self.new_cover_image,
+            'author': self.author.id,
+            'file': pdf_file,
+            'title': 'Lorem Lorem',
             'description': 'Lorem ipsum',
+            'cover': image_file,
             'uploaded_by': self.user
         }
 
         response = self.post_views_response('book-update', book_data, book_id=self.book.id)
+        self.assertEqual(response.redirect_chain[0], (f'/book/book_detail/{self.book.id}/', 302))
+
+    # delete book
+    def test_delete_book_status_200__get(self):
+        """ testa o status code de uma requisição get para a view update book """
+
+        # solicitação get
+        response = self.get_views_response('book-delete', book_id=self.book.id)
         self.assertEqual(response.status_code, 200)
 
-    def test_update_book_view_template_used(self):
-        """ testa se está a retornar um template e se o template retornado é o template esperado """
+    def test_delete_book_status_302__post(self):
 
-        response = self.get_views_response('book-update', book_id=self.book.id)
+        # a view book-delete não recebe qual quer valor no post,
+        # por isso enviamos um dicionário vazio, porque o método de teste post exige que passemos um dicionário
+        empty_post = dict()
 
-        self.assertTemplateUsed(response, 'books/book_create_form.html')
+        response = self.post_views_response('book-delete', empty_post, book_id=self.book.id)
+        self.assertEqual(response.redirect_chain[0], ('/', 302))
+
+
+class AuthorssViewTestCase(TestCase):
+    """ Teste para views relacionadas aos autores dos livros """
+
+    def setUp(self) -> None:
+
+        self.user = User.objects.create(username='KimZangui')
+        self.user.set_password('testing321')
+        self.user.is_superuser = True
+        self.user.save()
+
+        self.client.login(username='KimZangui', password='testing321')
+
+        self.author = Authors.objects.create(name='Quim', biography='Lorem ipsum')
+
+        self.image_path = './media/books/images/arquivos_de_Teste/Assassins_Creed_The_Chain_Cover.jpg'
+
+    def upload_file(self, path:str, file_type:str) -> SimpleUploadedFile:
+        """ simula o upload de um arquivo """
+
+        with open(path, 'rb') as file:
+            final_file = SimpleUploadedFile(file.name, file.read(), content_type=file_type)
+
+        return final_file
+
+    def get_views_response(self, view=str, **kwargs):
+        """ Simula uma solicitação get para uma determinada view """
+
+        return self.client.get(
+            reverse(view, kwargs=kwargs)
+        )
+
+    def post_views_response(self, view=str, post_values=dict, **kwargs):
+        """ Simula uma solicitação post para uma determinada view """
+
+        return self.client.post(
+            # url
+            reverse(view, kwargs=kwargs),
+            # valor
+            post_values,
+            # aceitar o redirecionamento
+            follow=True)
+
+    # author detail
+    def test_author_detail_status_200(self):
+        """ testa o status code de uma requisição get para a view book detail """
+
+        response = self.get_views_response('author-detail', author_name=self.author.name)
+
+        self.assertEqual(response.status_code, 200)
+
+    # register author
+    def test_register_author_status_200__get(self):
+        """ testa o status code de uma requisição get para a view upload book """
+
+        # solicitação get
+        response = self.get_views_response('register-author')
+        self.assertEqual(response.status_code, 200)
+
+    def test_register_author_status_302__post(self):
+
+        image_file = self.upload_file(self.image_path, 'image/jpg')
+
+        author_data = {
+            'name': 'Ana',
+            'image': image_file,
+            'biography': 'Lorem ipsum',
+        }
+
+        response = self.post_views_response('register-author', author_data)
+        self.assertEqual(response.redirect_chain[0][1], 302)
+
+    # update author
+    def test_author_update_status_200__get(self):
+        """ testa o status code de uma requisição get para a view update book """
+
+        # solicitação get
+        response = self.get_views_response('author-update', author_name=self.author.name)
+        self.assertEqual(response.status_code, 200)
+
+    def test_author_update_status_302__post(self):
+
+        image_file = self.upload_file(self.image_path, 'image/jpg')
+
+        author_data = {
+            'name': 'Ana',
+            'image': image_file,
+            'biography': 'Lorem ipsum',
+        }
+
+        response = self.post_views_response('author-update', author_data, author_name=self.author.name)
+        self.assertEqual(response.redirect_chain[0], (f'/author/author_detail/{author_data["name"]}/', 302))
+
+    # delete book
+    def test_author_delete_status_200__get(self):
+        """ testa o status code de uma requisição get para a view update book """
+
+        # solicitação get
+        response = self.get_views_response('author-delete', author_name=self.author.name)
+        self.assertEqual(response.status_code, 200)
+
+    def test_author_delete_status_302__post(self):
+
+        # a view book-delete não recebe qual quer valor no post,
+        # por isso enviamos um dicionário vazio, porque o método de teste post exige que passemos um dicionário
+        empty_post = dict()
+
+        response = self.post_views_response('author-delete', empty_post, author_name=self.author.name)
+        self.assertEqual(response.redirect_chain[0], ('/', 302))
