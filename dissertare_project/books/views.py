@@ -1,10 +1,9 @@
-from django.forms import ValidationError
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
-from django.http import JsonResponse, Http404
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from .models import Authors, Books
@@ -35,16 +34,19 @@ def books(request):
         'books/books.html',
         {
             'books': all_books,
-            'page_obj': page_obj})
+            'page_obj': page_obj,
+            'title': 'home'
+        }
+    )
 
 
 def book_detail(request, book_id):
     book = Books.objects.get(pk=book_id)
 
-    return render(request, 'books/book_detail.html', {'book': book})
+    return render(request, 'books/book_detail.html', {'book': book, 'title': book.title})
 
 
-@user_passes_test(_user_is_superuser)
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def upload_book(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -63,15 +65,26 @@ def upload_book(request):
                 kwargs={'book_id': final_form.pk}
             ))
         else:
-            print(book_form.errors.as_data())
-            return render(request, 'books/book_create_form.html', {'book_form': book_form, 'book_form_erros': book_form.errors})
+            return render(
+                request,
+                'books/book_create_form.html',
+                {
+                    'book_form': book_form,
+                    'book_form_erros': book_form.errors,
+                    'title': 'carregar livro'
+                }
+            )
 
     book_form = BookForm()
 
-    return render(request, 'books/book_create_form.html', {'book_form': book_form})
+    return render(
+        request,
+        'books/book_create_form.html',
+        {'book_form': book_form, 'title': 'carregar livro'}
+    )
 
 
-@user_passes_test(_user_is_superuser)
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def update_book(request, book_id):
     """ Apenas admin deven usar essa página """
 
@@ -92,10 +105,16 @@ def update_book(request, book_id):
 
     book_form = BookForm(instance=book)
 
-    return render(request, 'books/book_create_form.html', {'book_form': book_form})
+    title = f'editar livro {book.title}'
+
+    return render(
+        request,
+        'books/book_create_form.html',
+        {'book_form': book_form, 'title': title}
+    )
 
 
-@user_passes_test(_user_is_superuser)
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def delete_book(request, book_id):
     """ Apenas admin deven usar essa página """
     book = Books.objects.get(pk=book_id)
@@ -105,10 +124,19 @@ def delete_book(request, book_id):
 
         return HttpResponseRedirect(reverse('books'))
 
-    return render(request, 'books/delete_book_form.html', {'book': book})
+    title = f'remover o livro {book.title}'
+
+    return render(request, 'books/delete_book_form.html', {'book': book, 'title': title})
 
 
-@user_passes_test(_user_is_superuser)
+@login_required
+def download_book(request, book_id):
+    book = Books.objects.get(id=book_id)
+
+    return redirect(book.file.url)
+
+
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def register_author(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -126,20 +154,86 @@ def register_author(request):
         return render(
             request,
             'books/author_registration_form.html',
-            {'author_form': author_form, 'author_form_erros': author_form.errors})
+            {
+                'author_form': author_form,
+                'author_form_erros': author_form.errors,
+                'title': 'Registar novo autor'
+            }
+        )
 
     author_form = AuthorsForm()
 
-    return render(request, 'books/author_registration_form.html', {'author_form': author_form})
+    return render(
+        request,
+        'books/author_registration_form.html',
+        {'author_form': author_form, 'title': 'Registar novo autor'}
+    )
 
 
 def author_detail(request, author_name):
+
     author = Authors.objects.get(name=author_name)
+    author_books = author.books_set.all().order_by('-date_posted')
 
-    return render(request, 'books/author_detail.html', {'author': author})
+    title = author.name
+
+    return render(
+        request,
+        'books/author_detail.html',
+        {
+            'author': author,
+            'title': title,
+            'author_books': author_books[:4]
+        }
+    )
 
 
-@user_passes_test(_user_is_superuser)
+def all_authors(request):
+    """ todos os autores """
+
+    authors = Authors.objects.all().order_by('-registration_date')
+
+    pagtr = Paginator(authors, 14)
+    page_number = request.GET.get('page')
+    page_obj = pagtr.get_page(page_number)
+
+    title = 'authors'
+
+    return render (
+        request,
+        'books/all_authors.html',
+        {
+            'title': title,
+            'page_obj': page_obj
+        }
+    )
+
+
+def all_author_books(request, author_name):
+    """ todos os livros de um autor """
+
+    author = Authors.objects.get(name=author_name)
+    author_books = author.books_set.all().order_by('-date_posted')
+
+    pagtr = Paginator(author_books, 8)
+    page_number = request.GET.get('page')
+    page_obj = pagtr.get_page(page_number)
+
+    title = f"todos os livros de {author.name}"
+
+    return render(
+        request,
+        'books/all_author_books.html',
+        {
+            'author': author,
+            'title': title,
+            'author_books': author_books,
+            'page_obj': page_obj
+        }
+    )
+
+
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def author_update(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)
@@ -156,13 +250,16 @@ def author_update(request, author_name):
             return HttpResponseRedirect(reverse(
                 'author-detail',
                 kwargs={'author_name': author.name}))
-    else:
-        author_form = AuthorsForm(instance=author)
 
-        return render(request, 'books/author_registration_form.html', {'author_form': author_form})
+    author_form = AuthorsForm(instance=author)
+    title = f'actualizar autor {author.name}'
+    return render(
+        request,
+        'books/author_registration_form.html',
+        {'author_form': author_form, 'title': title})
 
 
-@user_passes_test(_user_is_superuser)
+@user_passes_test(_user_is_superuser, redirect_field_name='book')
 def delete_author(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)
@@ -172,4 +269,5 @@ def delete_author(request, author_name):
 
         return HttpResponseRedirect(reverse('books'))
 
-    return render(request, 'books/delete_author_form.html', {'author': author})
+    title = f'remover autor {author.name}'
+    return render(request, 'books/delete_author_form.html', {'author': author, 'title': title})

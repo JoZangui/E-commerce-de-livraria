@@ -1,4 +1,11 @@
 {% extends "books/base.html" %}
+
+{% block navigations_button %}
+    <span onclick="goBack()" style="cursor: pointer;">
+        <iconify-icon icon="material-symbols:arrow-circle-left-outline" style="color: #000000; font-size: 57px;"></iconify-icon>
+    </span>
+{% endblock navigations_button %}
+
 {% block main_content %}
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center justify-content-lg-start align-items-center align-items-md-start">
@@ -11,7 +18,7 @@
 
             <!-- download button -->
             <div class="mt-4">
-                <a href="#" class="btn btn-lg btn-success px-5">Download</a>
+                <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a>
             </div>
         </div>
 

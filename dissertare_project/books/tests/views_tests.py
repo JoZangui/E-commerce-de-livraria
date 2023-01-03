@@ -45,14 +45,14 @@ class BooksViewTestCase(TestCase):
 
         return final_file
 
-    def get_views_response(self, view=str, **kwargs):
+    def get_views_response(self, view:str, **kwargs):
         """ Simula uma solicitação get para uma determinada view """
 
         return self.client.get(
             reverse(view, kwargs=kwargs)
         )
 
-    def post_views_response(self, view=str, post_values=dict, **kwargs):
+    def post_views_response(self, view:str, post_values:dict, **kwargs):
         """ Simula uma solicitação post para uma determinada view """
 
         return self.client.post(
@@ -173,14 +173,14 @@ class AuthorssViewTestCase(TestCase):
 
         return final_file
 
-    def get_views_response(self, view=str, **kwargs):
+    def get_views_response(self, view:str, **kwargs):
         """ Simula uma solicitação get para uma determinada view """
 
         return self.client.get(
             reverse(view, kwargs=kwargs)
         )
 
-    def post_views_response(self, view=str, post_values=dict, **kwargs):
+    def post_views_response(self, view:str, post_values:dict, **kwargs):
         """ Simula uma solicitação post para uma determinada view """
 
         return self.client.post(

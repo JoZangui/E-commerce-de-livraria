@@ -1,4 +1,11 @@
 {% extends "books/base.html" %}
+
+{% block navigations_button %}
+    <span onclick="goBack()" style="cursor: pointer;">
+        <iconify-icon icon="material-symbols:arrow-circle-left-outline" style="color: #000000; font-size: 57px;"></iconify-icon>
+    </span>
+{% endblock navigations_button %}
+
 {% block main_content %}
 <div class="container py-5">
     <div class="row d-flex flex-column flex-lg-row  border py-3">

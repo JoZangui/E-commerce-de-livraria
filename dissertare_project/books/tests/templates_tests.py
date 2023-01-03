@@ -44,7 +44,7 @@ class BooksViewsTemplateTestCase(TestCase):
 
         return final_file
 
-    def get_views_response(self, view=str, **kwargs):
+    def get_views_response(self, view:str, **kwargs):
         """ Simula uma solicitação get para uma determinada view """
 
         return self.client.get(
@@ -102,7 +102,7 @@ class AuthorsViewsTemplateTestCase(TestCase):
 
         self.image_path = './media/books/images/arquivos_de_Teste/Assassins_Creed_The_Chain_Cover.jpg'
 
-    def get_views_response(self, view=str, **kwargs):
+    def get_views_response(self, view:str, **kwargs):
         """ Simula uma solicitação get para uma determinada view """
 
         return self.client.get(

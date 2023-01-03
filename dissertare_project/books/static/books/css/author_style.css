@@ -1,0 +1,17 @@
+.sticky-after-top-menu {
+    position: sticky;
+    top: 8%;
+    z-index: 99;
+    background-color: #ffffff;
+}
+.detail--author-image img {
+    object-fit: cover;
+}
+.detail--author-image {
+    width: 204px;
+    height: 204px;
+}
+.detail--author-image img {
+    width: 204px;
+    height: 204px;
+}

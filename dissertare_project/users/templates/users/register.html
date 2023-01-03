@@ -1,0 +1,24 @@
+{% extends "books/base.html" %}
+
+<!-- bootstrap5 -->
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block main_content %}
+    <div class="container py-5">
+        <div class="row d-flex flex-column flex-lg-row  border py-3">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <!-- {{form}} -->
+                    {% bootstrap_form form %}
+                </div>
+                {% buttons %}
+                    <button class="btn btn-primary" type="submit">Login</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock main_content %}

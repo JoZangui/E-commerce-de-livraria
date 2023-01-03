@@ -39,6 +39,7 @@ class Authors(models.Model):
         verbose_name='Imagem do autor',
         blank=True)
     biography = models.TextField(max_length=400, verbose_name='Biografia do autor')
+    registration_date = models.DateTimeField(default=timezone.now, verbose_name='Registado em')
 
     def __str__(self) -> str:
         return self.name
