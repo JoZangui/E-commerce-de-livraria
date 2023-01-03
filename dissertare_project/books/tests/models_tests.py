@@ -11,8 +11,7 @@ class BooksTestCase(TestCase):
     def setUp(self) -> None:
         image_path = './media/books/images/joaquim/Assassins_Creed_The_Chain_Cover.jpg'
 
-        # font: https://stackoverflow.com/questions/26298821/django-testing-model-with-imagefield
-        newPhoto = SimpleUploadedFile(
+        new_cover_image = SimpleUploadedFile(
             name='Assassins_Creed_The_Chain_Cover.jpg',
             content=open(image_path, 'rb').read(),
             content_type='image/jpg'
@@ -25,7 +24,7 @@ class BooksTestCase(TestCase):
         self.book = Books.objects.create(
             author=author,
             title='Lorem',
-            cover=newPhoto,
+            cover=new_cover_image,
             description='Lorem ipsum',
             uploaded_by=user
         )

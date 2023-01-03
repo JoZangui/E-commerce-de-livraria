@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from .pdf_file_validator import pdf_format_validator
 
 from PIL import Image
+
+from .pdf_file_validator import pdf_format_validator
 
 
 def books_pdf_file_path(instance, filename):
@@ -38,6 +39,7 @@ class Authors(models.Model):
         verbose_name='Imagem do autor',
         blank=True)
     biography = models.TextField(max_length=400, verbose_name='Biografia do autor')
+    registration_date = models.DateTimeField(default=timezone.now, verbose_name='Registado em')
 
     def __str__(self) -> str:
         return self.name

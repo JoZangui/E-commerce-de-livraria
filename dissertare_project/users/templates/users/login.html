@@ -1,0 +1,37 @@
+{% extends "books/base.html" %}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block main_content %}
+    <div class="container-fluid w-100 d-flex position-fixed px-0" style="height: 91%;">
+        <div class="col d-none d-lg-flex flex-column-reverse login-background-image">
+            <small class="pe-3 py-2 text-end">
+                <a class="font-bold text-dark" href="https://www.pexels.com/photo/man-reading-a-book-2861798/">Photo by Oladimeji Ajegbile</a>
+            </small>
+        </div>
+        <div class="col p-5">
+            <h1 class="text-center">Bem-vindo <br> ao <br> Dissertare</h1>
+            <!-- form -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {% bootstrap_form form %}
+                </div>
+                {% buttons %}
+                    <button class="btn btn-primary" type="submit">Login</button>
+                {% endbuttons %}
+            </form>
+            <small>
+                <a class="text-decoration-none" href="{% url 'password_reset' %}">Esqueceu a sua password?</a>
+            </small>
+            <br>
+            <br>
+            <small>
+                Ainda não tem uma conta,
+                <a class="text-decoration-none" href="{% url 'register' %}">clique aqui para se cadastrar</a>
+            </small>
+        </div>
+    </div>
+{% endblock main_content %}

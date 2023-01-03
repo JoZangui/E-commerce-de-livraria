@@ -1,0 +1,9 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+    <div class="container py-5">
+        <head>
+            <h1>Obrigado pela sua visita</h1>
+        </head>
+        <p>Para voltar a fazer login <a href="{% url 'login' %}">Clique aqui</a></p>
+    </div>
+{% endblock main_content %}

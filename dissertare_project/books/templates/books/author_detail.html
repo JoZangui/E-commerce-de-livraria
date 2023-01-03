@@ -1,4 +1,12 @@
 {% extends "books/base.html" %}
+
+<!-- botão para navegar para a página anterior -->
+{% block navigations_button %}
+    <span onclick="goBack()" style="cursor: pointer;">
+        <iconify-icon icon="material-symbols:arrow-circle-left-outline" style="color: #000000; font-size: 57px;"></iconify-icon>
+    </span>
+{% endblock navigations_button %}
+
 {% block main_content %}
 <div class="container py-5">
     <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center justify-content-lg-start align-items-center align-items-md-start">
@@ -6,7 +14,7 @@
         <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
             <!-- author image -->
             {% if author.image %}  
-                <div class="detail--book-image rounded overflow">
+                <div class="detail--author-image overflow rounded-circle">
                     <img src="{{author.image.url}}" alt="author-image">
                 </div>
             {% endif %}
@@ -14,6 +22,11 @@
 
         <!-- author info container -->
         <div class="col py-md-0 py-4">
+            <!-- author name -->
+            <div class="title text-center text-md-start">
+                <h1 title="Assassin's Creed The Chain">{{author.name}}</h1>
+            </div>
+            
             <!-- se o usuário logado é um administrador do site então apresenta as opções de editar e eliminar -->
             {% if user.is_superuser %}
                 <!-- edit and delete button -->
@@ -28,6 +41,36 @@
                 <p>{{author.biography}}</p>
             </div>
         </div>
+    </div>
+    <br>
+    <br>
+    <hr>
+    <br>
+    <br>
+    <!-- livros mais recentes do autor -->
+    <div>
+        <h4 class="pb-3 px-3">Últimos lançamentos</h4>
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 gy-5 gx-5 text-center">
+            {% for book in author_books %}
+                <div class="col d-flex flex-column align-items-center">
+                    <div class="rounded-3 book-cover-size home--image-container">
+                        <a href="{% url 'book-detail' book.id %}"><img src="{{book.cover.url}}" alt="book-image-cover"></a>
+                    </div>
+                    <div class="text-container-width">
+                        <h5 class="font-bold title-height" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title|truncatechars:26}}</a></h5>
+                        <span><small>{{book.date_posted|date:"d b, Y"}}</small></span>
+                    </div>
+                </div>
+            {% empty %}
+                <small>Opss! este autor ainda não tem um livro aqui</small>
+            {% endfor %}
+        </div>
+        <!-- botão disponível apenas para autores que têm mais de 4 livros -->
+        {% if author.books_set.count > 4 %}
+            <div class="d-flex justify-content-end py-4 pe-4">
+                <a class="btn btn-outline-primary" href="{% url 'all-author-books' author.name %}">ver todos</a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock main_content %}

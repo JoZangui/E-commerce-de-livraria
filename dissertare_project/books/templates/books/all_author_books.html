@@ -1,0 +1,98 @@
+{% extends "books/base.html" %}
+
+{% block navigations_button %}
+    <span onclick="goBack()" style="cursor: pointer;">
+        <iconify-icon icon="material-symbols:arrow-circle-left-outline" style="color: #000000; font-size: 57px;"></iconify-icon>
+    </span>
+{% endblock navigations_button %}
+
+{% block main_content %}  
+<div class="sticky-after-top-menu container-fluid py-2 mb-2">
+    <h2 class="text-center">{{author.name}} { {{author_books.count}} }</h2>
+</div>
+
+<!-- pagination top -->
+<nav aria-label="Page navigation example" class="d-flex justify-content-center py-5">
+    <ul class="pagination pagination-sm d-flex align-items-center my-auto">
+        {% if page_obj.has_previous %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link d-none d-lg-inline border border-2 border-dark rounded text-dark" href="?page=1">primeiro</a>
+            </li>
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{page_obj.previous_page_number}}">anterior</a>
+            </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item px-2 px-md-3 active" aria-current="page">
+                <a class="page-link border border-2 border-dark rounded text-bg-dark" href="?page={{num}}">{{num}}</a>
+            </li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{num}}">{{num}}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{page_obj.next_page_number}}">próximo</a>
+            </li>
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link d-none d-lg-inline border border-2 border-dark rounded text-dark" href="?page={{page_obj.paginator.num_pages}}">ultimo</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+<!-- main content -->
+<div class="container">
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 gy-5 gx-5 text-center">
+        {% for book in page_obj %}
+            <div class="col d-flex flex-column align-items-center">
+                <div class="rounded-3 book-cover-size home--image-container">
+                    <a href="{% url 'book-detail' book.id %}"><img src="{{book.cover.url}}" alt="book-image-cover"></a>
+                </div>
+                <div class="text-container-width">
+                    <h5 class="font-bold title-height" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title|truncatechars:26}}</a></h5>
+                    <span>
+                        <small>{{book.date_posted|date:"d b, Y"}}</small>
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- pagination top -->
+<nav aria-label="Page navigation example" class="d-flex justify-content-center py-5">
+    <ul class="pagination pagination-sm d-flex align-items-center my-auto">
+        {% if page_obj.has_previous %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link d-none d-lg-inline border border-2 border-dark rounded text-dark" href="?page=1">primeiro</a>
+            </li>
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{page_obj.previous_page_number}}">anterior</a>
+            </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <li class="page-item px-2 px-md-3 active" aria-current="page">
+                <a class="page-link border border-2 border-dark rounded text-bg-dark" href="?page={{num}}">{{num}}</a>
+            </li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{num}}">{{num}}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link border border-2 border-dark rounded text-dark" href="?page={{page_obj.next_page_number}}">próximo</a>
+            </li>
+            <li class="page-item px-2 px-md-3">
+                <a class="page-link d-none d-lg-inline border border-2 border-dark rounded text-dark" href="?page={{page_obj.paginator.num_pages}}">ultimo</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock main_content %}
