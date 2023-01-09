@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
@@ -8,6 +10,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Authors, Books
 from .forms import AuthorsForm, BookForm
+from dissertare_project.settings import BASE_DIR
+
+from .rename_dir import rename_dir
 
 
 def _user_is_superuser(user):
@@ -197,7 +202,7 @@ def all_authors(request):
     page_number = request.GET.get('page')
     page_obj = pagtr.get_page(page_number)
 
-    title = 'authors'
+    title = 'autores'
 
     return render (
         request,
@@ -238,13 +243,22 @@ def author_update(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)
 
+
     if request.method == 'POST':
+        old_dirname = author.name
+        path = os.path.abspath(f'{BASE_DIR}/media/authors/images/')
+
         author_form = AuthorsForm(
             request.POST,
             request.FILES,
             instance=author)
 
         if author_form.is_valid():
+            # new_dirname = author_form.cleaned_data.get('name')
+            # rename_dir(path, old_dirname, new_dirname)
+
+            print(author_form.cleaned_data.get('image'))
+
             author_form.save()
 
             return HttpResponseRedirect(reverse(
