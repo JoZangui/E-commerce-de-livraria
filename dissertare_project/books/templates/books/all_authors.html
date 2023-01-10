@@ -35,18 +35,20 @@
 
 <!-- main content -->
 <div class="container">
-    <div class="row gy-0 gx-2 gx-md-5 text-dark px-md-5 m-auto">
+    <div class="row gy-0 gx-2 gx-md-5 px-md-5 m-auto">
         {% for author in page_obj %}
-            <div class="colunas d-flex flex-column col-6 col-md-auto">
+            <div class="colunas d-flex flex-column align-items-center col-6 col-md-auto">
                 <!-- imagem do autor -->
-                <div class="authors-image-container border overflow-hidden border-5 border-light rounded-top">
-                    <a href="{% url 'author-detail' author.name %}"><img src="{{author.image.url}}" alt="author image"></a>
+                <div class="authors-image-container overflow-hidden rounded-circle">
+                    <a href="{% url 'author-detail' author.name %}">
+                        <img src="{{author.image.url}}" alt="author image">
+                    </a>
                 </div>
                 <!-- nome do autor -->
-                <div class="font-bold text-start pt-1 px-2 bg-light rounded-bottom">
-                    <h6><a href="{% url 'author-detail' author.name %}" class="text-decoration-none text-dark" title="author.name">{{author.name|truncatechars:11}}</a></h6>
+                <div class="font-bold text-center pt-3 px-2 rounded-bottom">
+                    <h6><a href="{% url 'author-detail' author.name %}" class="text-decoration-none text-dark" title="{{author.name}}">{{author.name|truncatechars:11}}</a></h6>
                     <small class="font-normal">
-                        <a href="{% url 'book-detail' author.books_set.last.id %}" class="text-decoration-none text-dark" title="{{author.books_set.last}}">{{author.books_set.last}}</a>
+                        <a href="{% url 'book-detail' author.books_set.last.id %}" class="p-2 text-decoration-none text-dark bg-light" title="{{author.books_set.last}}">{{author.books_set.last}}</a>
                     </small>
                 </div>
             </div>

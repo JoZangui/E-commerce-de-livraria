@@ -48,14 +48,14 @@
                     </li>
                     <li class="nav-item">
                         {% if title == 'authors' %}  
-                            <a class="nav-link active" href="{% url 'all-authors' %}" title="Author">
+                            <a class="nav-link active" href="{% url 'all-authors' %}" title="Autores">
                                 <span class="iconify" data-icon="ph:pen-nib-straight-bold" style="font-size: 23px;"></span>
-                                <span class="font-bold d-lg-none">Authors</span>
+                                <span class="font-bold d-lg-none">Autores</span>
                             </a>
                         {% else %}
-                            <a class="nav-link" href="{% url 'all-authors' %}" title="Author">
+                            <a class="nav-link" href="{% url 'all-authors' %}" title="Autores">
                                 <span class="iconify" data-icon="ph:pen-nib-straight-bold" style="font-size: 23px;"></span>
-                                <span class="font-bold d-lg-none">Authors</span>
+                                <span class="font-bold d-lg-none">Autores</span>
                             </a>
                         {% endif %}
                     </li>
@@ -78,9 +78,6 @@
                         <div class="d-flex w-">
                             <a href="{% url 'upload-book' %}" class="me-4" title="upload book">
                                 <span class="iconify" data-icon="tabler:book-upload" style="color: #000000; font-size: 27px;"></span>
-                            </a>
-                            <a href="admin/" class="me-4" title="página de admin">
-                                <iconify-icon icon="eos-icons:admin-outlined" style="color: #000000; font-size: 27px;"></iconify-icon>
                             </a>
                         </div>
                     {% endif %}

@@ -44,6 +44,16 @@ class Authors(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def save(self, *args, **kwargs):
+        super().save()
+
+        img = Image.open(self.image.path)
+
+        if img.height > 940 or img.width > 640:
+            output_size = (940, 640)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+
 
 class Books(models.Model):
 
