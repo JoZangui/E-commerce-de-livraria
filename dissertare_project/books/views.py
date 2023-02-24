@@ -1,19 +1,27 @@
-import os
+import json
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.utils.translation import gettext_lazy as _
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core.serializers import serialize
 
 from .models import Authors, Books
 from .forms import AuthorsForm, BookForm
 from dissertare_project.settings import BASE_DIR
 
-from .rename_dir import rename_dir
 
+class LazyEncoder(DjangoJSONEncoder):
+    """ https://docs.djangoproject.com/en/4.1/topics/serialization/#serialization-formats-json """
+
+    def default(self, obj):
+        if isinstance(obj, list):
+            return str(obj)
+        return super().default(obj)
 
 def _user_is_superuser(user):
     """
@@ -245,21 +253,17 @@ def author_update(request, author_name):
 
 
     if request.method == 'POST':
-        old_dirname = author.name
-        path = os.path.abspath(f'{BASE_DIR}/media/authors/images/')
-
+        print(f'nome do autor durante do post: {author_name}')
+        
         author_form = AuthorsForm(
             request.POST,
             request.FILES,
             instance=author)
 
         if author_form.is_valid():
-            # new_dirname = author_form.cleaned_data.get('name')
-            # rename_dir(path, old_dirname, new_dirname)
-
-            print(author_form.cleaned_data.get('image'))
-
             author_form.save()
+
+            print(f'nome do autor depois do post: {author.name}')
 
             return HttpResponseRedirect(reverse(
                 'author-detail',
@@ -285,3 +289,25 @@ def delete_author(request, author_name):
 
     title = f'remover autor {author.name}'
     return render(request, 'books/delete_author_form.html', {'author': author, 'title': title})
+
+
+def is_ajax(request):
+    """ criar decorador mais tarde """
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+def search_suggestions(request):        
+    if is_ajax(request=request):
+        data = json.load(request)['val']
+
+        books_suggestion = Books.objects.filter(title__icontains=data).order_by('-date_posted')
+        authors_suggestion = Authors.objects.filter(name__icontains=data).order_by('-registration_date')
+
+
+
+        result = {
+            'books': serialize('json', books_suggestion, cls=LazyEncoder),
+            'authors': serialize('json', authors_suggestion, cls=LazyEncoder)
+
+        }
+
+        return JsonResponse(result)

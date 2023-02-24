@@ -33,11 +33,10 @@ def authors_image_file_path(instance, filename):
 
 class Authors(models.Model):
 
-    name = models.CharField(max_length=30, verbose_name='Nome do autor')
+    name = models.CharField(max_length=30, verbose_name='Nome do autor', unique=True)
     image = models.ImageField(
         upload_to=authors_image_file_path,
-        verbose_name='Imagem do autor',
-        blank=True)
+        verbose_name='Imagem do autor')
     biography = models.TextField(max_length=400, verbose_name='Biografia do autor')
     registration_date = models.DateTimeField(default=timezone.now, verbose_name='Registado em')
 

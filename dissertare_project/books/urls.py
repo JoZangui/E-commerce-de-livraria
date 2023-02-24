@@ -27,4 +27,6 @@ urlpatterns = [
     path("author/all_authors/", views.all_authors, name="all-authors"),
     # all author books
     path('author/all_author_books/<str:author_name>/', views.all_author_books, name='all-author-books'),
+    # search suggestions
+    path('search_suggestions/', views.search_suggestions, name='search_suggestions')
 ]

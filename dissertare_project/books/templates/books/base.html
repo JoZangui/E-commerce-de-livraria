@@ -34,41 +34,30 @@
                 <!-- nav list elements -->
                 <ul class="navbar-nav mb-2 mb-lg-0 me-lg-5">
                     <li class="nav-item me-3">
-                        {% if title == 'home' %}
-                            <a class="nav-link active" aria-current="page" href="{% url 'books' %}" title="Home">
-                                <span class="iconify" data-icon="gg:home-alt" style="font-size: 25px;"></span>
-                                <span class="font-bold d-lg-none">Home</span>
-                            </a>
-                        {% else %}  
-                            <a class="nav-link" aria-current="page" href="{% url 'books' %}" title="Home">
-                                <span class="iconify" data-icon="gg:home-alt" style="font-size: 25px;"></span>
-                                <span class="font-bold d-lg-none">Home</span>
-                            </a>
-                        {% endif %}
+                        
+                        <a class="nav-link {% if title == 'home' %}active{% endif %}" aria-current="page" href="{% url 'books' %}" title="Home">
+                            <span class="iconify" data-icon="gg:home-alt" style="font-size: 25px;"></span>
+                            <span class="font-bold d-lg-none">Home</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        {% if title == 'authors' %}  
-                            <a class="nav-link active" href="{% url 'all-authors' %}" title="Autores">
-                                <span class="iconify" data-icon="ph:pen-nib-straight-bold" style="font-size: 23px;"></span>
-                                <span class="font-bold d-lg-none">Autores</span>
-                            </a>
-                        {% else %}
-                            <a class="nav-link" href="{% url 'all-authors' %}" title="Autores">
-                                <span class="iconify" data-icon="ph:pen-nib-straight-bold" style="font-size: 23px;"></span>
-                                <span class="font-bold d-lg-none">Autores</span>
-                            </a>
-                        {% endif %}
+                        <a class="nav-link {% if title == 'autores' %}active{% endif %}" href="{% url 'all-authors' %}" title="Autores">
+                            <span class="iconify" data-icon="ph:pen-nib-straight-bold" style="font-size: 23px;"></span>
+                            <span class="font-bold d-lg-none">Autores</span>
+                        </a>
                     </li>
                 </ul>
 
                 <!-- search form container -->
-                <div class="container d-inline w-50 px-lg-5 px-0">
+                <div class="search container d-inline w-50 px-lg-5 px-0">
                     <form class="d-flex" role="search">
-                        <input class="form-control border-0 bg-light rounded-0" type="search" placeholder="Search" aria-label="Search">
+                        <input class="search-input form-control border-0 bg-light rounded-0" type="search" placeholder="Search" aria-label="Search">
                         <button type="submit" style="border: none; background-color: #fafafa;">
                             <span class="iconify" data-icon="akar-icons:search" style="color: #545454; font-size: 20px;"></span>
                         </button>
                     </form>
+                    <div class="suggestion-list container w-25 py-2 bg-light position-absolute">
+                    </div>
                 </div>
 
                 <!-- buttons -->
@@ -108,7 +97,8 @@
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
     
-    <!-- my script -->
+    <!-- my scripts -->
     <script src="{% static 'books/js/page_navigation.js' %}"></script>
+    <script src="{% static 'books/js/search_suggestions.js' %}"></script>
 </body>
 </html>

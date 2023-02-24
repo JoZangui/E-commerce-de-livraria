@@ -1,4 +1,4 @@
-import os, shutil
+import os
 
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
@@ -7,8 +7,8 @@ from books.models import Books, Authors
 from django.conf import settings
 
 
+# caminho do directório 'media' (configurado em settings.py)
 MEDIA_BASE_DIR = settings.MEDIA_ROOT
-
 
 @receiver(post_delete, sender=Books)
 def delete_book_files_signal(sender, instance:Books,**kwargs):
@@ -22,46 +22,54 @@ def delete_book_files_signal(sender, instance:Books,**kwargs):
     instance.cover.delete(save=False)
 
 
+@receiver(pre_save, sender=Books)
+def update_book_files_signal(sender, instance:Books, **kwargs):
+    """
+    Exclui o arquivo de imagem e de pdf do livro ao actualizar os dados do mesmo
+    caso o usuário tenha carregado uma outra imagem ou ficheiro pdf
+    """
+
+    try:
+        book = Books.objects.get(pk=instance.pk)
+        new_book_cover = instance.cover
+        new_book_file = instance.file
+        old_book_cover = book.cover
+        old_book_file = book.file
+
+        # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+        if new_book_cover != old_book_cover:
+            os.unlink(os.path.join(MEDIA_BASE_DIR, old_book_cover.name))
+
+        # elimina o antigo ficheiro pdf caso o usuário tenha carregado um novo
+        if new_book_file != old_book_file:
+            os.unlink(os.path.join(MEDIA_BASE_DIR, old_book_file.name))
+    except Exception:
+        return None
+
+
 @receiver(pre_save, sender=Authors)
 def update_author_image_file_signal(sender, instance:Authors, **kwargs):
     """
     Exclui o arquivo de imagem do autor ao actualizar os dados do mesmo
+    caso o usuário tenha carregado uma outra imagem
     """
 
-    author = Authors.objects.get(name=instance.name)
-    new_author_image = instance.image
-    old_author_image = author.image
+    try:
+        author = Authors.objects.get(pk=instance.pk)
+        new_author_image = instance.image
+        old_author_image = author.image
 
-    # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
-    if new_author_image != old_author_image:
-        # caminho do directório media (configurado em settings.py)
-
-        os.unlink(os.path.join(MEDIA_BASE_DIR, old_author_image.name))
+        # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+        if new_author_image != old_author_image:
+            os.unlink(os.path.join(MEDIA_BASE_DIR, old_author_image.name))
+    except Exception:
+        return None
 
 
 @receiver(post_delete, sender=Authors)
-def delete_author_files_signal(sender, instance:Authors,**kwargs):
+def delete_author_image_file_signal(sender, instance:Authors,**kwargs):
     """
     Exclui o arquivo associado ao autor e limpa todos os atributos no campo quando excluir um autor.
     """
 
     instance.image.delete(save=False)
-
-
-# @receiver(pre_save, sender=Authors)
-# def rename_author_image_folder_signal(sender, instance:Authors, **kwargs):
-#     """
-#     renomeia a pasta dos aquivos de um autor com o novo nome do autor
-#     caso o nome do autor seja atualizado
-#     """
-
-#     author = Authors.objects.get(name=instance.name)
-#     old_dir_name = author.name
-#     new_dir_name = instance.name
-#     path = 'authors/images/'
-
-#     if old_dir_name != new_dir_name:
-#         old_dir = os.path.join(MEDIA_BASE_DIR, path + old_dir_name)
-#         new_dir = os.path.join(MEDIA_BASE_DIR, path + new_dir_name)
-
-#         shutil.move(old_dir, new_dir)

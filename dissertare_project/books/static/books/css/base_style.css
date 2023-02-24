@@ -1,6 +1,15 @@
 /* ------ Dissertare --------- */
+.active-link {
+    color: #000000;
+}
 .search-button {
     border: none;
+}
+.suggestion-list {
+    display: none;
+}
+.suggestion-list.active {
+    display: block;
 }
 .font-bold {
     font-weight: bold;
