@@ -1,0 +1,121 @@
+{% extends 'books/base.html' %}
+{% block main_content %}
+    {% if cart_books %}
+        {% for book in cart_books %}
+            <div class="card mb-3">
+                <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ book.cover.url }}" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <center>
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">{{ book.description }}</p>
+                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            {% if book.is_sale %}
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    &nbsp;&nbsp;Sale!&nbsp;&nbsp;
+                                    <div class="bi-star-fill"></div>
+                                </div>
+                                <!-- book price-->
+                                <strike>
+                                    ${{book.price}}
+                                </strike>
+                                &nbsp;
+                                ${{book.sale_price}}
+                            {% else %}
+                                ${{book.price}}
+                            {% endif %}
+                            <br><br>
+                            <div class="row justify-content-center">
+                                <div class="col-md-2">quantity</div>
+                                <div class="col-md-2">
+                                    <select class="form-select form-select-sm" id="select{{book.id}}">
+                                        {% for key, value in quantities.items %}
+                                            {% if key == book.id|slugify %}
+                                            <option selected>{{ value }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br><br>
+                            <a href="{% url 'books' %}" class="btn btn-secondary">books</a>
+                            <button type="button" data-index="{{book.id}}" class="btn btn-secondary update-cart">Update</button>
+                            <button type="button" data-index="{{book.id}}" class="btn btn-danger delete-book">Remove</button>
+                        </center>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div align="right">
+            <h3>Total: ${{totals}}</h3>
+            <a href="{% url 'books' %}" class="btn btn-success">Checkout</a>
+        </div>
+    {% else %}
+        There's Nothing In Your Cart...
+    {% endif %}
+    <script>
+        // Update Cart
+        $(document).on('click', '.update-cart', function(e) {
+                e.preventDefault();
+                // grab the book id
+                var bookid = $(this).data('index');
+    
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'cart_update' %}",
+                    data: {
+                        book_id: $(this).data('index'),
+                        book_qty: $('#select' + bookid + ' option:selected').text(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        action: 'post'
+                    },
+    
+                    success: function(json) {
+                        // console.log(json)
+                        // document.getElementById('cart_quantity').textContent = json.qty
+                        location.reload();
+                    },
+    
+                    error: function(xhr, errmsg, err) {
+    
+                    }
+                });
+        });
+        // Delete Item From Cart
+        $(document).on('click', '.delete-book', function(e) {
+            e.preventDefault();
+            // grab the book id
+            // var bookid = $(this).data('index');
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cart_delete' %}",
+                data: {
+                    book_id: $(this).data('index'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+
+                success: function(json) {
+                    // console.log(json)
+                    // document.getElementById('cart_quantity').textContent = json.qty
+                    location.reload();
+                },
+
+                error: function(xhr, errmsg, err) {
+
+                }
+            });
+        });
+    </script>
+{% endblock %}

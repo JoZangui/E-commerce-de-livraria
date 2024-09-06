@@ -54,6 +54,18 @@ class Authors(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
+    class Meta:
+        verbose_name_plural = 'Authors'
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = 'categories'
+
 
 class Books(models.Model):
 
@@ -70,6 +82,10 @@ class Books(models.Model):
         verbose_name='Capa do livro')
     date_posted = models.DateTimeField(default=timezone.now, verbose_name='Publicado no site em')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Enviado por')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+    is_sale = models.BooleanField(default=False)
+    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
 
     def __str__(self) -> str:
         return self.title
@@ -83,3 +99,6 @@ class Books(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.cover.path)
+
+    class Meta:
+        verbose_name_plural = 'Books'

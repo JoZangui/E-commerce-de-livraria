@@ -1,18 +1,19 @@
 import os
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 from .models import Authors, Books
 from .forms import AuthorsForm, BookForm
 from dissertare_project.settings import BASE_DIR
 
-from .rename_dir import rename_dir
+# from .rename_dir import rename_dir
 
 
 def _user_is_superuser(user):
@@ -51,7 +52,7 @@ def book_detail(request, book_id):
     return render(request, 'books/book_detail.html', {'book': book, 'title': book.title})
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def upload_book(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -89,7 +90,7 @@ def upload_book(request):
     )
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def update_book(request, book_id):
     """ Apenas admin deven usar essa página """
 
@@ -119,7 +120,7 @@ def update_book(request, book_id):
     )
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def delete_book(request, book_id):
     """ Apenas admin deven usar essa página """
     book = Books.objects.get(pk=book_id)
@@ -141,7 +142,7 @@ def download_book(request, book_id):
     return redirect(book.file.url)
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def register_author(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -238,7 +239,7 @@ def all_author_books(request, author_name):
     )
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def author_update(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)
@@ -273,7 +274,7 @@ def author_update(request, author_name):
         {'author_form': author_form, 'title': title})
 
 
-@user_passes_test(_user_is_superuser, redirect_field_name='book')
+@user_passes_test(_user_is_superuser, login_url='books')
 def delete_author(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)

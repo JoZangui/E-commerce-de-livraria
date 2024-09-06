@@ -18,7 +18,20 @@
 
             <!-- download button -->
             <div class="mt-4">
-                <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a>
+                <!-- <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a> -->
+                <button type="button" value="{{book.id}}" class="btn btn-lg btn-success px-5" id="add-cart">Add To Cart</button>
+                <div class="row justify-content-center">
+                    <div class="col-md-2">quantity</div>
+                    <div class="col-md-2">
+                        <select class="form-select form-select-sm" id="qty-cart">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="3">4</option>
+                            <option value="3">5</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -52,4 +65,30 @@
         </div>
     </div>
 </div>
+<script>
+    // Check if button pressed
+    $(document).on('click', '#add-cart', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart_add' %}",
+            data: {
+                book_id: $('#add-cart').val(),
+                book_qty: $('#qty-cart option:selected').text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+
+            success: function(json) {
+                // console.log(json)
+                document.getElementById('cart_quantity').textContent = json.qty
+                location.reload();
+            },
+
+            error: function(xhr, errmsg, err) {
+
+            }
+        });
+    });
+</script>
 {% endblock main_content %}
