@@ -48,3 +48,12 @@ class ShippingAddress(models.Model):
     
     def __str__(self) -> str:
         return f'Shipping Address - {str(self.id)}'
+    
+
+class Invoices(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    invoice_number = models.PositiveBigIntegerField(default=1, verbose_name='Fatura nº', )
+    invoice_file = models.URLField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Invoices'

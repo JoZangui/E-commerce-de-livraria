@@ -1,13 +1,17 @@
 """ payment views """
+import os
+
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from cart.cart import Cart
 
-from .models import Order, OrderItem, ShippingAddress
+from .models import Order, OrderItem, ShippingAddress, Invoices
 from .forms import ShippingForm, PaymentForm
 from users.models import Profile
+from cart.cart import Cart
+
+from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
 
 
 @login_required
@@ -141,7 +145,10 @@ def process_order(request):
                         # create order item
                         create_oder_item = OrderItem(order_id=order_id, book_id=book_id, user=user, quantity=value, price=price)
                         create_oder_item.save()
-                
+
+            # create invoice pdf
+
+            
             # Delete our cart
             for key in list(request.session.keys()):
                 if key == 'session_key':
@@ -180,12 +187,16 @@ def process_order(request):
                     price = book.price
 
                 # Get quantity
-                for key, value in quantities().item():
+                for key, value in quantities().items():
                     if int(key) == book.id:
                         # create order item
                         create_oder_item = OrderItem(order_id=order_id, book_id=book_id, quantity=value, price=price)
                         create_oder_item.save()
-                        
+
+            # create invoice
+            invoice = Invoices(order_id=order_id, invoice_number=12341225)
+            invoice.save()
+
             # Delete our cart
             for key in list(request.session.keys()):
                 if key == 'session_key':
@@ -242,7 +253,7 @@ def checkout(request):
     quantities = cart.get_quantities
     totals = cart.cart_total()
 
-    if request.user.i_authenticated:
+    if request.user.is_authenticated:
         # Checkout as logged in user
         # Shipping User
         shipping_user = ShippingAddress.objects.get(user__id=request.user.id)

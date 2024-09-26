@@ -18,8 +18,17 @@
 
             <!-- download button -->
             <div class="mt-4">
-                <!-- <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a> -->
-                <button type="button" value="{{book.id}}" class="btn btn-lg btn-success px-5" id="add-cart">Add To Cart</button>
+                {% if book_is_in_cart %}
+                    <!-- <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a> -->
+                    <center>
+                        <strong>
+                            <small>Você já possui este livro</small>
+                        </strong>
+                    </center>
+                    <a href="{% url 'cart_summary' %}" class="btn btn-lg btn-outline-primary px-5">View Cart</a>
+                {% else %}
+                    <button type="button" value="{{book.id}}" class="btn btn-lg btn-success px-5" id="add-cart">Add To Cart</button>
+                {% endif %}
                 <div class="row justify-content-center">
                     <div class="col-md-2">quantity</div>
                     <div class="col-md-2">

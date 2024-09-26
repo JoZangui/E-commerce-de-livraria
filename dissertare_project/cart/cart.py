@@ -37,7 +37,7 @@ class Cart():
             carty = str(self.cart)
             carty = carty.replace("\'", "\"")
             # Save carty to the Profile Model
-            current_user.update(user_Cart=str(carty))
+            current_user.update(user_cart=str(carty))
 
     def cart_total(self):
         # Get book IDS

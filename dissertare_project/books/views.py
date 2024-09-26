@@ -12,6 +12,7 @@ from django.contrib import messages
 from .models import Authors, Books
 from .forms import AuthorsForm, BookForm
 from dissertare_project.settings import BASE_DIR
+from cart.cart import Cart
 
 # from .rename_dir import rename_dir
 
@@ -48,8 +49,10 @@ def books(request):
 
 def book_detail(request, book_id):
     book = Books.objects.get(pk=book_id)
+    cart = Cart(request)
+    book_is_in_cart = str(book_id) in cart.cart.keys()
 
-    return render(request, 'books/book_detail.html', {'book': book, 'title': book.title})
+    return render(request, 'books/book_detail.html', {'book': book, 'title': book.title, 'book_is_in_cart': book_is_in_cart})
 
 
 @user_passes_test(_user_is_superuser, login_url='books')

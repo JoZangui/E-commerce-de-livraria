@@ -14,10 +14,13 @@
         <div class="col p-5">
             <h1 class="text-center">Bem-vindo <br> ao <br> Dissertare</h1>
             <!-- form -->
-            <form method="post" enctype="multipart/form-data">
+            <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    {% bootstrap_form form %}
+                    <input type="text" class="form-control" name="username" placeholder="Enter Your Username">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter Your Password">
                 </div>
                 {% buttons %}
                     <button class="btn btn-primary" type="submit">Login</button>

@@ -50,7 +50,7 @@ def cart_delete(request):
         response = JsonResponse({'book': book_id})
         messages.warning(request, ("Item Deleted From Shopping Cart..."))
         return response
-    
+
 def cart_update(request):
     cart = Cart(request)
     if request.POST.get('action') == 'post':

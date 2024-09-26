@@ -1,4 +1,6 @@
 """ users views """
+import json
+
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -7,12 +9,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 
 
 from .forms import UserRegisterForm
 from .tokens import account_activation_token
+from users.models import Profile
+from cart.cart import Cart
 
 
 def register(request):
@@ -86,3 +90,34 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login account. go to <a href="/">livros<a>')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            current_user = Profile.objects.get(user__id=user.id)
+            # Get their saved cart from database
+            saved_cart = current_user.user_cart
+            # Convert database string to python dictionary
+            if saved_cart:
+                # Convert to dictionary using JSON
+                converted_cart = json.loads(saved_cart)
+                # Add the loaded cart dictionary to our session
+                # Get the cart
+                cart = Cart(request)
+                # Loop thru the cart and add the items from the database
+                for key, value in converted_cart.items():
+                    cart.add(book=key, quantity=value)
+            messages.success(request, 'You Have Been Logged In!')
+            return redirect('books')
+        else:
+            messages.warning(request, 'There was an error, please try again...')
+            return redirect('login')
+    else:
+        return render(request, 'users/login.html')
