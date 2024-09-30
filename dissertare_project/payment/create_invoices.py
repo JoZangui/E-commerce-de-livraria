@@ -6,7 +6,7 @@ from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
 
 
 class CreateInvoce():
-    def __init__(self, cliente_name:str, cliente_email:str, cliente_phone:str, cliente_address:str) -> None:
+    def __init__(self, cliente_name:str, cliente_email:str, cliente_phone:str, cliente_address:str, invoice_number:str) -> None:
         os.environ["INVOICE_LANG"] = 'en'
 
         # Header
@@ -25,6 +25,7 @@ class CreateInvoce():
 
         self.invoice = Invoice(self.client, self.provider, self.creator)
         self.invoice.currency = 'Kz'
+        self.invoice.number = invoice_number
 
     def add_item(self, quantities:int, price:float, description:str) -> None:
         self.invoice.add_item(Item(quantities, price, description))
@@ -35,7 +36,7 @@ class CreateInvoce():
 
         # create invoice pdf
         self.invoice_pdf = SimpleInvoice(self.invoice)
-        self.files_dir = os.path.join(MEDIA_ROOT,'invoices\invoice.pdf')
+        self.files_dir = os.path.join(MEDIA_ROOT,f'invoices\invoice_{self.invoice.number}.pdf')
         self.invoice_pdf.gen(self.files_dir, generate_qr_code=True)
 
         return self.files_dir

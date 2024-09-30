@@ -51,8 +51,8 @@ class ShippingAddress(models.Model):
     
 
 class Invoices(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    invoice_number = models.PositiveBigIntegerField(default=1, verbose_name='Fatura nº', )
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    invoice_number = models.CharField(max_length=10, verbose_name='Fatura nº', )
     invoice_file = models.FileField(upload_to='invoices', null=True, blank=True)
 
     class Meta:

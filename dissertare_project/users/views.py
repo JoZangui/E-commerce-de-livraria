@@ -33,7 +33,7 @@ def register(request):
             user.is_active = False
             user.save()
 
-            # pega o endereço do actual do site
+            # pega o endereço actual do site
             current_site = get_current_site(request)
             # assunto do email que será enviado
             mail_subject = 'Activate your blog account.'

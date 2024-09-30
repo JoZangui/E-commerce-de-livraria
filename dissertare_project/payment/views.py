@@ -146,9 +146,11 @@ def process_order(request):
                         create_oder_item = OrderItem(order_id=order_id, book_id=book_id, user=user, quantity=value, price=price)
                         create_oder_item.save()
 
-            # create invoice pdf
+            # create invoice
+            invoice_number = f'D_B_{order_id}'
+            invoice = Invoices(order_id=order_id, invoice_number=invoice_number)
+            invoice.save()
 
-            
             # Delete our cart
             for key in list(request.session.keys()):
                 if key == 'session_key':
@@ -194,7 +196,8 @@ def process_order(request):
                         create_oder_item.save()
 
             # create invoice
-            invoice = Invoices(order_id=order_id, invoice_number=12341225)
+            invoice_number = f'D_B_{order_id}'
+            invoice = Invoices(order_id=order_id, invoice_number=invoice_number)
             invoice.save()
 
             # Delete our cart
