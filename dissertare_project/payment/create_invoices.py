@@ -36,7 +36,9 @@ class CreateInvoce():
 
         # create invoice pdf
         self.invoice_pdf = SimpleInvoice(self.invoice)
-        self.files_dir = os.path.join(MEDIA_ROOT,f'invoices\invoice_{self.invoice.number}.pdf')
+        # cria um caminho de directório de forma automática evitando problemas entre caminhos do tipo windows(\) e linux(/)
+        invoices_path = os.path.join('invoices', f'invoice_{self.invoice.number}.pdf')
+        self.files_dir = os.path.join(MEDIA_ROOT, invoices_path)
         self.invoice_pdf.gen(self.files_dir, generate_qr_code=True)
 
         return self.files_dir

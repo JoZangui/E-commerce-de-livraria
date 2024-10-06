@@ -1,17 +1,19 @@
 """ payment views """
-import os
+import os # verificar para remover
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.http import FileResponse
 
 from .models import Order, OrderItem, ShippingAddress, Invoices
 from .forms import ShippingForm, PaymentForm
 from users.models import Profile
 from cart.cart import Cart
-
-from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
+from books.models import Books
 
 
 @login_required
@@ -161,7 +163,15 @@ def process_order(request):
             currente_user = Profile.objects.filter(user__id=request.user.id)
             # Delete shopping cart in Database (user_cart field)
             currente_user.update(user_cart="")
-            
+
+            # Enviar um email para o cliente com a fatura e o livro
+            mail_subject = 'Obrigado por comprar na livraria Dissertare'
+            message = 'Em Anexo o livro e a sua fatura'
+            to_email = 'jozangui@gmail.com'
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.attach_file(invoice.invoice_file.path)
+            email.send(fail_silently=False)
+
             messages.success(request, "Order Placed!")
             return redirect('books')
         else:
@@ -205,6 +215,17 @@ def process_order(request):
                 if key == 'session_key':
                     # Delete the key
                     del request.session[key]
+
+            # Enviar um email para o cliente com a fatura e o livro
+            message = render_to_string(
+                'payment/payment_email_template.html', {'order_id': order_id}
+            )
+            mail_subject = 'Obrigado por comprar na livraria Dissertare'
+            to_email = 'jozangui@gmail.com'
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.attach_file(invoice.invoice_file.path)
+            email.send(fail_silently=False)
+
             messages.success(request, 'Order Placed!')
             return redirect('books')
     else:
@@ -280,3 +301,18 @@ def checkout(request):
     
 def payment_success(request):
     return render(request, 'payment/payment_success.html')
+
+def ordered_books(request, pk):
+    order = Order.objects.get(id=pk)
+    order_items = order.orderitem_set.all()
+
+    return render(request, 'payment/ordered_books.html', {'order_items': order_items})
+
+def download_book(request, pk):
+    book = get_object_or_404(Books, pk=pk)
+    book_path = book.file.path
+    response = FileResponse(open(book_path, 'rb'))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = f'attachment; filename="{book.title}.pdf"'
+
+    return response

@@ -1,0 +1,19 @@
+{% extends "books/base.html" %}
+{% block main_content %}
+    <!-- main content -->
+    <div class="container">
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 gy-5 gx-5 text-center">
+            {% for order_item in order_items %}
+                <div class="col d-flex flex-column align-items-center">
+                    <div class="rounded-3 book-cover-size home--image-container">
+                        <img src="{{order_item.book.cover.url}}" alt="book-image-cover">
+                    </div>
+                    <div class="text-container-width">
+                        <h5 class="font-bold title-height" title="{{order_item.book.title}}">{{book.title|truncatechars:26}}</h5>
+                    </div>
+                </div>
+                <a href="{% url 'download_book' order_item.book.pk %}" class="btn btn-primary">Download</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock main_content %}
