@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import FileResponse
+from django.contrib.sites.shortcuts import get_current_site
 
 from .models import Order, OrderItem, ShippingAddress, Invoices
 from .forms import ShippingForm, PaymentForm
@@ -160,9 +161,9 @@ def process_order(request):
                     del request.session[key]
 
             # Delete Cart from Database (user_cart field)
-            currente_user = Profile.objects.filter(user__id=request.user.id)
+            current_user = Profile.objects.filter(user__id=request.user.id)
             # Delete shopping cart in Database (user_cart field)
-            currente_user.update(user_cart="")
+            current_user.update(user_cart="")
 
             # Enviar um email para o cliente com a fatura e o livro
             mail_subject = 'Obrigado por comprar na livraria Dissertare'
@@ -216,11 +217,18 @@ def process_order(request):
                     # Delete the key
                     del request.session[key]
 
+            # pega o endereço actual do site
+            current_site = get_current_site(request)
             # Enviar um email para o cliente com a fatura e o livro
-            message = render_to_string(
-                'payment/payment_email_template.html', {'order_id': order_id}
-            )
             mail_subject = 'Obrigado por comprar na livraria Dissertare'
+            # renderiza um template html para a forma de string
+            message = render_to_string(
+                'payment/payment_email_template.html',
+                {
+                    'domain': current_site.domain,
+                    'order_id': order_id
+                }
+            )
             to_email = 'jozangui@gmail.com'
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.attach_file(invoice.invoice_file.path)
