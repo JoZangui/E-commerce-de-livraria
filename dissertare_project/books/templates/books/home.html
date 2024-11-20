@@ -115,6 +115,10 @@
     </nav>
     <!-- main content -->
     <main>
+        {% for book in books_on_sale %}
+            {{book}}
+        {% endfor %}
+        
         <div class="container pt-5">
             <!-- Books on sale -->
             <div class="align-items-center title my-4">
@@ -128,26 +132,91 @@
             <div class="container items-container rounded">
                 <div class="container items">
                     <ul class="d-flex justify-content-between bg-light overflow-y-hidden rounded py-4 px-4 px-md-5">
-                        {% for book in books_on_sale %}
-                            <li class="book_on_sale p-2 d-md-flex flex-column align-items-center">
-                                <div class="image-container rounded">
-                                    <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
-                                        <!-- 40% -->
-                                         {{book.discount_percentage|floatformat:"0"}}%
-                                    </div>
-                                    <img src="{{book.cover.url}}" alt="book-cover">
+                        <li class="p-2 d-md-flex flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    40%
                                 </div>
-                                <div class="text">
-                                    <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
-                                    <a href="" class="author text-dark">
-                                        <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
-                                    </a>
-                                    <a href="" class="btn btn-outline-primary mt-3">
-                                        Detalhes
-                                    </a>
+                                <img src="images/river_sing_me_home.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">River sing me home</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Eleanor Shearer</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    75%
                                 </div>
-                            </li>
-                        {% endfor %}
+                                <img src="images/war-of-the-worlds-cover-by-kjell-roger-ringstad.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">The war of the worlds</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">H.G. Wellsr</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    13%
+                                </div>
+                                <img src="images/anya_and_the_nightingale.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">Anya and the nightingale</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Sofia Pasternack</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    5%
+                                </div>
+                                <img src="images/the_language_of_fire.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">The language of fire</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Stephanie Hemphill</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-lg-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    10%
+                                </div>
+                                <img src="images/the-swallows-673x1024.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">The swallows - a novel</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Liza Lutz</h2>
+                                </a>
+                                <a href="details.html" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -164,22 +233,76 @@
             <div class="container items-container rounded">
                 <div class="container items">
                     <ul class="d-flex justify-content-between bg-light overflow-y-hidden rounded py-4 px-4 px-md-5">
-                        {% for book in recent_books %}
-                            <li class="brand_new_books p-2 d-md-flex flex-column align-items-center">
-                                <div class="image-container rounded">
-                                    <img src="{{book.cover.url}}" alt="book-cover">
-                                </div>
-                                <div class="text">
-                                    <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
-                                    <a href="" class="author text-dark">
-                                        <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
-                                    </a>
-                                    <a href="" class="btn btn-outline-primary mt-3">
-                                        Detalhes
-                                    </a>
-                                </div>
-                            </li>
-                        {% endfor %}
+                        <li class="p-2 d-md-flex flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <img src="images/our_wives_under_the_sea.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">Our wives under the sea</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Julia Armfield</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <img src="images/the_long_summer.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">The long summer</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Elizabeth Hanson</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <img src="images/dont_look_back.png" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">Dont look back</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Isaac Nelson</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-md-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <img src="images/get_in_trouble.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">Get in trouble</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">John Doe</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
+                        <li class="p-2 d-lg-flex d-none flex-column align-items-center">
+                            <div class="image-container rounded">
+                                <img src="images/Glittering_a_turd.jpg" alt="book-cover">
+                            </div>
+                            <div class="text">
+                                <h1 class="fs-6 fw-bold">Glittering a turd</h1>
+                                <a href="" class="author text-dark">
+                                    <h2 class="fs-6">Kris Hallenga</h2>
+                                </a>
+                                <a href="" class="btn btn-outline-primary mt-3">
+                                    Detalhes
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -195,21 +318,17 @@
                 <div class="card col-auto w-100 mb-3 me-md-5 border-0" style="max-width: 640px;">
                     <div class="row g-0 p-5 p-md-2">
                         <div class="col-md-4">
-                            <img src="{{editor_choice.cover.url}}" class="img-fluid rounded" alt="...">
+                            <img src="images/the-swallows-673x1024.jpg" class="img-fluid rounded" alt="...">
                         </div>
                         <div class="col-md-8 px-4">
                             <div class="card-body">
                                 <!-- Title -->
-                                <h5 class="fs-1 editor-choice-book-title card-title" title="{{editor_choice.title}}">{{editor_choice.title}}</h5>
+                                <h5 class="fs-1 editor-choice-book-title card-title">The swallows - A novel</h5>
                                 <!-- description -->
                                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                                 <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                                {% if editor_choice.is_sale %}
-                                    <span class="fs-5" style="text-decoration: line-through; color: gray;">${{editor_choice.price}}</span> &NonBreakingSpace;
-                                    <span class="fs-5 text-danger">${{editor_choice.sale_price}}</span>
-                                {% else %}
-                                    <span class="fs-5 text-primary">${{editor_choice.price}}</span><br>
-                                {% endif %}
+                                <span class="fs-5" style="text-decoration: line-through; color: gray;">$19.99</span> &NonBreakingSpace;
+                                <span class="fs-5 text-danger">$15.99</span>
                                 <!-- buttons -->
                                 <a href="" class="btn btn-primary mt-4">
                                     <i class="bi bi-cart-fill"></i> Adicionar ao carrinho
@@ -223,17 +342,13 @@
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Informação Adicional</h5>
                         <span>
-                            <strong>Título:</strong>
-                            {{editor_choice.title}}
-                        </span>
-                        <span>
                             <strong>Editora:</strong>
                             Carla Editora
                         </span>
                         <br>
                         <span>
                             <strong>Autor(a):</strong>
-                            {{editor_choice.author.name}}
+                            Lisa Lutz
                         </span>
                         <br>
                         <br>
@@ -253,46 +368,93 @@
                 <a href="" class="btn btn-outline-primary mb-4">Ver recomendações</a>
             </div>
             <div class="container recommendations d-flex justify-content-between align-items-center mb-3 py-3 px-3 rounded">
-                {% for list in book_lists %}
                 <!-- r1 -->
                 <div class="recommendation card me-3 bg-light py-2 px-3 overflow-hidden rounded">
                     <!-- recommendation books -->
                     <div class="recommendation-books w-100 d-flex justify-content-between pt-2 rounded">
-                            {% for book in list.books.all %}
-                                <div class="recommendation-book overflow-hidden rounded">
-                                    <img src="{{book.cover.url}}" class="card-img-top" alt="...">
-                                </div>
-                            {% endfor %}
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/anya_and_the_nightingale.jpg" class="card-img-top" alt="...">
                         </div>
-                        <!-- description -->
-                        <div class="card-body px-0">
-                        <h5 class="card-title">{{list.list_name}}</h5>
-                        <p class="card-text">{{list.list_description}}</p>
-                        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                        <a href="" class="btn btn-outline-primary">Ver lista</a>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/dont_look_back.png" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/the-swallows-673x1024.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/Gullivers-Travels.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/the_long_summer.jpg" class="card-img-top" alt="...">
                         </div>
                     </div>
-                {% endfor %}
+                    <!-- description -->
+                    <div class="card-body px-0">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                      <a href="" class="btn btn-outline-primary">Ver lista</a>
+                    </div>
+                </div>
+                <!-- r2 -->
+                <div class="recommendation card me-3 bg-light py-2 px-3 overflow-hidden rounded">
+                    <!-- recommendation books -->
+                    <div class="recommendation-books w-100 d-flex justify-content-between pt-2 rounded">
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/Harry poter and the globet of fire.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/the_forest_of_damned_souls.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/the_language_of_fire.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/The-Little-Prince-Book-Cover-389x600.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/river_sing_me_home.jpg" class="card-img-top" alt="...">
+                        </div>
+                    </div>
+                    <!-- description -->
+                    <div class="card-body px-0">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                      <a href="" class="btn btn-outline-primary">Ver lista</a>
+                    </div>
+                </div>
+                <!-- r3 -->
+                <div class="recommendation card me-3 bg-light py-2 px-3 overflow-hidden rounded">
+                    <!-- recommendation books -->
+                    <div class="recommendation-books w-100 d-flex justify-content-between pt-2 rounded">
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/our_wives_under_the_sea.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/Glittering_a_turd.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/get_in_trouble.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/much_too_vulgar.jpg" class="card-img-top" alt="...">
+                        </div>
+                        <div class="recommendation-book overflow-hidden rounded">
+                            <img src="images/the_martian.jpg" class="card-img-top" alt="...">
+                        </div>
+                    </div>
+                    <!-- description -->
+                    <div class="card-body px-0">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                      <a href="" class="btn btn-outline-primary">Ver lista</a>
+                    </div>
+                </div>
             </div>
 	    </div>
     </main>
-    
-    <!-- adicionando e mudando algumas classes bootstrap para ajustar a responsividade das imagens dos livros -->
-    <script>
-        const booksOnSale = document.querySelectorAll('.book_on_sale');
-        const brandNewBooks = document.querySelectorAll('.brand_new_books');
-        
-        function manageSomeBootstrapClasses(element) {
-            for (let index = 0; index < element.length; index++) {
-                if (index>=2) {
-                    element[index].classList.add('d-none');
-                }
-            }
-            element[element.length-1].classList.replace('d-md-flex', 'd-lg-flex');
-        }
-        manageSomeBootstrapClasses(booksOnSale);
-        manageSomeBootstrapClasses(brandNewBooks);
-    </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
