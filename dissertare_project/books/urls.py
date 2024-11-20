@@ -5,7 +5,9 @@ from . import views
 
 urlpatterns = [
     # home
-    path('', views.books, name="books"),
+    path('', views.home, name="home"),
+    # books
+    path('books', views.books, name="books"),
     # book detail
     path('book/book_detail/<int:book_id>/', views.book_detail, name="book-detail"),
     # upload book form

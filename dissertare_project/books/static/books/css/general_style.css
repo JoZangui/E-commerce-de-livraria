@@ -1,0 +1,97 @@
+@font-face {
+    font-family: Inria_Sans;
+    src: url('../fonts/Inria_Sans/InriaSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: Orbitron;
+    src: url('../fonts/Orbitron/Orbitron-VariableFont_wght.ttf');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* icons */
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+span.material-symbols-outlined {
+    font-size: 35px;
+}
+
+h1, h2, h3, a {
+    font-family: Inria_Sans;
+}
+
+/* header */
+.carousel-caption {
+    text-shadow: 0px 0px 2px #000;
+}
+.carousel-item img {
+    height: 315px;
+    object-fit: cover;
+    -o-object-fit: cover;
+    object-position: top;
+    -o-object-position: top;
+}
+
+/* nav */
+.nav-items > a {
+    font-family: Orbitron;
+}
+.active {
+    color: #000;
+}
+
+.form-inputs{
+    position:relative;
+}
+.form-inputs .form-control{
+    height:45px;
+}
+
+.form-inputs .form-control::placeholder {
+    font-style: italic;
+    font-weight: lighter;
+    color: lightgray;
+}
+
+.form-inputs .form-control:focus{
+    box-shadow:none;
+    color: #2b2b2b;
+    border: 2px solid #000;
+}
+
+.form-inputs i{
+    position:absolute;
+    right:10px;
+    background-color: #fff;
+}
+
+.cart-button a {
+    text-decoration: none;
+    color: #000;
+}
+
+.shop-bag{
+    color:#434343;
+    font-size:25px;
+    display:flex;
+    border-radius:50%;
+    align-items:center;
+    justify-content:center;
+}
+
+.qty{
+    font-size:12px;
+}
+/* main */
+.items-container {
+    padding: 19px 13px;
+    background-color: #D9D9D9;
+}

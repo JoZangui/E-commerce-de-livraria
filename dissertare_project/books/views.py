@@ -25,6 +25,11 @@ def _user_is_superuser(user):
     return user.is_superuser
 
 
+def home(request):
+    books_on_sale = Books.objects.filter(is_sale=True)
+    
+    return render(request, 'books/home.html', {'books_on_sale': books_on_sale})
+
 def books(request):
     all_books = Books.objects.all().order_by('-date_posted')
 

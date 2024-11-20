@@ -1,0 +1,114 @@
+/* main */
+.items ul {
+    list-style: none;
+    padding: 21px;
+    overflow: hidden;
+}
+.items ul li {
+    width: 172px;
+    height: 370px;
+    overflow: hidden;
+}
+
+li .image-container {
+    width: 100%;
+    min-height: 158px;
+    max-height: 221px;
+    position: relative;
+    overflow: hidden;
+}
+.image-container img, .editor-choice .book img, .books-cover--container .book-cover img {
+    width: 100%;
+}
+.image-container .sale {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    color: #ffffff;
+    background-color: #ff0000;
+}
+
+.editor-choice .book {
+    width: 197px;
+    height: 293px;
+    overflow: hidden;
+}
+.text {
+    width: 100%;
+    overflow: hidden;
+}
+
+.text > h1 {
+    height: 40px;
+    max-width: 150px;
+    overflow: hidden;
+}
+.author h2 {
+    max-width: 15ch;
+    min-width: 9ch;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.title h1 {
+    font-family: Orbitron;
+}
+
+.author-image {
+    width: 208px;
+    height: 208px;
+    overflow: hidden;
+}
+
+.author-image img {
+    max-width: 100%;
+}
+
+/* Editor's choice */
+.editor-choice-book-title {
+    max-width: 15ch;
+    min-width: 9ch;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* recomendation */
+.recommendations {
+    /* max-height: 120px; */
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background-color: #ddd;
+}
+
+.recommendations::-webkit-scrollbar {
+    width: 0;
+}
+
+.recommendations .recommendation {
+    min-width: 618px;
+    min-height: 320px;
+    max-height: 350px;
+}
+.recommendation-books {
+    height: 132px;
+}
+.recommendation-book {
+    width: 88px;
+    height: 131px;
+}
+.recommendation-book img {
+    width: 88px;
+    height: 131px;
+    object-fit: fill;
+    object-position: top;
+    -o-object-fit: fill;
+    -o-object-position: top;
+}
+
+/* topics */
+.topic-description {
+    height: 100%;
+}
