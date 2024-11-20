@@ -9,7 +9,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 
-from .models import Authors, Books
+from .models import Authors, Books, BookLists
 from .forms import AuthorsForm, BookForm
 from dissertare_project.settings import BASE_DIR
 from cart.cart import Cart
@@ -24,6 +24,26 @@ def _user_is_superuser(user):
     """
     return user.is_superuser
 
+
+def home(request):
+    books_on_sale = Books.objects.filter(is_sale=True)
+    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    for book in books_on_sale:
+        book.discount_percentage = (book.sale_price / book.price) * 100
+    # livros recentes
+    recent_books = Books.objects.all().order_by('-date_posted')[:5]
+    # a escolha do editor
+    editor_choice = Books.objects.filter(category__name='A escolha do editor').order_by('-date_posted').first()
+    # lista de livros
+    book_lists = BookLists.objects.all()[:3]
+
+    return render(request, 'books/home.html', {
+        'books_on_sale': books_on_sale,
+        'recent_books': recent_books,
+        'editor_choice':editor_choice,
+        'book_lists': book_lists
+        }
+    )
 
 def books(request):
     all_books = Books.objects.all().order_by('-date_posted')

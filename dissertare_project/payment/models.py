@@ -55,5 +55,8 @@ class Invoices(models.Model):
     invoice_number = models.CharField(max_length=10, verbose_name='Fatura nº', )
     invoice_file = models.FileField(upload_to='invoices', null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f'Invoice nº {self.invoice_number}'
+
     class Meta:
         verbose_name_plural = 'Invoices'

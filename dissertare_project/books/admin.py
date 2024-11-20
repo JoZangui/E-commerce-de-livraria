@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Books, Authors, Category
+from .models import Books, Authors, Category, BookLists
 
 
 class BooksAdmin(admin.ModelAdmin):
@@ -16,7 +16,11 @@ class BooksAdmin(admin.ModelAdmin):
             'file',
             'description',
             'cover',
-            'date_posted', 'price', 'is_sale', 'sale_price']}),
+            'date_posted',
+            'price',
+            'is_sale',
+            'sale_price',
+            'category']}),
         ('Autor do livro', {'fields': ['author']}),
         ('Quem está a publicar', {'fields': ['uploaded_by']})
     ]
@@ -31,10 +35,10 @@ class BooksAdmin(admin.ModelAdmin):
         'uploaded_by',
         'price',
         'is_sale',
-        'sale_price',
-        'category')
+        'sale_price')
 
 
 admin.site.register(Books, BooksAdmin)
 admin.site.register(Authors)
 admin.site.register(Category)
+admin.site.register(BookLists)
