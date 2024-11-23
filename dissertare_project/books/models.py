@@ -15,7 +15,7 @@ def books_pdf_file_path(instance, filename):
     para um directório com o nome do usuário
     """
     books_pdf_path = os.path.join('books', 'pdfs')
-    return os.path.join(books_pdf_path, str(instance.author.id), filename)
+    return os.path.join(books_pdf_path, filename)
 
 
 def books_image_file_path(instance, filename):
@@ -24,7 +24,7 @@ def books_image_file_path(instance, filename):
     para um directório com o nome do usuário
     """
     books_image_path = os.path.join('books', 'images')
-    return os.path.join(books_image_path, str(instance.author.id), filename)
+    return os.path.join(books_image_path, filename)
 
 
 def authors_image_file_path(instance, filename):
@@ -33,7 +33,7 @@ def authors_image_file_path(instance, filename):
     para um directório com o nome do usuário
     """
     authors_path = os.path.join('authors', 'images')
-    return os.path.join(authors_path, str(instance.id), filename)
+    return os.path.join(authors_path, filename)
 
 
 class Authors(models.Model):
@@ -87,7 +87,7 @@ class Books(models.Model):
         verbose_name='Capa do livro')
     date_posted = models.DateTimeField(default=timezone.now, verbose_name='Publicado no site em')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Enviado por')
-    category = models.ManyToManyField(Category, default=1)
+    category = models.ManyToManyField(Category, related_name='books_category', default=[0])
     price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
     is_sale = models.BooleanField(default=False)
     sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
@@ -110,7 +110,7 @@ class Books(models.Model):
 
 class BookLists(models.Model):
     list_name = models.CharField(verbose_name='Nome da lista', max_length=50)
-    books = models.ManyToManyField('Books', verbose_name='Livros', related_name='book_lists')
+    books = models.ManyToManyField(Books, verbose_name='Livros', related_name='book_lists', default=[0])
     list_description = models.TextField(verbose_name='Descrição da lista')
 
     def __str__(self) -> str:

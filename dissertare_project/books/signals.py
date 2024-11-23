@@ -23,21 +23,59 @@ def delete_book_files_signal(sender, instance:Books,**kwargs):
     instance.cover.delete(save=False)
 
 
+@receiver(pre_save, sender=Books)
+def delete_old_book_image_file_signal(sender, instance:Books, **kwargs):
+    """
+    Exclui o arquivo de imagem do livro ao adicionar uma nova imagem
+    """
+    # Verifica se o livro já existe na base de dados
+    if (Books.objects.filter(id=instance.id)):
+        book = Books.objects.get(id=instance.id)
+        new_book_image = instance.cover
+        old_book_image = book.cover
+
+        # verifica se o arquivo ou diretório existe
+        if os.path.exists(old_book_image.path):
+            # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+            if new_book_image != old_book_image:
+                os.unlink(old_book_image.path)
+
+
+@receiver(pre_save, sender=Books)
+def delete_old_book_pdf_file_signal(sender, instance:Books, **kwargs):
+    """
+    Exclui o arquivo de imagem do livro ao adicionar uma nova imagem
+    """
+    # Verifica se o livro já existe na base de dados
+    if (Books.objects.filter(id=instance.id)):
+        book = Books.objects.get(id=instance.id)
+        new_book_pdf = instance.file
+        old_book_pdf = book.file
+
+        # verifica se o arquivo ou diretório existe
+        if os.path.exists(old_book_pdf.path):
+            # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+            if new_book_pdf != old_book_pdf:
+                os.unlink(old_book_pdf.path)
+
+
 @receiver(pre_save, sender=Authors)
 def delete_old_author_image_file_signal(sender, instance:Authors, **kwargs):
     """
     Exclui o arquivo de imagem do autor ao adicionar uma nova imagem
     """
-    author = Authors.objects.get(id=instance.id)
-    new_author_image = instance.image
-    old_author_image = author.image
+    # verifica se o autor já existe na base de dados
+    if (Authors.objects.filter(id=instance.id)):
+        author = Authors.objects.get(id=instance.id)
+        new_author_image = instance.image
+        old_author_image = author.image
 
-    # verifica se o arquivo ou diretório existe
-    if os.path.exists(os.path.join(MEDIA_BASE_DIR, old_author_image.name)):
-        # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
-        if new_author_image != old_author_image:
-            # caminho do directório media (configurado em settings.py)
-            os.unlink(os.path.join(MEDIA_BASE_DIR, old_author_image.name)) # media/authors/images/author_name
+        # verifica se o arquivo ou diretório existe
+        if os.path.exists(old_author_image.path):
+            # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+            print(old_author_image.path)
+            if new_author_image != old_author_image:
+                os.unlink(old_author_image.path)
 
 
 @receiver(post_delete, sender=Authors)
@@ -46,3 +84,4 @@ def delete_author_files_signal(sender, instance:Authors,**kwargs):
     Exclui o arquivo associado ao autor e limpa todos os atributos no campo quando excluir um autor da base de dados.
     """
     instance.image.delete(save=False)
+
