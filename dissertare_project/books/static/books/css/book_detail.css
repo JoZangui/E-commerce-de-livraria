@@ -1,0 +1,43 @@
+.book {
+    height: 450px;
+}
+.book-image {
+    width: 219px;
+    height: 326px;
+    overflow: hidden;
+}
+.buttons, .price {
+    width: 219px;
+}
+.book-image img {
+    width: 219px;
+    height: 326px;
+    object-fit: fill;
+    object-position: top;
+    -o-object-fit: fill;
+    -o-object-position: top;
+}
+.add-to-cart-button, .amount-button {
+    width: 219px;
+}
+.book-description {
+    height: 270px;
+}
+.editor-comment, .synopsis {
+    max-height: 250px;
+}
+.recommended-books {
+    height: 90%;
+}
+.recommended-book-image {
+    width: 117px;
+    height: 174px;
+}
+.recommended-book-image img {
+    width: 117px;
+    height: 174px;
+    object-fit: cover;
+    -o-object-fit: cover;
+    object-position: top;
+    -o-object-position: top;
+}

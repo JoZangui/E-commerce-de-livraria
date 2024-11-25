@@ -29,7 +29,7 @@ def home(request):
     books_on_sale = Books.objects.filter(is_sale=True)
     # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
     for book in books_on_sale:
-        book.discount_percentage = (book.sale_price / book.price) * 100
+        book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
     # livros recentes
     recent_books = Books.objects.all().order_by('-date_posted')[:5]
     # a escolha do editor
@@ -41,7 +41,8 @@ def home(request):
         'books_on_sale': books_on_sale,
         'recent_books': recent_books,
         'editor_choice':editor_choice,
-        'book_lists': book_lists
+        'book_lists': book_lists,
+        'title': 'home'
         }
     )
 
@@ -62,7 +63,7 @@ def books(request):
         {
             'books': all_books,
             'page_obj': page_obj,
-            'title': 'home'
+            'title': 'books'
         }
     )
 
@@ -72,7 +73,7 @@ def book_detail(request, book_id):
     cart = Cart(request)
     book_is_in_cart = str(book_id) in cart.cart.keys()
 
-    return render(request, 'books/book_detail.html', {'book': book, 'title': book.title, 'book_is_in_cart': book_is_in_cart})
+    return render(request, 'books/book_detail.html', {'book': book, 'title': 'detail', 'book_is_in_cart': book_is_in_cart})
 
 
 @user_passes_test(_user_is_superuser, login_url='books')

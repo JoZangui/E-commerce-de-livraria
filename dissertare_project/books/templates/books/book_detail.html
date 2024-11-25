@@ -1,79 +1,97 @@
-{% extends "books/base.html" %}
-
-{% block navigations_button %}
-    <span onclick="goBack()" style="cursor: pointer;">
-        <iconify-icon icon="material-symbols:arrow-circle-left-outline" style="color: #000000; font-size: 57px;"></iconify-icon>
-    </span>
-{% endblock navigations_button %}
-
+{% extends "books\base.html" %}
 {% block main_content %}
-<div class="container py-5">
-    <div class="row row-cols-1 row-cols-md-2 d-flex justify-content-center justify-content-lg-start align-items-center align-items-md-start">
-        <!-- book cover and download button container -->
-        <div class="col w-25 d-flex flex-column align-items-center me-lg-4 me-md-5 px-0">
-            <!-- book cover -->
-            <div class="detail--book-cover rounded overflow">
-                <img src="{{book.cover.url}}" class="" alt="book-cover">
-            </div>
-
-            <!-- download button -->
-            <div class="mt-4">
+    <div class="mt-5 container items-container overflow rounded">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center text-lg-start mx-auto py-3 rounded bg-light">
+            <!-- book cover, price, amount -->
+            <div class="book col col-lg-4 col-xl-3 d-flex flex-column justify-content-between align-items-center align-items-lg-start ps-md-4">
+                <div class="book-image rounded">
+                    <img src="{{book.cover.url}}" alt="book-cover">
+                </div>
+                <!-- price -->
+                <div class="price d-flex justify-content-center py-1">    
+                    {% if  book.is_sale %}
+                        <!-- if sale is true -->
+                        <span class="text-danger fs-5 fw-bold">US${{book.sale_price}} -<span class="ms-2 text-secondary fw-normal text-decoration-line-through">US${{book.price}}</span></span>
+                    {% else %}
+                        <!-- if sale is false -->
+                        <span class="text-primary text-center fs-4">US${{book.price}}</span>    
+                    {% endif %}
+                </div>
+                <!-- buttons -->
+                <div class="buttons">
                 {% if book_is_in_cart %}
-                    <!-- <a href="{% url 'download-book' book.pk %}" download {% if user.is_authenticated %}download="{{book.title}}"{% endif %} type="application/pdf" class="btn btn-lg btn-success px-5">download</a> -->
-                    <center>
-                        <strong>
-                            <small>Você já possui este livro</small>
-                        </strong>
-                    </center>
-                    <a href="{% url 'cart_summary' %}" class="btn btn-lg btn-outline-primary px-5">View Cart</a>
+                    <!-- Already have -->
+                    <small class="text-secondary">já adicionou este artigo ao carrinho</small>
+                    <a href="{% url 'cart_summary' %}" class="add-to-cart-button btn btn-outline-secondary my-2">Ver artigo no carrinho</a>
                 {% else %}
-                    <button type="button" value="{{book.id}}" class="btn btn-lg btn-success px-5" id="add-cart">Add To Cart</button>
+                    <!-- amount buttons group -->
+                    <div class="amount-button btn-group" role="group" aria-label="First group">
+                        <!-- decrease button -->
+                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="decrease()"><</button>
+                        <!-- input -->
+                        <input type="number" class="amount-input btn btn-sm btn-outline-warning" id="qty-cart" value="1" min="1" max="10" disabled>
+                        <!-- increase button -->
+                        <button type="button" class="btn btn-sm btn-outline-warning" onclick="increase()">></button>
+                    </div>
+                    <button type="button" value="{{book.id}}" class="add-to-cart-button btn btn-primary my-2" id="add-cart">Adicionar ao carrinho</button>
                 {% endif %}
-                <div class="row justify-content-center">
-                    <div class="col-md-2">quantity</div>
-                    <div class="col-md-2">
-                        <select class="form-select form-select-sm" id="qty-cart">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="3">4</option>
-                            <option value="3">5</option>
-                        </select>
+                </div>
+            </div>
+            <!-- book description -->
+            <div class="col-auto col-md-6 col-lg-8 col-xl-5 book-title-and-description overflow-x-hidden overflow-y-auto">
+                <!-- title -->
+                <h3 class="fw-bold fs-2">{{book.title}}</h3>
+                <a href="" class="text-secondary fw-bold"> <!-- autor --> {{book.author}}</a> | <span class="text-secondary fs-6 mb-3"><!-- data --> {{book.date_posted|date:"d b, Y"}}</span>
+                <div class="book-description row row-cols-1 overflow-x-hidden overflow-y-auto">
+                    <!-- editorecommended-comment (optional) -->
+                    <div class="editorecommended-comment col pt-2">
+                        <h4>Comentário</h4>
+                        <p class="text-start">{{book.description}}</p>
+                    </div>
+                    <div class="synopsis col pt-2">
+                        <h4>Sinopse</h4>
+                        <p class="text-start">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae laudantium optio explicabo, pariatur obcaecati fugit mollitia id placeat libero ex maiores esse vero in molestias hic voluptates odit aspernatur blanditiis.</p>
+                    </div>
+                </div>
+                {% if user.is_superuser %}
+                    <span class="mt-3 d-flex d-md-block justify-content-center">
+                        <a href="{% url 'book-update' book.id %}" class="btn btn-sm btn-outline-primary me-3 me-md-2">Editar</a>
+                        <a href="{% url 'book-delete' book.id %}" class="btn btn-sm btn-outline-danger">Deletar</a>
+                    </span>
+                {% endif %}
+            </div>
+            <!-- recommendations -->
+            <div class="col-md-12 mt-4 mt-lg-0 d-flex flex-column justify-content-between align-items-center align-items-lg-start ps-md-4 ps-xl-5">
+                <h4 class="fw-bold text-left">Continue explorando</h4>
+                <p>Lorem ipsum dolor, sit amet consectetur</p>    
+                <div class="recommended-books row overflow-hidden">
+                    <div class="col-auto recommended-book-image overflow-hidden">
+                        <a href="">
+                            <img class="rounded" src="images/Gullivers-Travels.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="col-auto recommended-book-image overflow-hidden">
+                        <a href="">
+                            <img class="rounded" src="images/war-of-the-worlds-cover-by-kjell-roger-ringstad.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="col-auto recommended-book-image overflow-hidden">
+                        <a href="">
+                            <img class="rounded" src="images/our_wives_under_the_sea.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="col-auto recommended-book-image overflow-hidden">
+                        <a href="">
+                            <img class="rounded" src="images/get_in_trouble.jpg" alt="">
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- book info container -->
-        <div class="col py-md-0 py-4">
-            <!-- book title -->
-            <div class="title text-center text-md-start">
-                <h1 title="Assassin's Creed The Chain">{{book.title}}</h1>
-            </div>
-
-            <!-- se o usuário logado é um administrador do site então apresenta as opções de editar e eliminar -->
-            {% if user.is_superuser %}
-                <!-- edit and delete button -->
-                <div class="d-flex d-md-block justify-content-center">
-                    <a href="{% url 'book-update' book.id %}" class="btn btn-sm btn-outline-primary me-3 me-md-2">Edit</a>
-                    <a href="{% url 'book-delete' book.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-                </div>
-            {% endif %}
-
-            <!-- author name and pub date -->
-            <br>
-            <div class="autor-date text-center text-md-start">
-                <h4><span class="font-bold"><a href="{% url 'author-detail' book.author.name %}" class="text-decoration-none text-dark">{{book.author}}</a></span> | <small>{{book.date_posted|date:"d b, Y"}}</small></h4>
-            </div>
-
-            <!-- book description -->
-            <br>
-            <div class="content">
-                <p>{{book.description}}</p>
-            </div>
-        </div>
     </div>
-</div>
+{% endblock main_content %}
+
+{% block adicional_scripts %}
 <script>
     // Check if button pressed
     $(document).on('click', '#add-cart', function(e) {
@@ -83,21 +101,34 @@
             url: "{% url 'cart_add' %}",
             data: {
                 book_id: $('#add-cart').val(),
-                book_qty: $('#qty-cart option:selected').text(),
+                book_qty: $('#qty-cart').val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
-
+            
             success: function(json) {
                 // console.log(json)
                 document.getElementById('cart_quantity').textContent = json.qty
                 location.reload();
             },
-
+            
             error: function(xhr, errmsg, err) {
-
+                
             }
         });
     });
+
+    const amountInput = document.querySelector('.amount-input');
+    const increase = () => {
+        if (Number(amountInput.value) - amountInput.max) {
+            amountInput.value = Number(amountInput.value) + 1;
+        }
+    }
+    const decrease = () => {
+        if (Number(amountInput.value) > amountInput.min) {
+            amountInput.value = Number(amountInput.value) - 1;
+        }
+    }
+
 </script>
-{% endblock main_content %}
+{% endblock adicional_scripts %}

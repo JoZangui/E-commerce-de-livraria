@@ -107,7 +107,26 @@ li .image-container {
     -o-object-fit: fill;
     -o-object-position: top;
 }
-
+.recommendation-title {
+    max-width: 25ch;
+    min-width: 9ch;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    overflow: hidden;
+}
+.recommendation-description {
+    max-width: 75ch;
+    min-width: 9ch;
+    min-height: 6ch;
+    max-height: 6ch;
+    text-wrap: wrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    overflow: hidden;
+}
 /* topics */
 .topic-description {
     height: 100%;
