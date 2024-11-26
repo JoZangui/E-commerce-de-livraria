@@ -115,7 +115,7 @@ def login_user(request):
                 for key, value in converted_cart.items():
                     cart.add(book=key, quantity=value)
             messages.success(request, 'You Have Been Logged In!')
-            return redirect('books')
+            return redirect('home')
         else:
             messages.warning(request, 'There was an error, please try again...')
             return redirect('login')

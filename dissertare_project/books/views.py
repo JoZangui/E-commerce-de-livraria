@@ -50,7 +50,7 @@ def books(request):
     all_books = Books.objects.all().order_by('-date_posted')
 
     # classe para separar os itens por páginas (8 itens por página)
-    pagtr = Paginator(all_books, 8)
+    pagtr = Paginator(all_books, 10)
 
     # número da página a ser apresentada
     page_number = request.GET.get('page')
@@ -63,7 +63,28 @@ def books(request):
         {
             'books': all_books,
             'page_obj': page_obj,
-            'title': 'books'
+            'title': 'book_list'
+        }
+    )
+
+def books_on_sale(request):
+    all_books_on_sale = Books.objects.filter(is_sale=True).order_by('-date_posted')
+
+    # classe para separar os itens por páginas (8 itens por página)
+    pagtr = Paginator(all_books_on_sale, 10)
+
+    # número da página a ser apresentada
+    page_number = request.GET.get('page')
+    # objecto com o número e link das páginas
+    page_obj = pagtr.get_page(page_number)
+
+    return render(
+        request,
+        'books/books_on_sale.html',
+        {
+            'books': all_books_on_sale,
+            'page_obj': page_obj,
+            'title': 'book_list'
         }
     )
 
