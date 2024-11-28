@@ -112,6 +112,7 @@ class BookLists(models.Model):
     list_name = models.CharField(verbose_name='Nome da lista', max_length=50)
     books = models.ManyToManyField(Books, verbose_name='Livros', related_name='book_lists', default=[0])
     list_description = models.TextField(verbose_name='Descrição da lista')
+    update_date = models.DateTimeField(default=timezone.now, verbose_name='Data da ultima actualização')
 
     def __str__(self) -> str:
         return self.list_name

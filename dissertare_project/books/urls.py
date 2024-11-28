@@ -30,5 +30,6 @@ urlpatterns = [
     # all author books
     path('author/all_author_books/<str:author_name>/', views.all_author_books, name='all-author-books'),
     # books_on_sale
-    path('books_on_sale', views.books_on_sale, name='books-on-sale')
+    path('books_on_sale', views.books_on_sale, name='books-on-sale'),
+    path('book_lists', views.book_lists, name='book-lists'),
 ]

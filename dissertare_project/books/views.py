@@ -97,6 +97,26 @@ def book_detail(request, book_id):
     return render(request, 'books/book_detail.html', {'book': book, 'title': 'detail', 'book_is_in_cart': book_is_in_cart})
 
 
+def book_lists(request):
+    lists = BookLists.objects.all().order_by('-update_date')
+
+    # classe para separar os itens por páginas (8 itens por página)
+    pagtr = Paginator(lists, 10)
+
+    # número da página a ser apresentada
+    page_number = request.GET.get('page')
+    # objecto com o número e link das páginas
+    page_obj = pagtr.get_page(page_number)
+
+    return render(
+        request,
+        'books/book_lists.html',
+        {
+            'lists': lists,
+            'title': 'book_lists',
+            'page_obj': page_obj,
+        })
+
 @user_passes_test(_user_is_superuser, login_url='books')
 def upload_book(request):
     """ Apenas admin devem usar essa página """
