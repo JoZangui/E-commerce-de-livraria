@@ -52,7 +52,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{list.list_name}}</h5>
                             <p class="card-text">{{list.list_description|truncatechars:96}}</p>
-                            <a href="#" class="btn btn-outline-primary">Ver lista</a>
+                            <a href="{% url 'books-from-lists' list.id %}" class="btn btn-outline-primary">Ver lista</a>
                         </div>
                     </div>
                 </div>

@@ -29,7 +29,10 @@ urlpatterns = [
     path("author/all_authors/", views.all_authors, name="all-authors"),
     # all author books
     path('author/all_author_books/<str:author_name>/', views.all_author_books, name='all-author-books'),
-    # books_on_sale
+    # books on sale
     path('books_on_sale', views.books_on_sale, name='books-on-sale'),
+    # book lists
     path('book_lists', views.book_lists, name='book-lists'),
+    # books from list
+    path('books_from_list/<int:list_id>', views.books_from_list, name='books-from-lists'),
 ]

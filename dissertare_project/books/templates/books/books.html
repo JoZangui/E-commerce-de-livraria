@@ -42,6 +42,11 @@
                 <div class="col-auto d-flex justify-content-center py-3 rounded">
                     <div class="book overflow-hidden">
                         <div class="book-image overflow-hidden rounded">
+                            {% if book.is_sale %}
+                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
+                                    {{book.discount_percentage|floatformat:"0"}}%
+                                </div>
+                            {% endif %}
                             <img src="{{book.cover.url}}" alt="book-image-cover">
                         </div>
                         <div class="title-author">

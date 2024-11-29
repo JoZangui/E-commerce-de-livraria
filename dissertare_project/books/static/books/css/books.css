@@ -6,6 +6,7 @@
     font-family: Inria_Sans;
 }
 .book-image {
+    position: relative;
     width: 151px;
     height: 225px;
     overflow: hidden;
@@ -17,4 +18,11 @@
     -o-object-fit: fill;
     object-position: top;
     -o-object-position: top;
+}
+.book-image .sale {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    color: #ffffff;
+    background-color: #ff0000;
 }

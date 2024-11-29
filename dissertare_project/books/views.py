@@ -48,6 +48,10 @@ def home(request):
 
 def books(request):
     all_books = Books.objects.all().order_by('-date_posted')
+    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    for book in all_books:
+        if book.is_sale:
+            book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
 
     # classe para separar os itens por páginas (8 itens por página)
     pagtr = Paginator(all_books, 10)
@@ -63,12 +67,15 @@ def books(request):
         {
             'books': all_books,
             'page_obj': page_obj,
-            'title': 'book_list'
+            'title': 'books'
         }
     )
 
 def books_on_sale(request):
     all_books_on_sale = Books.objects.filter(is_sale=True).order_by('-date_posted')
+    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    for book in all_books_on_sale:
+        book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
 
     # classe para separar os itens por páginas (8 itens por página)
     pagtr = Paginator(all_books_on_sale, 10)
@@ -80,14 +87,39 @@ def books_on_sale(request):
 
     return render(
         request,
-        'books/books_on_sale.html',
+        'books/books.html',
         {
             'books': all_books_on_sale,
             'page_obj': page_obj,
-            'title': 'book_list'
+            'title': 'books'
         }
     )
 
+
+def books_from_list(request, list_id):
+    books_list = BookLists.objects.get(id=list_id)
+    books = books_list.books.all()
+    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    for book in books:
+        if book.is_sale:
+            book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
+    # classe para separar os itens por páginas (8 itens por página)
+    pagtr = Paginator(books, 10)
+
+    # número da página a ser apresentada
+    page_number = request.GET.get('page')
+    # objecto com o número e link das páginas
+    page_obj = pagtr.get_page(page_number)
+
+    return render(
+        request,
+        'books/books.html',
+        {
+            'books': books,
+            'page_obj': page_obj,
+            'title': 'books'
+        }
+    )
 
 def book_detail(request, book_id):
     book = Books.objects.get(pk=book_id)
