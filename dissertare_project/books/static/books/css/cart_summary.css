@@ -1,0 +1,22 @@
+.artigos::-webkit-scrollbar {
+    width: 0;
+}
+.artigos .card {
+    min-width: 18rem;
+}
+.card-image {
+    width: 190px;
+    height: 202px;
+}
+.card-image image {
+    width: 100%;
+}
+.card-title {
+    max-width: 35ch;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.price {
+    height: 55px;
+}

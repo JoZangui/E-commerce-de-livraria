@@ -1,121 +1,128 @@
-{% extends 'books/base.html' %}
+{% extends "books/base.html" %}
 {% block main_content %}
-    {% if cart_books %}
-        {% for book in cart_books %}
-            <div class="card mb-3">
-                <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="{{ book.cover.url }}" class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <center>
-                            <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">{{ book.description }}</p>
-                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                            {% if book.is_sale %}
-                                <div class="d-flex justify-content-center small text-warning mb-2">
-                                    <div class="bi-star-fill"></div>
-                                    &nbsp;&nbsp;Sale!&nbsp;&nbsp;
-                                    <div class="bi-star-fill"></div>
-                                </div>
-                                <!-- book price-->
-                                <strike>
-                                    ${{book.price}}
-                                </strike>
-                                &nbsp;
-                                ${{book.sale_price}}
-                            {% else %}
-                                ${{book.price}}
-                            {% endif %}
-                            <br><br>
-                            <div class="row justify-content-center">
-                                <div class="col-md-2">quantity</div>
-                                <div class="col-md-2">
-                                    <select class="form-select form-select-sm" id="select{{book.id}}">
-                                        {% for key, value in quantities.items %}
-                                            {% if key == book.id|slugify %}
-                                            <option selected>{{ value }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </div>
+    <div class="container items-container overflow rounded">
+        <div class="row row-cols-1 mx-auto p-3 rounded bg-light">
+            <div class="artigos col d-flex flex-nowrap overflow-y-hidden overflow-x-auto">
+                {% for book in cart_books %}
+                    <div class="card me-4">
+                        <div class="card-image w-100 overflow-hidden">
+                            <img src="{{book.cover.url}}" class="card-img-top" alt="...">
+                        </div>
+                        <div class="card-body">
+                            <!-- title -->
+                            <h5 class="card-title text-center" title="{{book.title}}">{{book.title}}</h5>
+                            <!-- price -->
+                            <div class="price">
+                                {% if book.is_sale %}
+                                    <h6 class="text-center text-danger">US${{book.sale_price}}</h6>
+                                    <h6 class="text-center text-secondary text-decoration-line-through">US${{book.price}}</h6>
+                                {% else %}
+                                    <h6 class="text-center">US${{book.price}}</h6>
+                                {% endif %}
                             </div>
-                            <br><br>
-                            <a href="{% url 'books' %}" class="btn btn-secondary">books</a>
-                            <button type="button" data-index="{{book.id}}" class="btn btn-secondary update-cart">Update</button>
-                            <button type="button" data-index="{{book.id}}" class="btn btn-danger delete-book">Remove</button>
-                        </center>
+                            <!-- buttons -->
+                            <!-- amount buttons group -->
+                            <div class="amount-button btn-group w-100 mb-3" role="group" aria-label="First group">
+                                <!-- decrease button -->
+                                <button type="button" class="btn btn-sm btn-outline-warning" onclick="decrease(this)"><</button>
+                                <!-- input -->
+                                {% for key, value in quantities.items %}
+                                    {% if key == book.id|slugify %}
+                                        <input type="number" id="{{book.id}}" class="amount-input btn btn-sm btn-outline-warning" value="{{value}}" min="1" max="10" disabled>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- increase button -->
+                                <button type="button" class="btn btn-sm btn-outline-warning" onclick="increase(this)">></button>
+                            </div>
+                            <div class="update-remove--buttons w-100 d-flex justify-content-center align-items-center">
+                                <button type="button" data-index="{{book.id}}" class="update-cart btn btn-outline-primary me-4">Actualizar</button>
+                                <button type="button" data-index="{{book.id}}" class="delete-book btn btn-outline-danger">Remover</button>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    There's Nothing In Your Cart...
+                {% endfor %}
+            </div>
+            <div class="col pt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total estimado</h5>
+                        <p class="card-text">US${{totals}}</p>
+                        <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
                     </div>
                 </div>
-                </div>
             </div>
-        {% endfor %}
-        <div align="right">
-            <h3>Total: ${{totals}}</h3>
-            <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
         </div>
-    {% else %}
-        There's Nothing In Your Cart...
-    {% endif %}
-    <script>
-        // Update Cart
-        $(document).on('click', '.update-cart', function(e) {
-                e.preventDefault();
-                // grab the book id
-                var bookid = $(this).data('index');
-    
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'cart_update' %}",
-                    data: {
-                        book_id: $(this).data('index'),
-                        book_qty: $('#select' + bookid + ' option:selected').text(),
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        action: 'post'
-                    },
-    
-                    success: function(json) {
-                        // console.log(json)
-                        // document.getElementById('cart_quantity').textContent = json.qty
-                        location.reload();
-                    },
-    
-                    error: function(xhr, errmsg, err) {
-    
-                    }
-                });
+    </div>
+{% endblock main_content %}
+{% block adicional_scripts %}   
+<script>
+    // Update Cart
+    $(document).on('click', '.update-cart', function(e) {
+        e.preventDefault();
+        // grab the book id
+        var bookid = $(this).data('index');
+        console.log($(this).parentElement)
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart_update' %}",
+            data: {
+                book_id: $(this).data('index'),
+                book_qty: $('#' + bookid).val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+
+            success: function(json) {
+                location.reload();
+            },
+
+            error: function(xhr, errmsg, err) {
+
+            }
         });
-        // Delete Item From Cart
-        $(document).on('click', '.delete-book', function(e) {
-            e.preventDefault();
-            // grab the book id
-            // var bookid = $(this).data('index');
+    });
+    // Delete Item From Cart
+    $(document).on('click', '.delete-book', function(e) {
+        e.preventDefault();
+        // grab the book id
 
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'cart_delete' %}",
-                data: {
-                    book_id: $(this).data('index'),
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    action: 'post'
-                },
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart_delete' %}",
+            data: {
+                book_id: $(this).data('index'),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
 
-                success: function(json) {
-                    // console.log(json)
-                    // document.getElementById('cart_quantity').textContent = json.qty
-                    location.reload();
-                },
+            success: function(json) {
+                location.reload();
+            },
 
-                error: function(xhr, errmsg, err) {
+            error: function(xhr, errmsg, err) {
 
-                }
-            });
+            }
         });
-    </script>
-{% endblock %}
+    });
+    
+    /* aumenta e diminui a quantidade de um livro */
+
+    const increase = (increaseButton) => {
+        // pega o input relacionado ao botão clicado
+        const amountInput = increaseButton.parentElement.querySelector('.amount-input');
+        if (Number(amountInput.value) - amountInput.max) {
+            amountInput.value = Number(amountInput.value) + 1;
+        }
+    }
+    const decrease = (decreaseButton) => {
+        // pega o input relacionado ao botão clicado
+        const amountInput = decreaseButton.parentElement.querySelector('.amount-input');
+        if (Number(amountInput.value) > amountInput.min) {
+            amountInput.value = Number(amountInput.value) - 1;
+        }
+    }
+</script>
+{% endblock adicional_scripts %}
