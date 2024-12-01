@@ -39,9 +39,8 @@ class ShippingAddress(models.Model):
     shipping_address1 = models.CharField(max_length=255)
     shipping_address2 = models.CharField(max_length=255, null=True, blank=True)
     shipping_city = models.CharField(max_length=255)
-    shipping_state = models.CharField(max_length=255, null=True, blank=True)
-    shipping_zipcode = models.CharField(max_length=255, null=True, blank=True)
-    shipping_country = models.CharField(max_length=255)
+    shipping_phone_number = models.CharField(max_length=20, blank=True)
+    shipping_mode = models.CharField(verbose_name='Local de entrega', default='Home', max_length=50) # diz onde o cliente vai receber o produto, em casa ou na loja
 
     class Meta:
         verbose_name_plural = "Shipping Address"

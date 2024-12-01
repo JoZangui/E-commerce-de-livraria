@@ -40,7 +40,38 @@
                     <div class="card-body">
                         <form action="{% url 'billing_info' %}" method="post">
                             {% csrf_token %}
-                            {{ shipping_form.as_p }}
+                            <div class="mb-4">
+                                <label for="" class="fw-bold">Entrega</label>
+                                {% for choice in shipping_form.shipping_mode %}
+                                    <div class="form-check">
+                                        {{choice}}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Nome completo</label>
+                                {{ shipping_form.shipping_full_name}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Email</label>
+                                {{ shipping_form.shipping_email}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Número de telefone</label>
+                                {{ shipping_form.shipping_phone_number}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Endereço 1</label>
+                                {{ shipping_form.shipping_address1}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Endereço 2</label>
+                                {{ shipping_form.shipping_address2}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Cidade</label>
+                                {{ shipping_form.shipping_city}}
+                            </div>
                         </div>
                     </div>
                     <br>
