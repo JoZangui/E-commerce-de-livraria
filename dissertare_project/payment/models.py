@@ -40,7 +40,7 @@ class ShippingAddress(models.Model):
     shipping_address2 = models.CharField(max_length=255, null=True, blank=True)
     shipping_city = models.CharField(max_length=255)
     shipping_phone_number = models.CharField(max_length=20, blank=True)
-    shipping_mode = models.CharField(verbose_name='Local de entrega', default='Home', max_length=50) # diz onde o cliente vai receber o produto, em casa ou na loja
+    shipping_mode = models.CharField(verbose_name='Local de entrega', default='Enviar', max_length=50) # diz onde o cliente vai receber o produto, em casa ou na loja
 
     class Meta:
         verbose_name_plural = "Shipping Address"
@@ -53,6 +53,7 @@ class Invoices(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     invoice_number = models.CharField(max_length=10, verbose_name='Fatura nº', )
     invoice_file = models.FileField(upload_to='invoices', null=True, blank=True)
+    payment_mode = models.CharField(verbose_name='Método de pagamento', default='TPA - Terminal de Pagamento Automático', max_length=100)
 
     def __str__(self) -> str:
         return f'Invoice nº {self.invoice_number}'

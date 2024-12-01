@@ -36,15 +36,16 @@ def create_invoice_file(sender, instance:Invoices, created, **kwargs):
         cliente_info = {
             'Full_name': instance.order.full_name,
             'email': instance.order.email,
-            'phone_number': '933333333',
-            'shipping_address': instance.order.shipping_address
+            'shipping_address': instance.order.shipping_address,
+            'payment_mode': instance.payment_mode
         }
         create_invoce = CreateInvoce(
             cliente_info['Full_name'],
             cliente_info['email'],
-            cliente_info['phone_number'],
             cliente_info['shipping_address'],
-            instance.invoice_number
+            instance.invoice_number,
+            creation_date = timezone.now(),
+            payment_mode = cliente_info['payment_mode']
         )
 
         order_items = instance.order.orderitem_set.all()

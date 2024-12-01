@@ -29,7 +29,7 @@
                         {% endfor %}
                         Total: ${{totals}}
                         <br><br>
-                        <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
+                        <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Editar Itens</a>
                     </div>
                 </div>
                 <br><br>
@@ -43,7 +43,7 @@
                             <div class="mb-4">
                                 <label for="" class="fw-bold">Entrega</label>
                                 {% for choice in shipping_form.shipping_mode %}
-                                    <div class="form-check">
+                                    <div class="form-check mb-3">
                                         {{choice}}
                                     </div>
                                 {% endfor %}

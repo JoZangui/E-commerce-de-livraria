@@ -100,12 +100,13 @@ def process_order(request):
 
         # Get Billing Info from the last page
         payment_form = PaymentForm(request.POST or None)
+        payment_mode = str(payment_form['payment_mode'].value())
         # Get Shipping Session data
         my_shipping = request.session.get('my_shipping')
 
         # Gather Order Info
         full_name = my_shipping['shipping_full_name']
-        email = my_shipping['shipping_email']
+        shipping_email = my_shipping['shipping_email']
         # Create Shipping Address from session info
         shipping_address = f"""{my_shipping['shipping_address1']}
         \n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}
@@ -121,7 +122,7 @@ def process_order(request):
             create_oder = Order(
                 user=user,
                 full_name=full_name,
-                email=email,
+                email=shipping_email,
                 shipping_address=shipping_address,
                 amount_paid=amount_paid
             )
@@ -149,9 +150,17 @@ def process_order(request):
                         create_oder_item.save()
 
             # create invoice
-            invoice_number = f'D_B_{order_id}'
-            invoice = Invoices(order_id=order_id, invoice_number=invoice_number)
+            invoice_number = f'E_Books_{order_id}'
+            invoice = Invoices(order_id=order_id, invoice_number=invoice_number, payment_mode=payment_mode)
             invoice.save()
+
+            # Enviar um email para o cliente com a fatura e o livro
+            mail_subject = 'Obrigado por comprar na livraria Dissertare'
+            message = 'Em Anexo o livro e a sua fatura'
+            to_email = shipping_email
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.attach_file(invoice.invoice_file.path)
+            email.send(fail_silently=False)
 
             # Delete our cart
             for key in list(request.session.keys()):
@@ -164,13 +173,6 @@ def process_order(request):
             # Delete shopping cart in Database (user_cart field)
             current_user.update(user_cart="")
 
-            # Enviar um email para o cliente com a fatura e o livro
-            mail_subject = 'Obrigado por comprar na livraria Dissertare'
-            message = 'Em Anexo o livro e a sua fatura'
-            to_email = 'jozangui@gmail.com'
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.attach_file(invoice.invoice_file.path)
-            email.send(fail_silently=False)
 
             messages.success(request, "Order Placed!")
             return redirect('books')
@@ -179,7 +181,7 @@ def process_order(request):
             # Create Order
             create_oder = Order(
                 full_name=full_name,
-                email=email,
+                email=shipping_email,
                 shipping_address=shipping_address,
                 amount_paid=amount_paid
             )
@@ -206,15 +208,9 @@ def process_order(request):
                         create_oder_item.save()
 
             # create invoice
-            invoice_number = f'D_B_{order_id}'
+            invoice_number = f'E_Books_{order_id}'
             invoice = Invoices(order_id=order_id, invoice_number=invoice_number)
             invoice.save()
-
-            # Delete our cart
-            for key in list(request.session.keys()):
-                if key == 'session_key':
-                    # Delete the key
-                    del request.session[key]
 
             # pega o endereço actual do site
             current_site = get_current_site(request)
@@ -228,10 +224,17 @@ def process_order(request):
                     'order_id': order_id
                 }
             )
-            to_email = 'jozangui@gmail.com'
+            to_email = shipping_email
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.attach_file(invoice.invoice_file.path)
             email.send(fail_silently=False)
+
+            # Delete our cart
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    # Delete the key
+                    del request.session[key]
+
 
             messages.success(request, 'Order Placed!')
             return redirect('books')
