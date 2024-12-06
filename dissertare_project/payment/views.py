@@ -1,5 +1,5 @@
 """ payment views """
-import os # verificar para remover
+import json
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -108,10 +108,7 @@ def process_order(request):
         full_name = my_shipping['shipping_full_name']
         shipping_email = my_shipping['shipping_email']
         # Create Shipping Address from session info
-        shipping_address = f"""{my_shipping['shipping_address1']}
-        \n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}
-        \n{my_shipping['shipping_phone_number']}
-        \n{my_shipping['shipping_mode']}"""
+        shipping_address = json.dumps({"shipping_address1": my_shipping['shipping_address1'], "shipping_address2": my_shipping['shipping_address2'], "shipping_city":my_shipping['shipping_city'], "shipping_phone_number": my_shipping['shipping_phone_number'], "shipping_mode": my_shipping['shipping_mode']})
         amount_paid = totals
 
         # Create an Order
@@ -155,8 +152,18 @@ def process_order(request):
             invoice.save()
 
             # Enviar um email para o cliente com a fatura e o livro
+            # pega o endereço actual do site
+            current_site = get_current_site(request)
+            # Enviar um email para o cliente com a fatura e o livro
             mail_subject = 'Obrigado por comprar na livraria Dissertare'
-            message = 'Em Anexo o livro e a sua fatura'
+            # renderiza um template html para a forma de string
+            message = render_to_string(
+                'payment/payment_email_template.html',
+                {
+                    'domain': current_site.domain,
+                    'order_id': order_id
+                }
+            )
             to_email = shipping_email
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.attach_file(invoice.invoice_file.path)
@@ -209,7 +216,7 @@ def process_order(request):
 
             # create invoice
             invoice_number = f'E_Books_{order_id}'
-            invoice = Invoices(order_id=order_id, invoice_number=invoice_number)
+            invoice = Invoices(order_id=order_id, invoice_number=invoice_number, payment_mode=payment_mode)
             invoice.save()
 
             # pega o endereço actual do site
@@ -237,10 +244,10 @@ def process_order(request):
 
 
             messages.success(request, 'Order Placed!')
-            return redirect('books')
+            return redirect('home')
     else:
         messages.warning(request, 'Access Denied')
-        return redirect('books')
+        return redirect('home')
 
 def billing_info(request):
     if request.POST:
@@ -278,7 +285,7 @@ def billing_info(request):
             })
     else:
         messages.warning(request, 'Access Denied')
-        return redirect('books')
+        return redirect('home')
 
 def checkout(request):
     # Get the cart

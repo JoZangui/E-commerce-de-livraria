@@ -40,7 +40,7 @@ class ShippingAddress(models.Model):
     shipping_address2 = models.CharField(max_length=255, null=True, blank=True)
     shipping_city = models.CharField(max_length=255)
     shipping_phone_number = models.CharField(max_length=20, blank=True)
-    shipping_mode = models.CharField(verbose_name='Local de entrega', default='Enviar', max_length=50) # diz onde o cliente vai receber o produto, em casa ou na loja
+    shipping_mode = models.CharField(verbose_name='Local de entrega', default='Enviar', max_length=50) # Onde o cliente vai receber o produto, em casa ou na loja
 
     class Meta:
         verbose_name_plural = "Shipping Address"

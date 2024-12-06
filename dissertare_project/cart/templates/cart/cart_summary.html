@@ -41,18 +41,22 @@
                         </div>
                     </div>
                 {% empty %}
-                    There's Nothing In Your Cart...
+                    <p>
+                        Não existe itens no carrinho ainda, pode sempre <span><a href="{% url 'home' %}" class="link link-primary">Voltar para a Home</a></span> ou pesquisar por algum livro ou tema que lhe interesse..
+                    </p> 
                 {% endfor %}
             </div>
-            <div class="col pt-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total estimado</h5>
-                        <p class="card-text">US${{totals}}</p>
-                        <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+            {% if cart_books %}  
+                <div class="col pt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total estimado</h5>
+                            <p class="card-text">US${{totals}}</p>
+                            <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock main_content %}

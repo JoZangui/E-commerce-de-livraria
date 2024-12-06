@@ -6,15 +6,15 @@ from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
 
 
 class CreateInvoce():
-    def __init__(self, cliente_name:str, cliente_email:str, cliente_address:str, invoice_number:str, payment_mode:str, creation_date) -> None:
+    def __init__(self, cliente_email:str, cliente_address:str, cliente_city:str, invoice_number:str, payment_mode:str, creation_date) -> None:
         os.environ["INVOICE_LANG"] = 'en'
 
         # Header
         # client info
-        self.client = Client(cliente_name)
+        self.client = Client(f'Método de pagamento: {payment_mode}')
         self.client.email = f'Email: {cliente_email}'
-        self.client.address = f'Info de Entrega: {cliente_address}'
-        self.client.note = f'Método de pagamento: {payment_mode}'
+        self.client.address = cliente_address
+        self.client.city = f'Cidade: {cliente_city}'
 
         # Our info
         self.provider = Provider('Dissertare', bank_account='2600420569', bank_code='2010')

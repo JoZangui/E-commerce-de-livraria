@@ -1,5 +1,6 @@
 """ payment signals """
 from pathlib import Path
+import json
 
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
@@ -33,19 +34,23 @@ def set_shipped_date_on_update(sender, instance, **kwargs):
 def create_invoice_file(sender, instance:Invoices, created, **kwargs):
     """ Cria um ficheiro de fatura e "armazena" na tabela Invoice """
     if created:
+        shipping_address = json.loads(instance.order.shipping_address)
+        
         cliente_info = {
             'Full_name': instance.order.full_name,
             'email': instance.order.email,
-            'shipping_address': instance.order.shipping_address,
+            'shipping_address': f"Endereço 1: {shipping_address['shipping_address1']} / Endereço 2: {shipping_address['shipping_address2']}",
+            'city': shipping_address['shipping_city'],
             'payment_mode': instance.payment_mode
         }
+
         create_invoce = CreateInvoce(
-            cliente_info['Full_name'],
-            cliente_info['email'],
-            cliente_info['shipping_address'],
-            instance.invoice_number,
-            creation_date = timezone.now(),
-            payment_mode = cliente_info['payment_mode']
+            cliente_email=cliente_info['email'],
+            cliente_address=cliente_info['shipping_address'],
+            cliente_city=cliente_info['city'],
+            invoice_number=instance.invoice_number,
+            payment_mode = cliente_info['payment_mode'],
+            creation_date = timezone.now()
         )
 
         order_items = instance.order.orderitem_set.all()
