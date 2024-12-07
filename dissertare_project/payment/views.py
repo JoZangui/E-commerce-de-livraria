@@ -21,7 +21,8 @@ from books.models import Books
 def orders(request, pk):
     if request.user.is_authenticated:
         # Get the order
-        order = Order.objects.get(id=pk)
+        order = get_object_or_404(Order, id=pk)
+        shipping_address = json.loads(order.shipping_address)
         # Get the order items
         items = OrderItem.objects.filter(order=pk)
 
@@ -42,7 +43,7 @@ def orders(request, pk):
             messages.success(request, "Shipping Status Updated")
             return redirect('books')
         
-        return render(request, 'payment/orders.html', {'order': order, 'items': items})
+        return render(request, 'payment/orders.html', {'order': order, 'items': items, 'shipping_address': shipping_address})
     else:
         messages.warning(request, "Access Denied")
         return redirect('books')
@@ -182,7 +183,7 @@ def process_order(request):
 
 
             messages.success(request, "Order Placed!")
-            return redirect('books')
+            return redirect('home')
         else:
             # Not looged in
             # Create Order

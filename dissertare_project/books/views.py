@@ -98,7 +98,8 @@ def books_on_sale(request):
 
 def books_from_list(request, list_id):
     books_list = BookLists.objects.get(id=list_id)
-    books = books_list.books.all()
+    books = books_list.books.all().order_by('-date_posted')
+
     # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
     for book in books:
         if book.is_sale:
