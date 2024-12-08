@@ -1,8 +1,7 @@
-import os, shutil
+import os
 
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
-from django.shortcuts import get_object_or_404
 
 from books.models import Books, Authors
 from django.conf import settings
