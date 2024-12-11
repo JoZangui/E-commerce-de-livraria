@@ -10,4 +10,5 @@ urlpatterns = [
     path('process_order', views.process_order, name='process_order'),
     path('ordered_books/<int:pk>', views.ordered_books, name='ordered_books'),
     path('book_download/<int:pk>', views.download_book, name='download_book'),
+    path('order_conclusion', views.order_conclusion, name='order-conclusion'),
 ]

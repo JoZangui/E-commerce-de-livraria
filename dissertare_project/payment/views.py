@@ -17,6 +17,15 @@ from cart.cart import Cart
 from books.models import Books
 
 
+def order_conclusion(request):
+    """
+    Resumo do pedido do cliente
+
+    Essa pagina é exibida quando o cliente finaliza o pedido
+    """
+
+    return render(request, 'payment/order_conclusion.html')
+
 @login_required
 def orders(request, pk):
     if request.user.is_authenticated:
@@ -183,7 +192,7 @@ def process_order(request):
 
 
             messages.success(request, "Order Placed!")
-            return redirect('home')
+            return redirect('order-conclusion')
         else:
             # Not looged in
             # Create Order
@@ -245,7 +254,7 @@ def process_order(request):
 
 
             messages.success(request, 'Order Placed!')
-            return redirect('home')
+            return redirect('order-conclusion')
     else:
         messages.warning(request, 'Access Denied')
         return redirect('home')
@@ -321,6 +330,9 @@ def payment_success(request):
     return render(request, 'payment/payment_success.html')
 
 def ordered_books(request, pk):
+    """ 
+    Página para download dos livros que o cliente comprou
+    """
     order = Order.objects.get(id=pk)
     order_items = order.orderitem_set.all()
 
