@@ -11,12 +11,15 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 from .forms import UserRegisterForm
 from .tokens import account_activation_token
 from users.models import Profile
 from cart.cart import Cart
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
 
 
 def register(request):
@@ -55,7 +58,7 @@ def register(request):
             email.send(fail_silently=False)
             # renderiza uma página com a mensagem abaixo
             # indicando que o cliente deve ver em seu o email uma mensagem com um link de confirmação
-            return HttpResponse('Please confirm your email address to complete the registration')
+            return HttpResponse('Por favor confirme o seu endereço de email para completar o registro')
     else:
         form = UserRegisterForm()
     return render(
@@ -87,7 +90,8 @@ def activate(request, uidb64, token):
         # faz o login do novo usuário
         login(request, user)
         messages.success(request, 'Registro feito com sucesso')
-        return HttpResponse('Thank you for your email confirmation. Now you can login account. go to <a href="/">livros<a>')
+        # Obrigado por confirmar o seu email. Agora você já pode iniciar sessão na sua conta
+        return redirect('shipping-address-for-new-user')
     else:
         return HttpResponse('Activation link is invalid!')
 
@@ -121,3 +125,20 @@ def login_user(request):
             return redirect('login')
     else:
         return render(request, 'users/login.html')
+
+
+@login_required
+def shipping_address_for_new_user(request):
+    if request.POST:
+        shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
+
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_addres)
+        if shipping_form.is_valid():
+            shipping_form.save()
+
+            messages.success(request, 'Registro feito com sucesso')
+            return redirect('home')
+        return render(request, 'users/shipping_address_for_new_user.html', {'shipping_form': shipping_form})
+
+    shipping_form = ShippingForm()
+    return render(request, 'users/shipping_address_for_new_user.html', {'shipping_form': shipping_form})

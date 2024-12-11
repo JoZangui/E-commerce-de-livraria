@@ -41,5 +41,10 @@ urlpatterns = [
             template_name='users/password_reset_complete.html'
         ),
         name='password_reset_complete'
+    ),
+    path(
+        'shipping_address_for_new_user/',
+        views.shipping_address_for_new_user,
+        name='shipping-address-for-new-user'
     )
 ]
