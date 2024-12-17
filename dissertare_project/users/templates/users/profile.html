@@ -9,9 +9,9 @@
             </div>
         </div>
         <h4 class="fw-bold">Sua Biblioteca</h4>
-        <div class="row py-3 border rounded">
+        <div class="row d-flex justify-content-center justify-content-md-between p-3 border rounded">
             {% for item in ordered_items %}
-                <div class="col-3 d-flex justify-content-center">
+                <div class="my-book col-auto d-md-flex justify-content-center">
                     <div>
                         <div class="book-image overflow-hidden rounded" style="width: 150px; height: 210px;">
                             <img src="{{item.book.cover.url}}" alt="" style="width: 150px; height: 210px; object-fit: fill;">
@@ -44,4 +44,19 @@
         </div>
         <a href="{% url 'update-user-shipping-address' %}" class="btn btn-outline-secondary">Editar suas informações de entrega</a>
     </div>
+
+    <!-- adicionando e mudando algumas classes bootstrap para ajustar na responsividade das imagens dos livros -->
+    <script>
+        const myBook = document.querySelectorAll('.my-book');
+
+        function manageSomeBootstrapClasses(element) {
+            for (let index = 0; index < element.length; index++) {
+                if (index>=2) {
+                    element[index].classList.add('d-none');
+                }
+            }
+            element[element.length-1].classList.replace('d-md-flex', 'd-lg-flex');
+        }
+        manageSomeBootstrapClasses(myBook);
+    </script>
 {% endblock main_content%}
