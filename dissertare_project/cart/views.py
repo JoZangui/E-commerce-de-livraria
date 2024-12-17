@@ -36,7 +36,7 @@ def cart_add(request):
         cart_quantity = cart.__len__()
 
         response = JsonResponse({'qty': cart_quantity})
-        messages.success(request, ("Product Added To Cart..."))
+        messages.success(request, ("Artigo adicionado com sucesso"))
         return response
 
 def cart_delete(request):
@@ -48,7 +48,7 @@ def cart_delete(request):
         cart.delete(book=book_id)
 
         response = JsonResponse({'book': book_id})
-        messages.warning(request, ("Item Deleted From Shopping Cart..."))
+        messages.warning(request, ("Item removido do carrinho"))
         return response
 
 def cart_update(request):
@@ -61,5 +61,5 @@ def cart_update(request):
         cart.update(book=book_id, quantity=book_quantity)
 
         response = JsonResponse({'qty': book_quantity})
-        messages.success(request, ("Your Cart Has Been Updated..."))
+        messages.success(request, ("Seu carrinho foi actualizado com sucesso"))
         return response

@@ -191,7 +191,7 @@
                 <!-- login and logout buttons -->
                 <div class="justify-content-between">
                     {% if user.is_active %}
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">{{user.username|truncatechars:14}}</a>
+                        <a href="{% url 'profile' %}" class="btn btn-outline-secondary">{{user.username|truncatechars:14}}</a>
                         <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-success me-5">Login</a>

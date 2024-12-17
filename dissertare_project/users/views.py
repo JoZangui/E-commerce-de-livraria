@@ -4,7 +4,7 @@ import json
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.urls import reverse
+from django.core.paginator import Paginator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
@@ -19,7 +19,7 @@ from .tokens import account_activation_token
 from users.models import Profile
 from cart.cart import Cart
 from payment.forms import ShippingForm
-from payment.models import ShippingAddress
+from payment.models import ShippingAddress, Order, OrderItem
 
 
 def register(request):
@@ -128,17 +128,71 @@ def login_user(request):
 
 
 @login_required
-def shipping_address_for_new_user(request):
+def user_shipping_address(request):
     if request.POST:
         shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
-
         shipping_form = ShippingForm(request.POST or None, instance=shipping_addres)
         if shipping_form.is_valid():
             shipping_form.save()
 
             messages.success(request, 'Registro feito com sucesso')
             return redirect('home')
-        return render(request, 'users/shipping_address_for_new_user.html', {'shipping_form': shipping_form})
+        return render(request, 'users/user_shipping_address.html', {'shipping_form': shipping_form})
 
     shipping_form = ShippingForm()
-    return render(request, 'users/shipping_address_for_new_user.html', {'shipping_form': shipping_form})
+    return render(request, 'users/user_shipping_address.html', {'shipping_form': shipping_form})
+
+
+@login_required
+def update_user_shipping_address(request):
+    shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
+    if request.POST:
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_addres)
+        if shipping_form.is_valid():
+            shipping_form.save()
+
+            messages.success(request, 'Registro feito com sucesso')
+            return redirect('profile')
+        messages.warning('Algo deu errado!')
+        return render(request, 'users/user_shipping_address.html', {'shipping_form': shipping_form})
+
+    if shipping_addres:
+        shipping_form = ShippingForm(instance=shipping_addres)
+    else:
+        shipping_form = ShippingForm()
+    return render(request, 'users/user_shipping_address.html', {'shipping_form': shipping_form})
+
+
+@login_required
+def user_books(request):
+    ordered_items = OrderItem.objects.all().filter(user=request.user)
+
+    books = []
+    for item in ordered_items:
+        books.append(item.book)
+    
+    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    for book in books:
+        if book.is_sale:
+            book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
+    
+    pagtr = Paginator(books, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = pagtr.get_page(page_number)
+
+    return render(
+        request,
+        'books/books.html',
+        {
+            'book': ordered_items,
+            'page_obj': page_obj,
+            'title': 'books'
+        }
+    )
+
+@login_required
+def profile(request):
+    ordered_items = OrderItem.objects.all().filter(user=request.user)[:4]
+    shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
+    return render(request, 'users/profile.html', {'ordered_items': ordered_items, 'shipping_addres': shipping_addres})

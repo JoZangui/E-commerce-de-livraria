@@ -1,18 +1,27 @@
 {% extends "books/base.html" %}
 {% block main_content %}
     <!-- main content -->
-    <div class="container">
-        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 gy-5 gx-5 text-center">
+    <div class="container my-5">
+        <div class="card border-primary mb-3">
+            <div class="card-header text-primary">Nota</div>
+            <div class="card-body text-primary">
+              <h5 class="card-title">Os seus livros para Download</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+        <div class="row my-5">
             {% for order_item in order_items %}
-                <div class="col d-flex flex-column align-items-center">
-                    <div class="rounded-3 book-cover-size home--image-container">
-                        <img src="{{order_item.book.cover.url}}" alt="book-image-cover">
-                    </div>
-                    <div class="text-container-width">
-                        <h5 class="font-bold title-height" title="{{order_item.book.title}}">{{book.title|truncatechars:26}}</h5>
+                <div class="col my-3 my-lg-0">
+                    <div class="card overflow-hidden" style="height: 390px; width: 18rem;">
+                        <div class="overflow-hidden" style="width: 100%; height: 290px;">
+                            <img src="{{order_item.book.cover.url}}" class="card-img-top" alt="...">
+                        </div>
+                        <div class="card-body">
+                        <h5 class="card-title" title="{{order_item.book.title}}">{{order_item.book.title|truncatechars:26}}</h5>
+                        <a href="{% url 'download_book' order_item.book.pk %}" class="btn btn-primary">Download</a>
+                        </div>
                     </div>
                 </div>
-                <a href="{% url 'download_book' order_item.book.pk %}" class="btn btn-primary">Download</a>
             {% endfor %}
         </div>
     </div>

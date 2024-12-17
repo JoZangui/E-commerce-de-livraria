@@ -15,7 +15,7 @@
                       Shipping Info
                     </div>
                     <div class="card-body">
-                        <form action="{% url 'shipping-address-for-new-user' %}" method="post">
+                        <form action="{% url 'update-user-shipping-address' %}" method="post">
                             {% csrf_token %}
                             <div class="mb-4">
                                 <div class="card border-success mb-3" style="max-width: 18rem;">

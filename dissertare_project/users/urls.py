@@ -43,8 +43,23 @@ urlpatterns = [
         name='password_reset_complete'
     ),
     path(
-        'shipping_address_for_new_user/',
-        views.shipping_address_for_new_user,
-        name='shipping-address-for-new-user'
-    )
+        'user_shipping_address/',
+        views.user_shipping_address,
+        name='user-shipping-address'
+    ),
+    path(
+        'profile/',
+        views.profile,
+        name='profile'
+    ),
+    path(
+        'update_user_shipping_address/',
+        views.update_user_shipping_address,
+        name='update-user-shipping-address'
+    ),
+    path(
+        'user_books/',
+        views.user_books,
+        name='user-books'
+    ),
 ]
