@@ -44,14 +44,16 @@
                 <a href="" class="text-secondary fw-bold"> <!-- autor --> {{book.author}}</a> | <span class="text-secondary fs-6 mb-3"><!-- data --> {{book.date_posted|date:"d b, Y"}}</span>
                 <div class="book-description row row-cols-1 overflow-x-hidden overflow-y-auto">
                     <!-- editorecommended-comment (optional) -->
-                    <div class="editorecommended-comment col pt-2">
-                        <h4>Comentário</h4>
-                        <p class="text-start">{{book.description}}</p>
-                    </div>
                     <div class="synopsis col pt-2">
                         <h4>Sinopse</h4>
-                        <p class="text-start">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae laudantium optio explicabo, pariatur obcaecati fugit mollitia id placeat libero ex maiores esse vero in molestias hic voluptates odit aspernatur blanditiis.</p>
+                        <p class="text-start">{{book.description}}</p>
                     </div>
+                    {% if book.comment %}
+                        <div class="editorecommended-comment col pt-2">
+                            <h4>Comentário</h4>
+                            <p class="text-start">{{book.comment}}</p>
+                        </div>
+                    {% endif %}
                 </div>
                 {% if user.is_superuser %}
                 <div class="mt-2 p-2 bg-warning rounded">

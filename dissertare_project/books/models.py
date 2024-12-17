@@ -81,7 +81,8 @@ class Books(models.Model):
         validators=[pdf_format_validator]
     )
     title = models.CharField(max_length=50, verbose_name='Título do livro')
-    description = models.TextField(max_length=400, verbose_name='Descrição do livro')
+    description = models.TextField(max_length=400, verbose_name='Sinopse')
+    comment = models.TextField(max_length=400, verbose_name='Comentário', null=True, blank=True)
     cover = models.ImageField(
         upload_to=books_image_file_path,
         verbose_name='Capa do livro')
