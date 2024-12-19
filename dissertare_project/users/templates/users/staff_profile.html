@@ -1,0 +1,42 @@
+{% extends "books/base.html" %}
+{% block main_content%}
+    <div class="container my-5">
+        <div class="card border-success mb-3">
+            <div class="card-header fw-bold text-success">Zona de administração</div>
+            <div class="card-body text-success">
+              <h5 class="card-title">Bem-vindo ao perfil de administração sr. {{user.username}}</h5>
+              <p class="card-text">Aqui você pode fazer upload de livros e gerenciar as suas entregas, este espaço é só para membros autorizados do staff</p>
+            </div>
+        </div>
+        <hr>
+        <div class="card border-secondary mb-3">
+            <div class="card-header fw-bold text-secondary">Upload de livros</div>
+            <div class="card-body text-secondary">
+              <h5 class="card-title">Informação do ultimo livro carregado:</h5>
+              <ul>
+                  <li class="card-text">
+                    <strong>Título:</strong> {{last_book_uploaded.title}}
+                  </li>
+                  <li class="card-text">
+                    <strong>Autor(a):</strong> {{last_book_uploaded.author.name}}
+                  </li>
+                  <li class="card-text">
+                    <strong>Data do carregamento:</strong> {{last_book_uploaded.date_posted}}
+                  </li>
+              </ul>
+            </div>
+        </div>
+        <a href="{% url 'upload-book' %}" class="btn btn-secondary">Carregar livro</a>
+        <hr>
+        <div class="card border-secondary mb-3">
+            <div class="card-header fw-bold text-secondary">Upload de livros</div>
+            <div class="card-body text-secondary">
+              <h5 class="card-title">Total de livros entregues e não entregues:</h5>
+              <span class="text-success"><strong>Total de livros entregues:</strong> {{shipped_quantity}} </span>
+              <br>
+              <span class="text-warning"><strong>Total de livros não entregues:</strong> {{not_shipped_quantity}} </span>
+            </div>
+        </div>
+        <a href="" class="btn btn-outline-secondary">Ir para entregas</a>
+    </div>
+{% endblock main_content%}

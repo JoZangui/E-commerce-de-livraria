@@ -62,4 +62,9 @@ urlpatterns = [
         views.user_books,
         name='user-books'
     ),
+    path(
+        'staff_profile/',
+        views.staff_profile,
+        name='staff-profile'
+    ),
 ]

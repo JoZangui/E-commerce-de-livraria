@@ -110,8 +110,8 @@
                             <ul class="dropdown-menu">
                                 {% if user.is_superuser %}
                                     <li class="border-bottom">
-                                        <a href="{% url 'upload-book' %}" class="dropdown-item" title="upload book">
-                                            <i class="bi bi-file-earmark-arrow-up"></i> Enviar livro
+                                        <a href="{% url 'staff-profile' %}" class="dropdown-item" title="upload book">
+                                            <i class="bi bi-person"></i> Perfil de administração
                                         </a>
                                     </li>
                                 {% endif %}
@@ -135,7 +135,7 @@
                                 {% if user.is_superuser %}
                                     <li class="border-bottom">
                                         <a href="{% url 'upload-book' %}" class="dropdown-item" title="upload book">
-                                            <i class="bi bi-file-earmark-arrow-up"></i> Enviar livro
+                                            <i class="bi bi-person"></i> Perfil de administração
                                         </a>
                                     </li>
                                 {% endif %}
@@ -159,7 +159,7 @@
                                 {% if user.is_superuser %}
                                     <li class="border-bottom">
                                         <a href="{% url 'upload-book' %}" class="dropdown-item" title="upload book">
-                                            <i class="bi bi-file-earmark-arrow-up"></i> Enviar livro
+                                            <i class="bi bi-person"></i> Perfil de administração
                                         </a>
                                     </li>
                                 {% endif %}

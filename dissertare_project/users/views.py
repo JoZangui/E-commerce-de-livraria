@@ -14,12 +14,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
+from payment.forms import ShippingForm
+from cart.cart import Cart
 from .forms import UserRegisterForm
 from .tokens import account_activation_token
 from users.models import Profile
-from cart.cart import Cart
-from payment.forms import ShippingForm
 from payment.models import ShippingAddress, Order, OrderItem
+from books.models import Books
 
 
 def register(request):
@@ -196,3 +197,19 @@ def profile(request):
     ordered_items = OrderItem.objects.all().filter(user=request.user)[:4]
     shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
     return render(request, 'users/profile.html', {'ordered_items': ordered_items, 'shipping_addres': shipping_addres})
+
+@login_required
+def staff_profile(request):
+    last_book_uploaded = Books.objects.last()
+    shipped_quantity = Order.objects.filter(shipped=True).count()
+    not_shipped_quantity = Order.objects.filter(shipped=False).count()
+
+    return render(
+        request,
+        'users/staff_profile.html',
+        {
+            'last_book_uploaded': last_book_uploaded,
+            'shipped_quantity': shipped_quantity,
+            'not_shipped_quantity': not_shipped_quantity,
+        }
+    )
