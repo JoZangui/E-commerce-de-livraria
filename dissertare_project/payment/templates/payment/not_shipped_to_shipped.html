@@ -4,13 +4,13 @@
     <div class="row">
         <div class="col px-lg-0 text-center text-md-start">
             <h1>Deseja confirmar o <br> <span class="h2">"Pedido nº: {{order.id}}" do pedinte: {{order.full_name}}  como entregue?</span></h1>
-            <p>Ao confirmar este pedido com entregue o cliente receberá uma fatura no seu email</p>
+            <p>Ao confirmar este pedido como entregue o cliente receberá uma fatura no seu email indicando a conclusão do processo de compra com sucesso</p>
             <hr>
             <div class="pb-5 pb-lg-0">
                 <form method="post">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-warning me-4" value="Confirmar">
-                    <a href="{% url 'not-shipped-dash' %}" class="btn btn-outline-primary">Cancelar</a>
+                    <a href="{% url 'not-shipped-dash' %}" class="btn btn-outline-secondary">Cancelar</a>
                 </form>
             </div>
         </div>

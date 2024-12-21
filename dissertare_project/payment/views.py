@@ -9,6 +9,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import FileResponse
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.paginator import Paginator
 
 from .models import Order, OrderItem, ShippingAddress, Invoices
 from .forms import ShippingForm, PaymentForm
@@ -60,8 +61,14 @@ def orders(request, pk):
 @login_required
 def not_shipped_dash(request):
     if request.user.is_superuser:
-        orders = Order.objects.filter(shipped=False)
-        return render(request, 'payment/not_shipped_dash.html', {'orders': orders})
+        orders = Order.objects.filter(shipped=False).order_by('-date_ordered')
+
+        pagtr = Paginator(orders, 5)
+
+        page_number = request.GET.get('page')
+        page_obj = pagtr.get_page(page_number)
+        
+        return render(request, 'payment/not_shipped_dash.html', {'page_obj': page_obj})
     else:
         messages.warning(request, "Access Denied")
         return redirect('books')
@@ -91,19 +98,13 @@ def not_shipped_to_shipped(request, order_id):
 def shipped_dash(request):
     if request.user.is_superuser:
         orders = Order.objects.filter(shipped=True)
-        if request.POST:
-            status = request.POST['shipping_status']
-            num = request.POST['num']
+        
+        pagtr = Paginator(orders, 5)
 
-            # grab Data time
-            now = timezone.now()
-            # grab the order
-            order = Order.objects.filter(id=num)
-            order.update(shipped=False)
+        page_number = request.GET.get('page')
+        page_obj = pagtr.get_page(page_number)
 
-            messages.success(request, "Shipping status updated")
-            return redirect('books')
-        return render(request, 'payment/shipped_dash.html', {'orders': orders})
+        return render(request, 'payment/shipped_dash.html', {'page_obj': page_obj})
     else:
         messages.warning(request, "Access Denied")
         return redirect('books')

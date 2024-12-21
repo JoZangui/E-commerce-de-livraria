@@ -6,7 +6,7 @@
         <div class="card border-success mb-3">
             <div class="card-header fw-bold text-success">Nota de boas-vindas</div>
             <div class="card-body text-success">
-              <h5 class="card-title">Bem-vindo ao perfil de administração sr. {{user.username}}</h5>
+              <h5 class="card-title">Bem-vindo ao perfil de administração sr(a). {{user.username}}</h5>
               <p class="card-text">Aqui você pode fazer upload de livros e gerenciar as suas entregas, este espaço é só para membros autorizados do staff</p>
             </div>
         </div>
@@ -35,8 +35,10 @@
             <div class="card-body text-secondary">
               <h5 class="card-title">Total de livros entregues e não entregues:</h5>
               <span class="text-success"><strong>Total de livros entregues:</strong> {{shipped_quantity}} </span>
-              <br>
+              <a href="{% url 'shipped-dash' %}" class="btn btn-sm btn-outline-success">Ver pedidos entregues</a>
+              <br><br>
               <span class="text-warning"><strong>Total de livros não entregues:</strong> {{not_shipped_quantity}} </span>
+              <a href="{% url 'not-shipped-dash' %}" class="btn btn-sm btn-outline-warning">Ver pedidos não entregues</a>
             </div>
         </div>
         <a href="" class="btn btn-outline-secondary">Ir para entregas</a>

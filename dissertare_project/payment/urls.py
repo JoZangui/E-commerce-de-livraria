@@ -11,6 +11,7 @@ urlpatterns = [
     path('ordered_books/<int:pk>', views.ordered_books, name='ordered_books'),
     path('book_download/<int:pk>', views.download_book, name='download_book'),
     path('order_conclusion/', views.order_conclusion, name='order-conclusion'),
+    path('shipped_dash/', views.shipped_dash, name='shipped-dash'),
     path('not_shipped_dash/', views.not_shipped_dash, name='not-shipped-dash'),
     path('not_shipped_to_shipped/<int:order_id>', views.not_shipped_to_shipped, name='not-shipped-to-shipped'),
 ]

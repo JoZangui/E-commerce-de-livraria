@@ -1,6 +1,42 @@
 {% extends 'books/base.html' %}
 {% block main_content %}
     <div class="py-5 container">
+        <!-- pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-md justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link text-dark fw-bold" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">primeiro</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link text-dark fw-bold" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+                            <span aria-hidden="true"><<</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active" aria-current="page"><a class="page-link text-light fw-bold" href="?page={{num}}">{{num}}</a></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link text-dark fw-bold" href="?page={{num}}">{{num}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link text-dark fw-bold" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+                            <span aria-hidden="true">>></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link text-dark fw-bold" href="?page={{page_obj.paginator.num_pages}}" aria-label="Next">
+                            <span aria-hidden="true">último</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="card">
@@ -10,14 +46,14 @@
                     <div class="card-body">
                         <h4 class="text-secondary">Informação de entrega</h4>
                         <ul class="list-group">
-                            {% for order in orders %}
+                            {% for order in page_obj %}
                                 <li class="list-group-item">
                                     pedinte: {{order.full_name}} Pedido nº: {{order.id}} <a href="{% url 'not-shipped-to-shipped' order.id %}" class="btn btn-outline-warning">Marcar como entregue</a>
                                 </li>
                             {% endfor %}
                         </ul>
                         <br><br>
-                        <a href="{% url 'home' %}" class="btn btn-sm btn-outline-primary">Voltar pra home</a>
+                        <a href="{% url 'staff-profile' %}" class="btn btn-sm btn-outline-primary">Voltar para o perfil de administração</a>
                     </div>
                 </div>
             </div>
