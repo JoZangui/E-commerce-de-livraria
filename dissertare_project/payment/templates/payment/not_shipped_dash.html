@@ -1,0 +1,26 @@
+{% extends 'books/base.html' %}
+{% block main_content %}
+    <div class="py-5 container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                      Resumo do seu pedido
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-secondary">Informação de entrega</h4>
+                        <ul class="list-group">
+                            {% for order in orders %}
+                                <li class="list-group-item">
+                                    pedinte: {{order.full_name}} Pedido nº: {{order.id}} <a href="{% url 'not-shipped-to-shipped' order.id %}" class="btn btn-outline-warning">Marcar como entregue</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <br><br>
+                        <a href="{% url 'home' %}" class="btn btn-sm btn-outline-primary">Voltar pra home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

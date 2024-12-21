@@ -18,7 +18,7 @@
                         </div>
                         <div class="card-body">
                         <h5 class="card-title" title="{{order_item.book.title}}">{{order_item.book.title|truncatechars:26}}</h5>
-                        <a href="{% url 'download_book' order_item.book.pk %}" class="btn btn-primary">Download</a>
+                        <a href="{% url 'download_book' order_item.book.pk %}" class="btn btn-success"><i class="bi bi-file-earmark-arrow-down"></i> Download</a>
                         </div>
                     </div>
                 </div>

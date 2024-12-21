@@ -1,8 +1,10 @@
 {% extends "books/base.html" %}
 {% block main_content%}
     <div class="container my-5">
+        <h1 class="fw-bold text-secondary">Perfil de administração</h1>
+        
         <div class="card border-success mb-3">
-            <div class="card-header fw-bold text-success">Zona de administração</div>
+            <div class="card-header fw-bold text-success">Nota de boas-vindas</div>
             <div class="card-body text-success">
               <h5 class="card-title">Bem-vindo ao perfil de administração sr. {{user.username}}</h5>
               <p class="card-text">Aqui você pode fazer upload de livros e gerenciar as suas entregas, este espaço é só para membros autorizados do staff</p>

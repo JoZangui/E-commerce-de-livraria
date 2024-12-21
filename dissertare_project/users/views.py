@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
@@ -200,16 +201,19 @@ def profile(request):
 
 @login_required
 def staff_profile(request):
-    last_book_uploaded = Books.objects.last()
-    shipped_quantity = Order.objects.filter(shipped=True).count()
-    not_shipped_quantity = Order.objects.filter(shipped=False).count()
+    if request.user.is_superuser:
+        last_book_uploaded = Books.objects.last()
+        shipped_quantity = Order.objects.filter(shipped=True).count()
+        not_shipped_quantity = Order.objects.filter(shipped=False).count()
 
-    return render(
-        request,
-        'users/staff_profile.html',
-        {
-            'last_book_uploaded': last_book_uploaded,
-            'shipped_quantity': shipped_quantity,
-            'not_shipped_quantity': not_shipped_quantity,
-        }
-    )
+        return render(
+            request,
+            'users/staff_profile.html',
+            {
+                'last_book_uploaded': last_book_uploaded,
+                'shipped_quantity': shipped_quantity,
+                'not_shipped_quantity': not_shipped_quantity,
+            }
+        )
+    else:
+        raise Http404

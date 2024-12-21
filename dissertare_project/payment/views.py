@@ -61,23 +61,31 @@ def orders(request, pk):
 def not_shipped_dash(request):
     if request.user.is_superuser:
         orders = Order.objects.filter(shipped=False)
-        if request.POST:
-            status = request.POST['shipping_status']
-            num = request.POST['num']
-
-            # grab Date and time
-            now = timezone.now()
-            # grab the order
-            order = Order.objects.filter(id=num)
-            # update order
-            order.update(shipped=True, date_shipped=now)
-            
-            messages.success(request, "Shipping status updated")
-            return redirect('books')
         return render(request, 'payment/not_shipped_dash.html', {'orders': orders})
     else:
         messages.warning(request, "Access Denied")
         return redirect('books')
+
+@login_required
+def not_shipped_to_shipped(request, order_id):
+    if request.user.is_superuser:
+        order = Order.objects.filter(id=order_id).first()
+
+        if request.POST:
+            # grab Date and time
+            now = timezone.now()
+            # grab the order
+            order = Order.objects.filter(id=order_id)
+            # update order
+            order.update(shipped=True, date_shipped=now)
+
+            messages.success(request, "Shipping status updated")
+            return redirect('not-shipped-dash')
+        return render(request, 'payment/not_shipped_to_shipped.html', {'order': order})
+    else:
+        messages.warning(request, "Access Denied")
+        return redirect('books')
+
 
 @login_required
 def shipped_dash(request):
