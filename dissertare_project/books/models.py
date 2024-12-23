@@ -120,3 +120,12 @@ class BookLists(models.Model):
 
     class Meta:
         verbose_name_plural = 'Book lists'
+
+class Announcement(models.Model):
+    title = models.CharField(verbose_name='Titulo do anúncio', max_length=50)
+    description = models.TextField(verbose_name='Descrição', max_length=100)
+    image = models.ImageField(upload_to='announcement', verbose_name='Anúncios')
+    date_posted = models.DateTimeField(default=timezone.now, verbose_name='Data do upload')
+
+    def __str__(self) -> str:
+        return self.title

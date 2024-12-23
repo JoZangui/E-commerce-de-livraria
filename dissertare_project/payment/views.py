@@ -98,7 +98,7 @@ def not_shipped_to_shipped(request, order_id):
 def shipped_dash(request):
     if request.user.is_superuser:
         orders = Order.objects.filter(shipped=True)
-        
+
         pagtr = Paginator(orders, 5)
 
         page_number = request.GET.get('page')
