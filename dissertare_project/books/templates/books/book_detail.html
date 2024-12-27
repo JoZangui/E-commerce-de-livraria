@@ -70,26 +70,13 @@
                 <h4 class="fw-bold text-left">Continue explorando</h4>
                 <p>Lorem ipsum dolor, sit amet consectetur</p>    
                 <div class="recommended-books row overflow-hidden">
-                    <div class="col-auto recommended-book-image overflow-hidden">
-                        <a href="">
-                            <img class="rounded" src="" alt="">
-                        </a>
-                    </div>
-                    <div class="col-auto recommended-book-image overflow-hidden">
-                        <a href="">
-                            <img class="rounded" src="" alt="">
-                        </a>
-                    </div>
-                    <div class="col-auto recommended-book-image overflow-hidden">
-                        <a href="">
-                            <img class="rounded" src="" alt="">
-                        </a>
-                    </div>
-                    <div class="col-auto recommended-book-image overflow-hidden">
-                        <a href="">
-                            <img class="rounded" src="" alt="">
-                        </a>
-                    </div>
+                    {% for book in books_in_the_same_category %}  
+                        <div class="col-auto recommended-book-image overflow-hidden">
+                            <a href="">
+                                <img class="rounded" src="{{book.cover.url}}" alt="">
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

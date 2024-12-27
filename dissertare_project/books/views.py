@@ -126,8 +126,20 @@ def book_detail(request, book_id):
     book = Books.objects.get(pk=book_id)
     cart = Cart(request)
     book_is_in_cart = str(book_id) in cart.cart.keys()
+    category = book.category.first()
+    # Retorna outros livros que pertencem a mesma categoria do livro pesquisado, excepto o livro pesquisado
+    books_in_the_same_category = Books.objects.filter(category=category).exclude(pk=book_id)[:4]
 
-    return render(request, 'books/book_detail.html', {'book': book, 'title': 'detail', 'book_is_in_cart': book_is_in_cart})
+    return render(
+        request,
+        'books/book_detail.html',
+        {
+            'book': book,
+            'title': 'detail',
+            'book_is_in_cart': book_is_in_cart,
+            'books_in_the_same_category': books_in_the_same_category
+        }
+    )
 
 
 def book_lists(request):
