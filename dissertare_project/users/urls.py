@@ -67,4 +67,9 @@ urlpatterns = [
         views.staff_profile,
         name='staff-profile'
     ),
+    path(
+        'upload_announcement/',
+        views.upload_announcement,
+        name='upload-announcement'
+    ),
 ]

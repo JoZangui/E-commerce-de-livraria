@@ -22,6 +22,7 @@ from .tokens import account_activation_token
 from users.models import Profile
 from payment.models import ShippingAddress, Order, OrderItem
 from books.models import Books
+from books.forms import AnnouncementForm
 
 
 def register(request):
@@ -215,5 +216,23 @@ def staff_profile(request):
                 'not_shipped_quantity': not_shipped_quantity,
             }
         )
+    else:
+        raise Http404
+
+
+@login_required
+def upload_announcement(request):
+    if request.user.is_superuser:
+        announcement_form = AnnouncementForm()
+
+        if request.POST:
+            announcement_form = AnnouncementForm(request.POST or None)
+
+            if announcement_form.is_valid():
+                announcement_form.save()
+                messages.success(request, 'anúncio adicionado com sucesso')
+                return redirect('staff-profile')
+            messages.warning('Algo deu errado!')
+        return render(request, 'users/announcement_form.html', {'announcement_form': announcement_form})
     else:
         raise Http404
