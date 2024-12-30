@@ -7,7 +7,7 @@ from .models import Books, Authors, Announcement
 class BookForm(ModelForm):
     class Meta:
         model = Books
-        fields = ['file', 'title', 'cover', 'description', 'author']
+        fields = ['file', 'title', 'cover', 'description', 'comment', 'author', 'category', 'price', 'is_sale', 'sale_price']
 
         widgets = {
             'file': forms.FileInput(attrs={'class': 'form-control'}),
@@ -16,16 +16,34 @@ class BookForm(ModelForm):
                 'class': 'form-control',
                 'placeholder':'Títule do livro',
                 'maxlength': '50',
-                'autofocus': True}),
+                'autofocus': True
+            }),
 
             'cover': forms.FileInput(attrs={'class': 'form-control'}),
-            
+
             'description': forms.Textarea(attrs={
                 'class': 'form-control not-resizable',
                 'cols':'30',
                 'rows': '10',
-                'placeholder': 'adicione uma descrição para o livro',
-                'maxlength': '400'})}
+                'placeholder': 'Sinopse do livro',
+                'maxlength': '400',
+                'style': "resize: none;"
+            }),
+
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control not-resizable',
+                'cols':'30',
+                'rows': '10',
+                'placeholder': 'Faça um comentário sobre este livro (História sobre o livro e ou seu autor, curiosidades, pontos marcantes...)',
+                'maxlength': '400',
+                'style': "resize: none;"
+            }),
+            'author': forms.Select(attrs={'class': "form-select"}),
+            'category': forms.SelectMultiple(attrs={'class': "form-select", 'aria-label': "Multiple select example"}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'is_sale': forms.CheckboxInput(attrs={'class': 'form-check-input is_sale'}),
+            'sale_price': forms.NumberInput(attrs={'class': 'form-control sale_price'})
+        }
 
 
 class AuthorsForm(ModelForm):

@@ -91,7 +91,7 @@ class Books(models.Model):
     category = models.ManyToManyField(Category, related_name='books_category', default=[0])
     price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
     is_sale = models.BooleanField(default=False)
-    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title

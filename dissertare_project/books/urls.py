@@ -21,7 +21,7 @@ urlpatterns = [
     # register author form
     path('author/register_author/', views.register_author, name="register-author"),
     # author detail
-    path('author/author_detail/<str:author_name>/', views.author_detail, name='author-detail'),
+    path('author/author_detail/<int:author_id>/', views.author_detail, name='author-detail'),
     # author update
     path('author/author_update/<str:author_name>/', views.author_update, name='author-update'),
     # delete author

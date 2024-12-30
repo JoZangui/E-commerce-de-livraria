@@ -175,21 +175,22 @@ def upload_book(request):
             final_form.uploaded_by = request.user
             final_form.save()
 
-
+            messages.success(request, 'Livro adicionado com sucesso')
             return HttpResponseRedirect(reverse(
                 'book-detail',
                 kwargs={'book_id': final_form.pk}
             ))
-        else:
-            return render(
-                request,
-                'books/book_create_form.html',
-                {
-                    'book_form': book_form,
-                    'book_form_erros': book_form.errors,
-                    'title': 'carregar livro'
-                }
-            )
+
+        messages.warning(request, 'Algo deu errado')
+        return render(
+            request,
+            'books/book_create_form.html',
+            {
+                'book_form': book_form,
+                'book_form_erros': book_form.errors,
+                'title': 'carregar livro'
+            }
+        )
 
     book_form = BookForm()
 
@@ -215,18 +216,26 @@ def update_book(request, book_id):
         if book_form.is_valid():
             book_form.save()
 
+            messages.success(request, 'Livro actualizado com sucesso')
             return HttpResponseRedirect(reverse(
                 'book-detail',
-                kwargs={'book_id': book_id}))
-
-    book_form = BookForm(instance=book)
+                kwargs={'book_id': book_id}
+                )
+            )
+        messages.warning(request, 'Algo deu errado')
+    else:
+        book_form = BookForm(instance=book)
 
     title = f'editar livro {book.title}'
 
     return render(
         request,
         'books/book_create_form.html',
-        {'book_form': book_form, 'title': title}
+        {
+            'book_form': book_form,
+            'book_form_erros': book_form.errors,
+            'title': title
+        }
     )
 
 
@@ -286,9 +295,9 @@ def register_author(request):
     )
 
 
-def author_detail(request, author_name):
+def author_detail(request, author_id):
 
-    author = Authors.objects.get(name=author_name)
+    author = Authors.objects.get(id=author_id)
     author_books = author.books_set.all().order_by('-date_posted')
 
     title = author.name
