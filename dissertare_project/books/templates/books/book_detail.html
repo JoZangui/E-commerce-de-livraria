@@ -41,7 +41,7 @@
             <div class="col-auto col-md-6 col-lg-8 col-xl-5 book-title-and-description overflow-x-hidden overflow-y-auto">
                 <!-- title -->
                 <h3 class="fw-bold fs-2">{{book.title}}</h3>
-                <a href="" class="text-secondary fw-bold"> <!-- autor --> {{book.author}}</a> | <span class="text-secondary fs-6 mb-3"><!-- data --> {{book.date_posted|date:"d b, Y"}}</span>
+                <a href="" class="text-secondary fw-bold"> <!-- autor --> {{book.author.name}}</a> | <span class="text-secondary fs-6 mb-3"><!-- data --> {{book.date_posted|date:"d b, Y"}}</span>
                 <div class="book-description row row-cols-1 overflow-x-hidden overflow-y-auto">
                     <!-- editorecommended-comment (optional) -->
                     <div class="synopsis col pt-2">
@@ -72,7 +72,7 @@
                 <div class="recommended-books row overflow-hidden">
                     {% for book in books_in_the_same_category %}  
                         <div class="col-auto recommended-book-image overflow-hidden">
-                            <a href="">
+                            <a href="{% url 'book-detail' book.id %}">
                                 <img class="rounded" src="{{book.cover.url}}" alt="">
                             </a>
                         </div>

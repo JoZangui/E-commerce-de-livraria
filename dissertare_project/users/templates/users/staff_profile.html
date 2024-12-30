@@ -11,27 +11,39 @@
             </div>
         </div>
         <hr>
-        <div class="card border-secondary mb-3">
-            <div class="card-header fw-bold text-secondary">Upload de livros</div>
-            <div class="card-body text-secondary">
-              <h5 class="card-title">Informação do ultimo livro carregado:</h5>
-              <ul>
-                  <li class="card-text">
-                    <strong>Título:</strong> {{last_book_uploaded.title}}
-                  </li>
-                  <li class="card-text">
-                    <strong>Autor(a):</strong> {{last_book_uploaded.author.name}}
-                  </li>
-                  <li class="card-text">
-                    <strong>Data do carregamento:</strong> {{last_book_uploaded.date_posted}}
-                  </li>
-              </ul>
-            </div>
+        <!-- upload de livros -->
+        <div class="card border-primary mb-3">
+          <div class="card-header fw-bold text-primary">Upload de livros</div>
+          <div class="card-body text-primary">
+            <h5 class="card-title">Informação do ultimo livro carregado:</h5>
+            <ul>
+              <li class="card-text">
+                <strong>Título:</strong> {{last_book_uploaded.title}}
+              </li>
+              <li class="card-text">
+                <strong>Autor(a):</strong> {{last_book_uploaded.author.name}}
+              </li>
+              <li class="card-text">
+                <strong>Data do carregamento:</strong> {{last_book_uploaded.date_posted}}
+              </li>
+            </ul>
+          </div>
         </div>
-        <a href="{% url 'upload-book' %}" class="btn btn-secondary">Carregar livro</a>
+        <a href="{% url 'upload-book' %}" class="btn btn-primary">Carregar livro</a>
         <hr>
+        <!-- Anúncio -->
         <div class="card border-secondary mb-3">
-            <div class="card-header fw-bold text-secondary">Upload de livros</div>
+          <div class="card-header fw-bold text-secondary">Anunciar</div>
+          <div class="card-body text-secondary">
+            <h5 class="card-title">Anunciar novidades</h5>
+            <p class="card-text">Pode sempre adicionar alguma informação no cabeçalho da página para anunciar alguma novidade</p>
+          </div>
+        </div>
+        <a href="{% url 'upload-announcement' %}" class="btn btn-outline-secondary">Carregar Anúncio</a>
+        <hr>
+        <!-- upload de livros -->
+        <div class="card border-secondary mb-3">
+            <div class="card-header fw-bold text-secondary">Entregas</div>
             <div class="card-body text-secondary">
               <h5 class="card-title">Total de livros entregues e não entregues:</h5>
               <span class="text-success"><strong>Total de livros entregues:</strong> {{shipped_quantity}} </span>
@@ -41,6 +53,5 @@
               <a href="{% url 'not-shipped-dash' %}" class="btn btn-sm btn-outline-warning">Ver pedidos não entregues</a>
             </div>
         </div>
-        <a href="" class="btn btn-outline-secondary">Ir para entregas</a>
     </div>
 {% endblock main_content%}

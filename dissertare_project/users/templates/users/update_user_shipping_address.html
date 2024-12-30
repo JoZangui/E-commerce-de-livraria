@@ -1,0 +1,58 @@
+{% extends 'books/base.html' %}
+{% block main_content %}
+    <div class="py-5 container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                      Shipping Info
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'update-user-shipping-address' %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <div class="card border-success mb-3" style="max-width: 18rem;">
+                                    <div class="card-body text-success">
+                                      <p class="card-text">Onde deseja receber o seu artigo? (Enviar/receber na loja)</p>
+                                    </div>
+                                </div>
+                                <label for="" class="fw-bold">Entrega</label>
+                                {% for choice in shipping_form.shipping_mode %}
+                                    <div class="form-check mb-3">
+                                        {{choice}}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Nome completo</label>
+                                {{ shipping_form.shipping_full_name}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Email</label>
+                                {{ shipping_form.shipping_email}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Número de telefone</label>
+                                {{ shipping_form.shipping_phone_number}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Endereço 1</label>
+                                {{ shipping_form.shipping_address1}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Endereço 2</label>
+                                {{ shipping_form.shipping_address2}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="fw-bold">Cidade</label>
+                                {{ shipping_form.shipping_city}}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

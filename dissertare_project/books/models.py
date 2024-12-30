@@ -101,8 +101,8 @@ class Books(models.Model):
 
         img = Image.open(self.cover.path)
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+        if img.height > 2500 or img.width > 1600:
+            output_size = (2500, 1600)
             img.thumbnail(output_size)
             img.save(self.cover.path)
 
@@ -124,7 +124,7 @@ class BookLists(models.Model):
 class Announcement(models.Model):
     title = models.CharField(verbose_name='Titulo do anúncio', max_length=50)
     description = models.TextField(verbose_name='Descrição', max_length=100)
-    image = models.ImageField(upload_to='announcement', verbose_name='Anúncios')
+    image = models.ImageField(upload_to='announcement', verbose_name='Imagem')
     date_posted = models.DateTimeField(default=timezone.now, verbose_name='Data do upload')
 
     def __str__(self) -> str:

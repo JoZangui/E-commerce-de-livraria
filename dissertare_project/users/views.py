@@ -93,8 +93,7 @@ def activate(request, uidb64, token):
         # faz o login do novo usuário
         login(request, user)
         messages.success(request, 'Registro feito com sucesso')
-        # Obrigado por confirmar o seu email. Agora você já pode iniciar sessão na sua conta
-        return redirect('shipping-address-for-new-user')
+        return redirect('user-shipping-address')
     else:
         return HttpResponse('Activation link is invalid!')
 
@@ -163,7 +162,7 @@ def update_user_shipping_address(request):
         shipping_form = ShippingForm(instance=shipping_addres)
     else:
         shipping_form = ShippingForm()
-    return render(request, 'users/user_shipping_address.html', {'shipping_form': shipping_form})
+    return render(request, 'users/update_user_shipping_address.html', {'shipping_form': shipping_form})
 
 
 @login_required
@@ -226,13 +225,13 @@ def upload_announcement(request):
         announcement_form = AnnouncementForm()
 
         if request.POST:
-            announcement_form = AnnouncementForm(request.POST or None)
+            announcement_form = AnnouncementForm(request.POST, request.FILES or None)
 
             if announcement_form.is_valid():
                 announcement_form.save()
                 messages.success(request, 'anúncio adicionado com sucesso')
                 return redirect('staff-profile')
-            messages.warning('Algo deu errado!')
+            messages.warning(request, 'Algo deu errado!')
         return render(request, 'users/announcement_form.html', {'announcement_form': announcement_form})
     else:
         raise Http404

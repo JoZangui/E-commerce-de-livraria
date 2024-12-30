@@ -55,3 +55,26 @@ class AnnouncementForm(ModelForm):
     class Meta:
         model = Announcement
         fields = ['title', 'description', 'image']
+
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder':'Título',
+                'maxlength': '50',
+                'autofocus': True
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control not-resizable',
+                'cols':'30',
+                'rows': '10',
+                'placeholder': 'Descrição',
+                'maxlength': '400'
+            }),
+            'image': forms.FileInput(
+                attrs={
+                'class': 'form-control',
+                'type': 'file',
+                'id': 'formFile'
+                }
+            )
+        }
