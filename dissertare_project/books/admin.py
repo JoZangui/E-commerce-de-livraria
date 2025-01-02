@@ -15,6 +15,7 @@ class BooksAdmin(admin.ModelAdmin):
             'title',
             'file',
             'description',
+            'comment',
             'cover',
             'date_posted',
             'price',
@@ -28,7 +29,6 @@ class BooksAdmin(admin.ModelAdmin):
     list_display = (
         'title',
         'file',
-        'description',
         'cover',
         'date_posted',
         'author',

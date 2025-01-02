@@ -3,10 +3,20 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from PIL import Image
 
 from .pdf_file_validator import pdf_format_validator
+
+
+def val_cannot_be_negative(val):
+    if val < 0:
+        raise ValidationError(
+            _("%(value)s é menor que zero, o valor não pode ser menor que zero"),
+            params={'value': val}
+        )
 
 
 def books_pdf_file_path(instance, filename):
@@ -89,9 +99,9 @@ class Books(models.Model):
     date_posted = models.DateTimeField(default=timezone.now, verbose_name='Publicado no site em')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Enviado por')
     category = models.ManyToManyField(Category, related_name='books_category', default=[0])
-    price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+    price = models.DecimalField(default=0, decimal_places=2, max_digits=6, validators=[val_cannot_be_negative])
     is_sale = models.BooleanField(default=False)
-    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6, null=True, blank=True)
+    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6, validators=[val_cannot_be_negative], null=True, blank=True)
 
     def __str__(self) -> str:
         return self.title

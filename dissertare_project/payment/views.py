@@ -86,7 +86,7 @@ def not_shipped_to_shipped(request, order_id):
             # update order
             order.update(shipped=True, date_shipped=now)
 
-            messages.success(request, "Shipping status updated")
+            messages.success(request, f"Pedido nº {order.first().id}, marcado como entregue com sucesso")
             return redirect('not-shipped-dash')
         return render(request, 'payment/not_shipped_to_shipped.html', {'order': order})
     else:
@@ -97,7 +97,7 @@ def not_shipped_to_shipped(request, order_id):
 @login_required
 def shipped_dash(request):
     if request.user.is_superuser:
-        orders = Order.objects.filter(shipped=True)
+        orders = Order.objects.filter(shipped=True).order_by('-date_shipped')
 
         pagtr = Paginator(orders, 5)
 

@@ -26,7 +26,7 @@ def _user_is_superuser(user):
 
 
 def home(request):
-    books_on_sale = Books.objects.filter(is_sale=True)
+    books_on_sale = Books.objects.filter(is_sale=True)[:5]
     # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
     for book in books_on_sale:
         book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
@@ -162,7 +162,7 @@ def book_lists(request):
             'page_obj': page_obj,
         })
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def upload_book(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -201,7 +201,7 @@ def upload_book(request):
     )
 
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def update_book(request, book_id):
     """ Apenas admin deven usar essa página """
 
@@ -239,7 +239,7 @@ def update_book(request, book_id):
     )
 
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def delete_book(request, book_id):
     """ Apenas admin deven usar essa página """
     book = Books.objects.get(pk=book_id)
@@ -261,7 +261,7 @@ def download_book(request, book_id):
     return redirect(book.file.url)
 
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def register_author(request):
     """ Apenas admin devem usar essa página """
     if request.method == 'POST':
@@ -358,7 +358,7 @@ def all_author_books(request, author_name):
     )
 
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def author_update(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)
@@ -393,7 +393,7 @@ def author_update(request, author_name):
         {'author_form': author_form, 'title': title})
 
 
-@user_passes_test(_user_is_superuser, login_url='books')
+@user_passes_test(_user_is_superuser, login_url='home')
 def delete_author(request, author_name):
     """ Apenas admin deven usar essa página """
     author = Authors.objects.get(name=author_name)

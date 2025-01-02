@@ -10,7 +10,9 @@
                         </div>
                         <div class="card-body">
                             <!-- title -->
-                            <h5 class="card-title text-center" title="{{book.title}}">{{book.title}}</h5>
+                            <div class="title d-flex justify-content-center">
+                                <h5 class="card-title text-center" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
+                            </div>
                             <!-- price -->
                             <div class="price">
                                 {% if book.is_sale %}

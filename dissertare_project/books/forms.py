@@ -40,9 +40,9 @@ class BookForm(ModelForm):
             }),
             'author': forms.Select(attrs={'class': "form-select"}),
             'category': forms.SelectMultiple(attrs={'class': "form-select", 'aria-label': "Multiple select example"}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'is_sale': forms.CheckboxInput(attrs={'class': 'form-check-input is_sale'}),
-            'sale_price': forms.NumberInput(attrs={'class': 'form-control sale_price'})
+            'sale_price': forms.NumberInput(attrs={'class': 'form-control sale_price', 'min': 0})
         }
 
 
