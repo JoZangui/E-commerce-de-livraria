@@ -6,12 +6,12 @@
                 {% for book in cart_books %}
                     <div class="card me-4">
                         <div class="card-image w-100 overflow-hidden">
-                            <img src="{{book.cover.url}}" class="card-img-top" alt="...">
+                            <img src="{{book.cover.url}}" class="card-img-top" alt="{{book.title}}">
                         </div>
                         <div class="card-body">
                             <!-- title -->
                             <div class="title d-flex justify-content-center">
-                                <h5 class="card-title text-center" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title}}</a></h5>
+                                <h5 class="card-title text-center" title="{{book.title}}"><a href="{% url 'book-detail' book.id %}" class="text-decoration-none text-dark">{{book.title}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum hic necessitatibus fugiat nobis error ratione obcaecati quos vitae repellendus? Atque nobis officiis exercitationem maiores? Optio magni praesentium soluta possimus dolores!</a></h5>
                             </div>
                             <!-- price -->
                             <div class="price">
