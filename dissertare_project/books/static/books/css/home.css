@@ -12,10 +12,16 @@
 
 li .image-container {
     width: 100%;
-    min-height: 158px;
-    max-height: 221px;
+    height: 221px;
     position: relative;
     overflow: hidden;
+}
+.image-container img {
+    height: 221px;
+    object-fit: cover;
+    object-position: top;
+    -o-object-fit: cover;
+    -o-object-position: top;
 }
 .image-container img, .editor-choice .book img, .books-cover--container .book-cover img {
     width: 100%;

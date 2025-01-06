@@ -16,16 +16,20 @@
                     {% for book in books_on_sale %}
                         <li class="book_on_sale p-2 d-md-flex flex-column align-items-center">
                             <div class="image-container rounded">
+                                <!-- rótulo de desconto -->
                                 <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
-                                        {{book.discount_percentage|floatformat:"0"}}%
+                                    {{book.discount_percentage|floatformat:"0"}}%
                                 </div>
+                                <!-- imagem da capa do livro -->
                                 <img src="{{book.cover.url}}" alt="book-cover">
                             </div>
+                            <!-- titulo e autor -->
                             <div class="text">
                                 <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
                                 <a href="" class="author text-dark">
                                     <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
                                 </a>
+                                <!-- botão -->
                                 <a href="{% url 'book-detail' book.id %}" class="btn btn-outline-primary mt-3">
                                     Detalhes
                                 </a>
@@ -123,8 +127,8 @@
                      <br>
                      <br>
                      <p class="card-text">
-                         <strong>Sinopse:</strong>
-                         Some quick example text to build on the card title and make up the bulk of the card's content.
+                        <strong>Sinopse:</strong>
+                        {{editor_choice.description|truncatewords:15}}
                      </p>
                  </div>
              </div>

@@ -71,7 +71,7 @@
                 <p class="fst-italic text-secondary">Mais livros baseados neste livro</p>    
                 <div class="recommended-books row overflow-hidden">
                     {% for book in books_in_the_same_category %}  
-                        <div class="col-auto recommended-book-image overflow-hidden">
+                        <div class="col-auto my-2 recommended-book-image overflow-hidden">
                             <a href="{% url 'book-detail' book.id %}">
                                 <img class="rounded" src="{{book.cover.url}}" alt="">
                             </a>

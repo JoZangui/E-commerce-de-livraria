@@ -29,6 +29,10 @@ h1, h2, h3, a {
 }
 
 /* header */
+.carousel-inner {
+    height: 315px;
+    overflow: hidden;
+}
 .carousel-caption {
     text-shadow: 0px 0px 2px #000;
 }
