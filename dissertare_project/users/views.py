@@ -28,8 +28,9 @@ from books.forms import AnnouncementForm
 def register(request):
     """ view para registro de usuário """
 
+    # redireciona para a página home se o usuário já estiver activo no site
     if request.user.is_active:
-        return redirect('books')
+        return redirect('home')
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -39,6 +40,7 @@ def register(request):
             user.is_active = False
             user.save()
 
+            """ Mensagem de confirmação de e-mail """
             # pega o endereço actual do site
             current_site = get_current_site(request)
             # assunto do email que será enviado
@@ -73,6 +75,8 @@ def register(request):
 
 def activate(request, uidb64, token):
     """
+    View de activação de conta
+    
     VIEW ACESSADA COM O LINK DE ACTIVAÇAO DE CONTA
     QUE FOI ENVIADA PARA O EMAIL DO NOVO USUÁRIO
     """
@@ -93,9 +97,11 @@ def activate(request, uidb64, token):
         # faz o login do novo usuário
         login(request, user)
         messages.success(request, 'Registro feito com sucesso')
+        # Redireciona o usuário para a página do formulário de entrega
         return redirect('user-shipping-address')
     else:
-        return HttpResponse('Activation link is invalid!')
+        # Activation link is invalid
+        return HttpResponse('Link de activação inválido!')
 
 
 def login_user(request):
@@ -131,6 +137,11 @@ def login_user(request):
 
 @login_required
 def user_shipping_address(request):
+    """
+    Página de registo dos dados de endereço de entrega do usuário.
+    Apenas para usuários logados.
+    """
+    
     if request.POST:
         shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
         shipping_form = ShippingForm(request.POST or None, instance=shipping_addres)
@@ -147,6 +158,10 @@ def user_shipping_address(request):
 
 @login_required
 def update_user_shipping_address(request):
+    """
+    Página de actualização dos dados de endereço de entrega.
+    Apenas para usuários logados.
+    """
     shipping_addres = ShippingAddress.objects.get(user__id=request.user.id)
     if request.POST:
         shipping_form = ShippingForm(request.POST or None, instance=shipping_addres)
@@ -167,17 +182,13 @@ def update_user_shipping_address(request):
 
 @login_required
 def user_books(request):
+    """ Página com os livros do usuário """
     ordered_items = OrderItem.objects.all().filter(user=request.user)
 
     books = []
     for item in ordered_items:
         books.append(item.book)
-    
-    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
-    for book in books:
-        if book.is_sale:
-            book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
-    
+
     pagtr = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -185,11 +196,30 @@ def user_books(request):
 
     return render(
         request,
-        'books/books.html',
+        'users/user_books.html',
         {
             'book': ordered_items,
             'page_obj': page_obj,
             'title': 'books'
+        }
+    )
+
+def user_books_details(request, book_id):
+    """ Página de detalhes de um livro do usuário """
+    # livro
+    book = Books.objects.get(pk=book_id)
+    # Retorna uma das categorias do livro
+    category = book.category.first()
+    # Retorna outros livros que pertencem a mesma categoria do livro pesquisado, excepto o livro pesquisado
+    books_in_the_same_category = Books.objects.filter(category=category).exclude(pk=book_id)[:4]
+
+    return render(
+        request,
+        'users/user_books_detail.html',
+        {
+            'book': book,
+            'title': 'detail',
+            'books_in_the_same_category': books_in_the_same_category
         }
     )
 
@@ -201,9 +231,12 @@ def profile(request):
 
 @login_required
 def staff_profile(request):
+    """ Página de administração para os membros do staff """
     if request.user.is_superuser:
         last_book_uploaded = Books.objects.last()
+        # número de livros entregues
         shipped_quantity = Order.objects.filter(shipped=True).count()
+        # número de livros não entregues
         not_shipped_quantity = Order.objects.filter(shipped=False).count()
 
         return render(
@@ -221,6 +254,7 @@ def staff_profile(request):
 
 @login_required
 def upload_announcement(request):
+    """ Página para upload de anúncios """
     if request.user.is_superuser:
         announcement_form = AnnouncementForm()
 

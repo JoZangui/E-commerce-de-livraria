@@ -72,4 +72,9 @@ urlpatterns = [
         views.upload_announcement,
         name='upload-announcement'
     ),
+    path(
+        'user_books_details/<int:book_id>',
+        views.user_books_details,
+        name='user-books-details'
+    ),
 ]

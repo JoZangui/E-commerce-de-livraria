@@ -16,8 +16,6 @@ urlpatterns = [
     path('book/update_book/<int:book_id>/', views.update_book, name='book-update'),
     # delete book
     path('book/delete_book/<int:book_id>/', views.delete_book, name='book-delete'),
-    # download book
-    path('book/download/<int:book_id>', views.download_book, name='download-book'),
     # register author form
     path('author/register_author/', views.register_author, name="register-author"),
     # author detail

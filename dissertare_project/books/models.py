@@ -12,6 +12,7 @@ from .pdf_file_validator import pdf_format_validator
 
 
 def val_cannot_be_negative(val):
+    """ Verifica se o valor inserido pelo usuário é menor a zero """
     if val < 0:
         raise ValidationError(
             _("%(value)s é menor que zero, o valor não pode ser menor que zero"),

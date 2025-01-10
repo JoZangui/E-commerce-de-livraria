@@ -1,0 +1,106 @@
+{% extends "books\base.html" %}
+{% block main_content %}
+    <div class="mt-5 container items-container overflow rounded">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center text-lg-start mx-auto py-3 rounded bg-light">
+            <!-- book cover, price, amount -->
+            <div class="book col col-lg-4 col-xl-3 d-flex flex-column justify-content-between align-items-center align-items-lg-start ps-md-4">
+                <div class="book-image rounded">
+                    <img src="{{book.cover.url}}" alt="book-cover">
+                </div>
+                <!-- info -->
+                <div class="price text-center">    
+                    <small class="text-secondary">Se gostou deste título temos muito mais a sua espera</small>
+                </div>
+                <!-- buttons -->
+                <div class="buttons">
+                    <a href="{% url 'books' %}" class="btn btn-sm btn-outline-info my-2 w-100">Ver títulos semelhante</a>
+                    <a href="{% url 'download_book' book.id %}" class="btn btn-success my-2 w-100">Download</a>
+                </div>
+            </div>
+            <!-- book description -->
+            <div class="col-auto col-md-6 col-lg-8 col-xl-5 book-title-and-description overflow-x-hidden overflow-y-auto">
+                <!-- title -->
+                <h3 class="fw-bold fs-2">{{book.title}}</h3>
+                <a href="" class="text-secondary fw-bold"> <!-- autor --> {{book.author.name}}</a> | <span class="text-secondary fs-6 mb-3"><!-- data --> {{book.date_posted|date:"d b, Y"}}</span>
+                <div class="book-description row row-cols-1 overflow-x-hidden overflow-y-auto">
+                    <!-- editorecommended-comment (optional) -->
+                    <div class="synopsis col pt-2">
+                        <h4>Sinopse</h4>
+                        <p class="text-start">{{book.description}}</p>
+                    </div>
+                    {% if book.comment %}
+                        <div class="editorecommended-comment col pt-2">
+                            <h4>Comentário</h4>
+                            <p class="text-start">{{book.comment}}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if user.is_superuser %}
+                    <div class="mt-2 p-2 bg-warning rounded">
+                        <small class="mb-3 d-block text-light fw-bold">Zona de administração para edição e remoção do livro use com cautela por favor</small>
+                        <span class="d-flex d-md-block justify-content-center">
+                            <a href="{% url 'book-update' book.id %}" class="btn btn-sm btn-primary me-3 me-md-2">Editar</a>
+                            <a href="{% url 'book-delete' book.id %}" class="btn btn-sm btn-danger">Deletar</a>
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- recommendations -->
+            <div class="col-md-12 mt-4 mt-lg-0 d-flex flex-column justify-content-between align-items-center align-items-lg-start ps-md-4 ps-xl-5">
+                <h4 class="fst-italic fw-bold text-left text-success">Continue explorando...</h4>
+                <p class="fst-italic text-secondary">Mais livros baseados neste livro</p>    
+                <div class="recommended-books row overflow-hidden">
+                    {% for book in books_in_the_same_category %}  
+                        <div class="col-auto my-2 recommended-book-image overflow-hidden">
+                            <a href="{% url 'book-detail' book.id %}">
+                                <img class="rounded" src="{{book.cover.url}}" alt="">
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
+
+{% block adicional_scripts %}
+<script>
+    // Check if button pressed
+    $(document).on('click', '#add-cart', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart_add' %}",
+            data: {
+                book_id: $('#add-cart').val(),
+                book_qty: $('#qty-cart').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            
+            success: function(json) {
+                // console.log(json)
+                document.getElementById('cart_quantity').textContent = json.qty
+                location.reload();
+            },
+            
+            error: function(xhr, errmsg, err) {
+                
+            }
+        });
+    });
+
+    const amountInput = document.querySelector('.amount-input');
+    const increase = () => {
+        if (Number(amountInput.value) - amountInput.max) {
+            amountInput.value = Number(amountInput.value) + 1;
+        }
+    }
+    const decrease = () => {
+        if (Number(amountInput.value) > amountInput.min) {
+            amountInput.value = Number(amountInput.value) - 1;
+        }
+    }
+
+</script>
+{% endblock adicional_scripts %}

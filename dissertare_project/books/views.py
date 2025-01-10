@@ -26,11 +26,14 @@ def _user_is_superuser(user):
 
 
 def home(request):
+    """página home """
+    
+    # retorna apenas 5 livros dos livros em promoção
     books_on_sale = Books.objects.filter(is_sale=True)[:5]
-    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    # calcula a percentagem de desconto e adiciona ao atributo (discount_percentage) que foi criado dentro do loop
     for book in books_on_sale:
         book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
-    # livros recentes
+    # retorna os últimos 5 livros adicionados
     recent_books = Books.objects.all().order_by('-date_posted')[:5]
     # a escolha do editor
     editor_choice = Books.objects.filter(category__name='A escolha do editor').order_by('-date_posted').first()
@@ -46,14 +49,20 @@ def home(request):
         }
     )
 
+
+# books
 def books(request):
+    """
+    página com todos os livros em ordem de postagem começando do mais recente
+    """
+
     all_books = Books.objects.all().order_by('-date_posted')
-    # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
+    # calcula a percentagem de desconto e adiciona ao atributo (discount_percentage) que foi criado dentro do loop
     for book in all_books:
         if book.is_sale:
             book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
 
-    # classe para separar os itens por páginas (8 itens por página)
+    # classe para separar os itens por páginas (10 itens por página)
     pagtr = Paginator(all_books, 10)
 
     # número da página a ser apresentada
@@ -72,6 +81,8 @@ def books(request):
     )
 
 def books_on_sale(request):
+    """ página com os livros em promoção """
+
     all_books_on_sale = Books.objects.filter(is_sale=True).order_by('-date_posted')
     # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
     for book in all_books_on_sale:
@@ -97,16 +108,19 @@ def books_on_sale(request):
 
 
 def books_from_list(request, list_id):
-    books_list = BookLists.objects.get(id=list_id)
-    books = books_list.books.all().order_by('-date_posted')
+    """ página de uma lista de livros """
 
+    # Lista de livros
+    books_list = BookLists.objects.get(id=list_id)
+    # livros da lista
+    books = books_list.books.all().order_by('-date_posted')
     # calcula a percentagem de desconto e adiciona ao atributo criado (discount_percentage)
     for book in books:
         if book.is_sale:
             book.discount_percentage = ((book.price - book.sale_price) / book.price) * 100
+
     # classe para separar os itens por páginas (8 itens por página)
     pagtr = Paginator(books, 10)
-
     # número da página a ser apresentada
     page_number = request.GET.get('page')
     # objecto com o número e link das páginas
@@ -123,9 +137,14 @@ def books_from_list(request, list_id):
     )
 
 def book_detail(request, book_id):
+    """ Página de detalhes de um livro """
+    # livro
     book = Books.objects.get(pk=book_id)
+    # carrinho
     cart = Cart(request)
+    # verifica se o livro já está no carrinho
     book_is_in_cart = str(book_id) in cart.cart.keys()
+    # Retorna uma das categorias do livro
     category = book.category.first()
     # Retorna outros livros que pertencem a mesma categoria do livro pesquisado, excepto o livro pesquisado
     books_in_the_same_category = Books.objects.filter(category=category).exclude(pk=book_id)[:4]
@@ -143,11 +162,13 @@ def book_detail(request, book_id):
 
 
 def book_lists(request):
+    """ Página com as listas de livros """
+
+    # Listas de livros ordernado por data de actualização
     lists = BookLists.objects.all().order_by('-update_date')
 
     # classe para separar os itens por páginas (8 itens por página)
     pagtr = Paginator(lists, 10)
-
     # número da página a ser apresentada
     page_number = request.GET.get('page')
     # objecto com o número e link das páginas
@@ -164,7 +185,10 @@ def book_lists(request):
 
 @user_passes_test(_user_is_superuser, login_url='home')
 def upload_book(request):
-    """ Apenas admin devem usar essa página """
+    """
+    página de upload de livros
+    """
+
     if request.method == 'POST':
         book_form = BookForm(
             request.POST,
@@ -203,7 +227,7 @@ def upload_book(request):
 
 @user_passes_test(_user_is_superuser, login_url='home')
 def update_book(request, book_id):
-    """ Apenas admin deven usar essa página """
+    """ página de actualização de livros """
 
     book = Books.objects.get(pk=book_id)
 
@@ -241,7 +265,8 @@ def update_book(request, book_id):
 
 @user_passes_test(_user_is_superuser, login_url='home')
 def delete_book(request, book_id):
-    """ Apenas admin deven usar essa página """
+    """ Página para remoção de livros """
+
     book = Books.objects.get(pk=book_id)
 
     if request.method == 'POST':
@@ -254,13 +279,7 @@ def delete_book(request, book_id):
     return render(request, 'books/delete_book_form.html', {'book': book, 'title': title})
 
 
-@login_required
-def download_book(request, book_id):
-    book = Books.objects.get(id=book_id)
-
-    return redirect(book.file.url)
-
-
+# Authors
 @user_passes_test(_user_is_superuser, login_url='home')
 def register_author(request):
     """ Apenas admin devem usar essa página """

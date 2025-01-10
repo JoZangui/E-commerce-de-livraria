@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from django.http import FileResponse
+from django.http import FileResponse, Http404
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
 
@@ -28,38 +28,8 @@ def order_conclusion(request):
     return render(request, 'payment/order_conclusion.html')
 
 @login_required
-def orders(request, pk):
-    if request.user.is_authenticated:
-        # Get the order
-        order = get_object_or_404(Order, id=pk)
-        shipping_address = json.loads(order.shipping_address)
-        # Get the order items
-        items = OrderItem.objects.filter(order=pk)
-
-        if request.POST:
-            status = request.POST['shipping_status']
-            # check if true or false
-            if status == 'true':
-                # Get the order
-                order = Order.objects.filter(id=pk)
-                # Update the status
-                now = timezone.now()
-                order.update(shipped=True, date_shipped=now)
-            else:
-                # Get the order
-                order = Order.objects.filter(id=pk)
-                # Update the status
-                order.update(shipped=False)
-            messages.success(request, "Shipping Status Updated")
-            return redirect('books')
-        
-        return render(request, 'payment/orders.html', {'order': order, 'items': items, 'shipping_address': shipping_address})
-    else:
-        messages.warning(request, "Access Denied")
-        return redirect('books')
-
-@login_required
 def not_shipped_dash(request):
+    """ Página com uma lista dos pedidos não entregues """
     if request.user.is_superuser:
         orders = Order.objects.filter(shipped=False).order_by('-date_ordered')
 
@@ -75,6 +45,7 @@ def not_shipped_dash(request):
 
 @login_required
 def not_shipped_to_shipped(request, order_id):
+    """ Página para definir um pedido não entregue como entregue """
     if request.user.is_superuser:
         order = Order.objects.filter(id=order_id).first()
 
@@ -88,7 +59,12 @@ def not_shipped_to_shipped(request, order_id):
 
             messages.success(request, f"Pedido nº {order.first().id}, marcado como entregue com sucesso")
             return redirect('not-shipped-dash')
-        return render(request, 'payment/not_shipped_to_shipped.html', {'order': order})
+        if order.shipped:
+            # se o pedido em causa já tiver sido entregue ele levanta uma Http404
+            messages.warning(request, "Este artigo não existe ou já foi entregue")
+            raise Http404
+        else:
+            return render(request, 'payment/not_shipped_to_shipped.html', {'order': order})
     else:
         messages.warning(request, "Access Denied")
         return redirect('books')
@@ -96,6 +72,7 @@ def not_shipped_to_shipped(request, order_id):
 
 @login_required
 def shipped_dash(request):
+    """ Lista de pedidos entregues """
     if request.user.is_superuser:
         orders = Order.objects.filter(shipped=True).order_by('-date_shipped')
 
@@ -110,6 +87,12 @@ def shipped_dash(request):
         return redirect('books')
 
 def process_order(request):
+    """
+    Processa o pedido do cliente. desde validação de formulários até a criação de faturas
+    Se tudo estiver conforme ele termina enviando um email para o cliente...
+    ...com as informações necessárias sobre o compra
+    """
+    
     if request.POST:
         # get the cart
         cart = Cart(request)
@@ -269,6 +252,8 @@ def process_order(request):
         return redirect('home')
 
 def billing_info(request):
+    """ Página com o formulário de método de pagamento """
+    
     if request.POST:
         # Get the cart
         cart = Cart(request)
@@ -307,6 +292,8 @@ def billing_info(request):
         return redirect('home')
 
 def checkout(request):
+    """ Inicio do processo de compra """
+    
     # Get the cart
     cart = Cart(request)
     cart_books = cart.get_books
@@ -334,13 +321,11 @@ def checkout(request):
             'totals': totals,
             'shipping_form': shipping_form
         })
-    
-def payment_success(request):
-    return render(request, 'payment/payment_success.html')
 
 def ordered_books(request, pk):
     """ 
-    Página para download dos livros que o cliente comprou
+    Página com os livros que o cliente comprou
+    Está pagina é acessada pelo link enviado ao email do cliente apos o fim de uma compra
     """
     order = Order.objects.get(id=pk)
     order_items = order.orderitem_set.all()
@@ -348,6 +333,7 @@ def ordered_books(request, pk):
     return render(request, 'payment/ordered_books.html', {'order_items': order_items})
 
 def download_book(request, pk):
+    """ View para download do livro """
     book = get_object_or_404(Books, pk=pk)
     book_path = book.file.path
     response = FileResponse(open(book_path, 'rb'))

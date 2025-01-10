@@ -37,22 +37,18 @@
                 {% endif %}
             </ul>
         </nav>
+        <!-- livros -->
         <div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 d-flex justify-content-center justify-content-md-start mx-auto p-3 rounded bg-light">
             {% for book in page_obj %}
                 <div class="col-auto d-flex justify-content-center py-3 rounded">
                     <div class="book overflow-hidden">
                         <div class="book-image overflow-hidden rounded">
-                            {% if book.is_sale %}
-                                <div class="sale px-2 text-center fs-4 fw-bold shadow-sm">
-                                    {{book.discount_percentage|floatformat:"0"}}%
-                                </div>
-                            {% endif %}
                             <img src="{{book.cover.url}}" alt="book-image-cover">
                         </div>
                         <div class="title-author text-center">
                             <h5 class="fw-bold" title="{{book.title}}">{{book.title|truncatechars:16}}</h5>
                             <h6><a class="text-dark" href="">{{book.author.name|truncatechars:16}}</a></h6>
-                            <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary w-100">Detalhes</a>
+                            <a href="{% url 'user-books-details' book.id %}" class="btn btn-sm btn-outline-primary w-100">Detalhe</a>
                         </div>
                     </div>
                 </div>

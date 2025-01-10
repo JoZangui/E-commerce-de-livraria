@@ -24,13 +24,13 @@
                                 <img src="{{book.cover.url}}" alt="book-cover">
                             </div>
                             <!-- titulo e autor -->
-                            <div class="text">
+                            <div class="text text-center">
                                 <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
                                 <a href="" class="author text-dark">
                                     <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
                                 </a>
                                 <!-- botão -->
-                                <a href="{% url 'book-detail' book.id %}" class="btn btn-outline-primary mt-3">
+                                <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary mt-3 w-100">
                                     Detalhes
                                 </a>
                             </div>
@@ -57,12 +57,12 @@
                             <div class="image-container rounded">
                                 <img src="{{book.cover.url}}" alt="book-cover">
                             </div>
-                            <div class="text">
+                            <div class="text text-center">
                                 <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
                                 <a href="" class="author text-dark">
                                     <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
                                 </a>
-                                <a href="{% url 'book-detail' book.id %}" class="btn btn-outline-primary mt-3">
+                                <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary mt-3 w-100">
                                     Detalhes
                                 </a>
                             </div>
