@@ -159,7 +159,7 @@
                         <h5 class="recommendation-title card-title" title="{{list.list_name}}">{{list.list_name}}</h5>
                         <p class="recommendation-description card-text" title="{{list.list_description}}">{{list.list_description|truncatechars:142}}</p>
                         <p class="card-text"><small class="text-body-secondary">Um total de: {{list.books.all|length}}</small></p>
-                        <a href="{% url 'books-from-lists' list.id %}" class="btn btn-outline-primary">Ver lista</a>
+                        <a href="{% url 'books-from-lists' list.id %}" class="btn btn-outline-primary w-100">Ver lista</a>
                     </div>
                 </div>
             {% endfor %}

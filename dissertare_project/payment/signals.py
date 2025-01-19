@@ -37,7 +37,7 @@ def create_invoice_file(sender, instance:Invoices, created, **kwargs):
         shipping_address = json.loads(instance.order.shipping_address)
         
         cliente_info = {
-            'Full_name': instance.order.full_name,
+            'full_name': instance.order.full_name,
             'email': instance.order.email,
             'shipping_address': f"Endereço 1: {shipping_address['shipping_address1']} / Endereço 2: {shipping_address['shipping_address2']}",
             'city': shipping_address['shipping_city'],
