@@ -52,22 +52,27 @@ def not_shipped_to_shipped(request, order_id):
 
         if request.POST:
             # grab Date and time
+            # Obtem o tempoe data
             now = timezone.now()
             # grab the order
+            # Obtem Order
             order = Order.objects.filter(id=order_id)
             # update order
+            # Actualiza Order
             order.update(shipped=True, date_shipped=now)
 
             messages.success(request, f"Pedido nº {order.first().id}, marcado como entregue com sucesso")
             return redirect('not-shipped-dash')
+
         if order.shipped:
+            # If the order has already been delivered, it raises an Http404
             # se o pedido em causa já tiver sido entregue ele levanta uma Http404
             messages.warning(request, "Este artigo não existe ou já foi entregue")
             raise Http404
         else:
             return render(request, 'payment/not_shipped_to_shipped.html', {'order': order})
     else:
-        messages.warning(request, "Access Denied")
+        messages.warning(request, "Acesso negado")
         return redirect('books')
 
 
