@@ -1,7 +1,7 @@
 # E-commerce de livraria
  * [Books](#books-app)
    * [views](#views-de-books)
-   * [models]()
+   * [models](#models-de-books)
    * [forms]()
    * [signals]()
    * [announcement]()
@@ -52,3 +52,62 @@ A view **upload_book** retorna uma página com o formulário de upload de livro.
 A view **update_book** é semelhante a view **upload_book** mas como o nome sugere, ela serve para atualizar os dados de um determinado livro
 
 A view **delete_book** retorna uma página com um formulário de confirmação para a remoção de um determinado livro, quão a remoção é confirmada o usuário é redirecionado para a página com todos os livros
+
+### Models de books
+A função **val_cannot_be_negative** verifica se o valor inserido no campo é negativo, ele é usado em campos do tipo numérico como por exemplo **_price_** e **_sale\_price_** como valor para o parâmetro **_validators_**
+
+A função **books_pdf_file_path** configura o diretório dos arquivos de PDF dos livros quando um novo modelo **Books** for salvo. Ele é usado no campo **_file_** de **Books** como valor do parâmetro **_upload\_to_**
+
+A função **books_image_file_path** configura o diretório dos arquivos de imagem dos livros quando um novo modelo **Books** for salvo. Ele é usado no campo **_cover_** de **Books** como valor do parâmetro **_upload\_to_**
+
+O model **Books** armazena as informações do livro e ele contém os seguintes campos:
+
+ * **_author_** um campo ForeignKey que faz refêrencia ao modelo **_Auhtor_** de **books.models**.
+ 
+ * **_file_** campo do tipo FileField que contém uma refêrencia ao arquivo PDF do livro.
+
+ * **_title_** campo do tipo CharField que armazena o título do livro.
+
+ * **_description_** campo do tipo TextField que armazena a descrição (sinopse) do livro.
+ 
+ * **_comment_** campo do tipo TextField que armazena a descrição do administrador da página sobre o livro.
+ 
+ * **_cover_** campo do tipo ImageField que contém uma refêrencia ao arquivo de imagem do livro.
+ 
+ * **_date\_posted_** campo do tipo DateTimeField que contém a data e hora de upload do livro.
+ 
+ * **_uploaded\_by_** campo do tipo ForeignKey que faz refêrencia ao modelo **User** do Django. Este campo é responsável por armazenar os dados do responsável pelo upload do livro.
+ 
+ * **_category_** campo do tipo ManyToManyField que faz refêrencia ao modelo **Category**. Este campo é responsável por armazenar as categorias a qual o livro pertence.
+
+ * **_price_** campo do tipo DecimalField armazena o preço do livro.
+
+ * **_is\_sale_** campo do tipo BooleanField armazena o estado actual do livro, se está em promoção ou não, (**True** para livro em promoção e **False** para livros que não estão em promoção).
+
+ * **_sale\_price_** campo do tipo DecimalField armazena o preço de promoção do livro.
+
+Nós subscrevemos o método **_save_** deste **Model** para alterar o tamanho da imagem da capa do livro quando este for salvo na base de dados.
+
+O model **BookLists** armazena as informações das listas de livros criadas pelo administrador e ele contém os seguintes campos:
+
+  * **_list\_name_** campo do tipo CharField que armazena o nome da lista.
+
+  * **_books_** campo do tipo ManyToManyField que faz refêrencia ao **Books** de **_books.models_**.
+
+  * **_list\_description_** campo do tipo TextField armazena a descrição da lista.
+
+  * **_update\_date_** campo do tipo DateTimeField armazena a data e a hora da ultima actualização da lista, seja a adição de algum livro ou actualização dos dados da mesma lista como o nome e a descrição.
+
+O model **Category** armazena as informações de categorias de livros e ele contém o seguinte campos:
+
+  * **_name_** campo do tipo CharField que armazena o nome da categoria.
+
+O model **Announcement** armazena as informações de anúncios e novidades e ele contém o seguinte campos:
+
+  * **_title_** campo do tipo CharField que armazena o título do anúncio.
+
+  * **_description_** campo do tipo TextField que armazena a descrição do anúncio.
+
+  * **_image_** campo do tipo ImageField que contém uma refêrencia ao arquivo de imagem do anúncio.
+  
+  * **_date\_posted_** campo do tipo DateTimeField que armazena a data e hora da postagem do anúncio.

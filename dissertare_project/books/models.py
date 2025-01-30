@@ -23,7 +23,6 @@ def val_cannot_be_negative(val):
 def books_pdf_file_path(instance, filename):
     """
     configura o diretório dos arquivos livros (PDF)
-    para um directório com o nome do usuário
     """
     books_pdf_path = os.path.join('books', 'pdfs')
     return os.path.join(books_pdf_path, filename)
@@ -32,7 +31,6 @@ def books_pdf_file_path(instance, filename):
 def books_image_file_path(instance, filename):
     """
     configura o diretório das capas dos livros (img)
-    para um directório com o nome do usuário
     """
     books_image_path = os.path.join('books', 'images')
     return os.path.join(books_image_path, filename)
