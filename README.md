@@ -1,30 +1,26 @@
 # E-commerce de livraria
- * [Books](#books-app)
-   * [views](#views-de-books)
-   * [models](#models-de-books)
-   * [forms]()
-   * [signals]()
-   * [announcement]()
-   * [context_processors]()
-   * [pdf_file_validator]()
-
- * [Users]()
-   * [views]()
-   * [models]()
-   * [forms]()
-   * [signal]()
-   * [tokens]()
- * [Payment]()
-   * [views]()
-   * [models]()
-   * [forms]()
-   * [signal]()
-   * [create_invoices]()
- * [Cart]()
-   * [views]()
-   * [models]()
-   * [cart]()
-   * [context_processors]()
+* [Books](#books-app)
+  * [views](#views-de-books)
+  * [models](#models-de-books)
+  * [signals](#signals-de-books)
+  * [announcement](#announcement-de-books)
+  * [pdf_file_validator](#pdf_file_validator-de-books)
+* [Users]()
+  * [views]()
+  * [models]()
+  * [signal]()
+  * [tokens]()
+* [Payment]()
+  * [views]()
+  * [models]()
+  * [signal]()
+  * [create_invoices]()
+* [Cart]()
+  * [views]()
+  * [models]()
+  * [cart]()
+* [context_processors](#context_processors)
+* [Forms](#forms)
 
 
 ## Books app
@@ -111,3 +107,23 @@ O model **Announcement** armazena as informações de anúncios e novidades e el
   * **_image_** campo do tipo ImageField que contém uma refêrencia ao arquivo de imagem do anúncio.
   
   * **_date\_posted_** campo do tipo DateTimeField que armazena a data e hora da postagem do anúncio.
+
+### Signals de Books
+O Signal **delete_book_files_signal** elimina do sistema de ficheiros o arquivo, seja este PDF ou imagem, do livro em questão, quando o mesmo for removido da base de dados.
+
+O signal **delete_old_book_image_file_signal** elimina o arquivo de imagem quando carregarmos uma nova imagem para um livro que já se encontra na base de dados.
+
+O signal **delete_old_book_pdf_file_signal** elimina o arquivo PDF quando carregarmos um novo arquivo PDF para um livro que já se encontra na base de dados.
+
+### Announcement de Books
+**Announcement** é usado pelo **_context\_processors_** de books para disponibilizar anúncios e novidades de página, sem que este tenha que recorrer a **views**.
+
+### pdf_file_validator de Books
+A função **pdf_format_validator** verifica se o ficheiro carregado pelo formulário é um PDF, se não, ela levanta um ValidationError. ele é usado em **_validators_** de models.
+
+### context_processors
+Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
+O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**. Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um.
+
+### Forms
+No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.

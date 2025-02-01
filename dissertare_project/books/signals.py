@@ -43,7 +43,7 @@ def delete_old_book_image_file_signal(sender, instance:Books, **kwargs):
 @receiver(pre_save, sender=Books)
 def delete_old_book_pdf_file_signal(sender, instance:Books, **kwargs):
     """
-    Exclui o arquivo de imagem do livro ao adicionar uma nova imagem
+    Exclui o arquivo PDF do livro ao adicionar um novo PDF
     """
     # Verifica se o livro já existe na base de dados
     if (Books.objects.filter(id=instance.id)):
@@ -53,7 +53,7 @@ def delete_old_book_pdf_file_signal(sender, instance:Books, **kwargs):
 
         # verifica se o arquivo ou diretório existe
         if os.path.exists(old_book_pdf.path):
-            # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
+            # elimina o antigo arquivo PDF caso o usuário tenha carregado um novo
             if new_book_pdf != old_book_pdf:
                 os.unlink(old_book_pdf.path)
 
