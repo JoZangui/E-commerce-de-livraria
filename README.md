@@ -5,8 +5,8 @@
   * [signals](#signals-de-books)
   * [announcement](#announcement-de-books)
   * [pdf_file_validator](#pdf_file_validator-de-books)
-* [Users]()
-  * [views]()
+* [Users](#users-app)
+  * [views](#views-de-users)
   * [models]()
   * [signal]()
   * [tokens]()
@@ -127,3 +127,86 @@ O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.conte
 
 ### Forms
 No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
+
+
+## Users app
+
+Na app **Users** encontramos tudo relacionado ao usuário seja este **_super\_user_** ou um usuário comum, desde modelos, formulários de validação até views.
+
+### Views de Users
+A view **register** é responsável pela página de registo de usuários. Em caso de sucesso ela envia um email para o usuário com um link de confirmação e redireciona o usuário para uma página com a mensagem **_"Por favor confirme o seu endereço de email para completar o registro"_**.
+
+A view **activate** é uma view de ativação de conta, ela é acessada pelo link enviado pela view **register**
+```python
+  def register(request):
+    """ view para registro de usuário """
+    ...
+    """ Mensagem de confirmação de e-mail """
+    # pega o endereço actual do site
+    current_site = get_current_site(request)
+    # assunto do email que será enviado
+    mail_subject = 'Activate your blog account.'
+    # renderiza um template html para a forma de string
+    message = render_to_string(
+        'users/email_template.html',
+        {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user)
+        }
+    )
+    # destinatário do email
+    to_email = form.cleaned_data.get('email')
+    # objecto responsável pelo envio do email
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    # envio do email
+    email.send(fail_silently=False)
+```
+
+ela verifica o Token de ativação e o usuário,
+```python
+  def activate(request, uidb64, token):
+    """
+    View de activação de conta
+    
+    VIEW ACESSADA COM O LINK DE ACTIVAÇAO DE CONTA
+    QUE FOI ENVIADA PARA O EMAIL DO NOVO USUÁRIO
+    """
+
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        # se o user for diferente de 'None'
+        # e as informções do token geradas estiverem de acordo 
+        # ele define a propriedade de usuário activado como sendo 'True'
+        user.is_active = True
+        # e depois salva essa informação do usuário
+        user.save()
+        # faz o login do novo usuário
+        login(request, user)
+        messages.success(request, 'Registro feito com sucesso')
+        # Redireciona o usuário para a página do formulário de entrega
+        return redirect('user-shipping-address')
+```
+
+em caso de sucesso ele emite a seguinte mensagem de sucesso **_"Registro feito com sucesso"_** e redireciona o usuário para a página de cadastro dos dados de entrega, em caso de insucesso o usuário recebe a seguinte mensagem **_"Link de activação inválido!"_**. 
+```python
+  def activate(request, uidb64, token):
+    """
+    View de activação de conta
+    
+    VIEW ACESSADA COM O LINK DE ACTIVAÇAO DE CONTA
+    QUE FOI ENVIADA PARA O EMAIL DO NOVO USUÁRIO
+    """
+    ...
+    else:
+          # Activation link is invalid
+          return HttpResponse('Link de activação inválido!')
+```
+
+A view **login_user** tal como diz o nome é responsável pelo login do usuário
