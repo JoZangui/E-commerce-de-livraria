@@ -30,6 +30,19 @@ Na app **Books** encontramos tudo relacionado ao livro, desde modelos, formulár
 ### Views de books
 
 Logo no início encontraremos a função **_user_is_superuser** que é usado pelo decorador *__@user_passes_test__* para verificar se o usuário que está tentando aceder a view em questão é um **super_user**. Esta função recebe como argumento o **user** o qual é usado para verificar se o usuário é ou não um **super_user**, a função retorna *__True__* se o usuário for um **super_user** e *__False__* se não for. Se o usuário não for um **super_user** então *__@user_passes_test__* retorna o usuário para a página home.
+```python
+def _user_is_superuser(user):
+    """
+    retorna True se o usuário
+    é um super usuário, se não, retorna False
+    """
+    return user.is_superuser
+```
+```python
+@user_passes_test(_user_is_superuser, login_url='home')
+def upload_book(request):
+  ...
+```
 
 A view **home** retorna uma página com alguns destaques como: livros em promoção (*__books_on_sale__*), as novidades (*__recent_books__*), a escolha do editor (*__editor_choice__*) e por fim algumas listas de recomendações de leitura (*__book_lists__*).
 
@@ -121,14 +134,6 @@ O signal **delete_old_book_pdf_file_signal** elimina o arquivo PDF quando carreg
 ### pdf_file_validator de Books
 A função **pdf_format_validator** verifica se o ficheiro carregado pelo formulário é um PDF, se não, ela levanta um ValidationError. ele é usado em **_validators_** de models.
 
-### context_processors
-Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
-O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**. Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um.
-
-### Forms
-No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
-
-
 ## Users app
 
 Na app **Users** encontramos tudo relacionado ao usuário seja este **_super\_user_** ou um usuário comum, desde modelos, formulários de validação até views.
@@ -194,7 +199,7 @@ ela verifica o Token de ativação e o usuário,
         return redirect('user-shipping-address')
 ```
 
-em caso de sucesso ele emite a seguinte mensagem de sucesso **_"Registro feito com sucesso"_** e redireciona o usuário para a página de cadastro dos dados de entrega, em caso de insucesso o usuário recebe a seguinte mensagem **_"Link de activação inválido!"_**. 
+em caso de sucesso a view emite a seguinte mensagem de sucesso **_"Registro feito com sucesso"_** e redireciona o usuário para a página de cadastro dos dados de entrega como vemos no exemplo a cima, e em caso de insucesso o usuário recebe a seguinte mensagem **_"Link de activação inválido!"_**. 
 ```python
   def activate(request, uidb64, token):
     """
@@ -209,4 +214,35 @@ em caso de sucesso ele emite a seguinte mensagem de sucesso **_"Registro feito c
           return HttpResponse('Link de activação inválido!')
 ```
 
-A view **login_user** tal como diz o nome é responsável pelo login do usuário
+A view **login_user** tal como diz o nome é responsável pelo login do usuário, no processo de login ela verifica o carrinho salvo do usuário na base de dados e carrega os seus itens, caso o usuário tenha adicionou algum item ao carrinho enquanto não estava logado, ao fazer o login a view adiciona esse(s) item(ns) ao carrinho do usuário logado.
+
+```python
+def login_user(request):
+  ...
+  if user is not None:
+    login(request, user)
+
+    current_user = Profile.objects.get(user__id=user.id)
+    # Get their saved cart from database
+    saved_cart = current_user.user_cart
+    # Convert database string to python dictionary
+    if saved_cart:
+        # Convert to dictionary using JSON
+        converted_cart = json.loads(saved_cart)
+        # Add the loaded cart dictionary to our session
+        # Get the cart
+        cart = Cart(request)
+        # Loop thru the cart and add the items from the database
+        for key, value in converted_cart.items():
+            cart.add(book=key, quantity=value)
+    messages.success(request, 'You Have Been Logged In!')
+    return redirect('home')
+```
+
+
+### context_processors
+Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
+O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**. Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um.
+
+### Forms
+No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
