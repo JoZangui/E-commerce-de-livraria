@@ -239,10 +239,24 @@ def login_user(request):
     return redirect('home')
 ```
 
+A view **user_shipping_address** retorna uma página com o formulário de cadastro dos dados de entrega do usuário, ela também é responsável pela validação dos dados, em caso de success ela redireciona o usuário para a página home com a mensagem **_"Registro feito com sucesso"_**.
 
-### context_processors
+A view **update_user_shipping_address** é semelhante a view **user_shipping_address** mas para actualização dos dados de entrega.
+
+A view **user_books** retorna uma página com os livros comprados pelo usuário.
+
+A view **user_books_details** retorna uma página com os detalhes de um livro comprado pelo usuário.
+
+A view **profile** tal como diz o nome, retorna a página de perfil do usuário.
+
+A view **staff_profile** retorna uma página de perfil de administração para os membros do staff.
+
+A view **upload_announcement** retorna uma página com o formulário de upload de anúncios e novidades.
+
+
+## context_processors
 Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
 O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**. Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um.
 
-### Forms
+## Forms
 No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
