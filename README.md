@@ -1,4 +1,9 @@
 # E-commerce de livraria
+
+<h4 align="center"> 
+    :construction:  Projeto em construção  :construction:
+</h4>
+
 * [Books](#books-app)
   * [views](#views-de-books)
   * [models](#models-de-books)
@@ -7,11 +12,11 @@
   * [pdf_file_validator](#pdf_file_validator-de-books)
 * [Users](#users-app)
   * [views](#views-de-users)
-  * [models]()
-  * [signal]()
-  * [tokens]()
-* [Payment]()
-  * [views]()
+  * [models](#models-de-users)
+  * [signal](#signals-de-users)
+  * [tokens](#tokengenerator)
+* [Payment](#payment-app)
+  * [views](#views-de-payment)
   * [models]()
   * [signal]()
   * [create_invoices]()
@@ -253,6 +258,115 @@ A view **staff_profile** retorna uma página de perfil de administração para o
 
 A view **upload_announcement** retorna uma página com o formulário de upload de anúncios e novidades.
 
+### Models de Users
+A app users tem apenas um model que é o **Profile**, ele armazena informações do usuário como o nome e os dados de entrega.
+
+### Signals de Users
+A app user também só contem um signal que é o **create_profile** que é responsável por criar um perfil para usuário tão logo o usuário se cadastrar no sistema com sucesso.
+
+### TokenGenerator
+O **TokenGenerator** é responsavel por gerar um token para o link de ativação de conta.
+
+## Payment app
+A app **Payment** é responsável pelo controle tanto do método de pagamento com o de entrega, nela também encontramos a view responsável pelo download dos livros, e o gerador de faturas
+
+### Views de Payment
+
+A view **order_conclusion** retorna a página de conclusão do processo de pedido, ela retorna uma mensagem de secesso ao usuário.
+
+A view **not_shipped_dash** retorna uma página com a lista de pedidos não entregues, está página é só para administradores da página.
+
+A view **not_shipped_to_shipped** é uam view de transição do pedido de não entregue para entregue.
+
+A view **shipped_dash** retorna uma página com a lista de pedidos entregues.
+
+<mark>As views acima citadas só podem ser acessadas por administradores da página, com excepção da view **order_conclusion**.</mark>
+
+Apos de seleção dos itens, preenchimento do formulário de endereço de entrega e da escolha do método de pagamento, a view **process_order** processa o pedido do cliente com base nas informações anteriomente dadas pelo cliente.
+
+ela salva as informações do pedido na base de dados criando um novo objecto **_Order_** e salvando os seus dados na base de dados.
+
+```python
+  ...
+  # Create Order
+  # Cria um pedido
+  create_oder = Order(
+      user=user,
+      full_name=full_name,
+      email=shipping_email,
+      shipping_address=shipping_address,
+      amount_paid=amount_paid
+  )
+  create_oder.save()
+```
+
+Ela também cria uma fatura aberta e envia para o email do cliente
+
+```python
+  ...
+  # create invoice
+  # Cria uma fatura
+  invoice_number = f'E_Books_{order_id}'
+  invoice = Invoices(order_id=order_id, invoice_number=invoice_number, payment_mode=payment_mode)
+  invoice.save()
+
+  """
+  EN: Send an email to the customer with the invoice and book
+  PT: Enviar um email para o cliente com a fatura e o livro
+  """
+  # pega o endereço actual do site
+  current_site = get_current_site(request)
+  # Email subject
+  # Assunto do email
+  mail_subject = 'Obrigado por comprar na livraria Dissertare'
+  # renders an html template to string form
+  # renderiza um template html para a forma de string
+  message = render_to_string(
+      'payment/payment_email_template.html',
+      {
+          'domain': current_site.domain,
+          'order_id': order_id
+      }
+  )
+  to_email = shipping_email
+  email = EmailMessage(mail_subject, message, to=[to_email])
+  email.attach_file(invoice.invoice_file.path)
+  email.send(fail_silently=False)
+```
+
+no final a view elimina os itens do carrinho do cliente e redireciona o  cliente para a página de conclusão do pedido **order_conclusion**.
+
+```python
+  ...
+  # Delete our cart
+  # Exclui o nosso carrinho
+  for key in list(request.session.keys()):
+      if key == 'session_key':
+          # Delete the key
+          # Elimina a chave
+          del request.session[key]
+
+  """
+  EN: Delete Cart from Database (user_cart field)
+  PT: Elimina o carrinho da base de dados (campo user_cart)
+  """
+  current_user = Profile.objects.filter(user__id=request.user.id)
+  # Delete shopping cart in Database (user_cart field)
+  # Remove as informações do carrinho de compras da base de dados (campo user_cart)
+  current_user.update(user_cart="")
+
+
+  messages.success(request, "Pedido concluido com sucesso!")
+  return redirect('order-conclusion')
+```
+
+A view **billing_info** retorna uma página com o fomulário método de pagamento. Ao submeter o formulário ela manda as informações para view **process_order** para a conclusão do pedido.
+
+A view **checkout** é por onde começamos o processo do pedido, ela é acessada pela link na página do carrinho. está view retorna uma página com o formulário dos dados do local de entrega.
+
+A view **ordered_books** retorna uma página com os livros digitais que o usuário comprou, essa página é acessada pelo link enviado ao cliente após o termino da compra.
+
+A view **download_book** é responsável pelo download do livro
 
 ## context_processors
 Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.

@@ -238,7 +238,7 @@ def process_order(request):
         current_user.update(user_cart="")
 
 
-        messages.success(request, "Order Placed!")
+        messages.success(request, "Pedido concluido com sucesso!")
         return redirect('order-conclusion')
     else:
         # Not looged in
