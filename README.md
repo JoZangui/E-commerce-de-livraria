@@ -17,9 +17,9 @@
   * [tokens](#tokengenerator)
 * [Payment](#payment-app)
   * [views](#views-de-payment)
-  * [models]()
-  * [signal]()
-  * [create_invoices]()
+  * [models](#models-de-payment)
+  * [signal](#signal-de-payment)
+  * [create_invoices](#createinvoice)
 * [Cart]()
   * [views]()
   * [models]()
@@ -367,6 +367,28 @@ A view **checkout** é por onde começamos o processo do pedido, ela é acessada
 A view **ordered_books** retorna uma página com os livros digitais que o usuário comprou, essa página é acessada pelo link enviado ao cliente após o termino da compra.
 
 A view **download_book** é responsável pelo download do livro
+
+### Models de Payment
+
+A model **Order** contem os dados do pedido do cliente, ele apenas armazena dados para clientes cadastrados no sistema, ela contem campos como id do usuário, nome completo, email, endereço de entrega e outros.
+
+A model **OrderItem** contem os dados dos itens de cada pedido como o livro, a quantidade e o preço.
+
+A model **ShippingAddress** contem as informações do endereço de entrega, e o nome do cliente.
+
+A model **Invoices** armazena as informações relacionadas a fatura, como os pedidos, número da fatura, método de pagamento e o caminho do arquivo PDF.
+
+### Signal de Payment
+O signal **create_shipping** cria uma instância de **ShippingAddress** para o novo usuário quando esse usuário for registado com sucesso na base de dados. Este signal é chamado após salvar um objecto **User**.
+
+O signal **set_shipped_date_on_update** configura a data de entrega do pedido caso o estado de **_shipped_** tenha alterado para **_True_**, este signal é chamado antes de salvar um objecto **Order**.
+
+O signal **create_invoice_file** cria uma arquivo PDF para faturas com os dados do objecto **Invoices**. Este signal é chamado após o objecto **Invoice** ser salvo.
+
+O signal **delete_invoice_files** elimina o arquivo PDF que estava associado a um registo de **Invoice** que foi eliminado da base de dados. Ele é chamado quando **Invoice** for removido da base dadas.
+
+### createInvoice
+**createInvoice** usa a API InvoiceGenerator para gerar uma fatura, ela é usada pelo signal **create_invoice_file**.
 
 ## context_processors
 Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
