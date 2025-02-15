@@ -3,6 +3,7 @@
 /dissertare_env
 /old_files
 *.jpg
+*.jpeg
 *.pdf
 *.png
 *.ttf
