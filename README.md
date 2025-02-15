@@ -268,7 +268,7 @@ A app user também só contem um signal que é o **create_profile** que é respo
 O **TokenGenerator** é responsavel por gerar um token para o link de ativação de conta.
 
 ## Payment app
-A app **Payment** é responsável pelo controle tanto do método de pagamento com o de entrega, nela também encontramos a view responsável pelo download dos livros, e o gerador de faturas
+A app **Payment** é responsável pelo controle tanto do método de pagamento como o de entrega, nela também encontramos a view responsável pelo download dos livros, e o gerador de faturas
 
 ### Views de Payment
 
