@@ -20,10 +20,9 @@
   * [models](#models-de-payment)
   * [signal](#signal-de-payment)
   * [create_invoices](#createinvoice)
-* [Cart]()
-  * [views]()
-  * [models]()
-  * [cart]()
+* [Cart](#cart-app)
+  * [views](#views-de-cart)
+  * [cart](#objecto-cart)
 * [context_processors](#context_processors)
 * [Forms](#forms)
 
@@ -390,9 +389,39 @@ O signal **delete_invoice_files** elimina o arquivo PDF que estava associado a u
 ### createInvoice
 **createInvoice** usa a API InvoiceGenerator para gerar uma fatura, ela é usada pelo signal **create_invoice_file**.
 
+## Cart app
+A app **cart** tal como diz o nome é responsável pelo carrinho do usuário esteja esse logado ou não.
+
+### Views de Cart
+A view **Cart_summary** retorna uma página com os itens do carrinho do usuário.
+
+A view **cart_add** é responsável por adicionar itens ao carrinho, ela retorna a quantidade de itens adicionados e uma mensagem de sucesso.
+
+A view **cart_delete** remove os itens do carrinho, ela retorna o id do item removido, e uma mensagem de aviso.
+
+A view **cart_update** actualiza a quantidade de um determinado item no carrinho. ela retorna a quantidade e uma mensagem de sucesso.
+
+### Objecto Cart
+O objecto **cart** é responsável por criar e manipular o carrinho, ela possui métodos para obter, adiciona, remover, actualizar e até verificar a quantidade de itens no carrinho. Quão logo é ivocada, ela cria uma session no navegador do usuário, de modo que o cliente não perca acesso aos itens do seu carrinho ao fechar o navegador, mesmo que ele não tenha estado logado. ele é ivocada por meio do seu **_context\_processors_** que retorna ele como um contexto para todos os templates da página. O capítulo seguinte explica um pouco mais sobre _[context_processors](#context_processors)_.
+
 ## context_processors
-Os **context_processors** são usados para disponibilizar conteudos em todas a páginas do site sem a utilização de alguma view em específico.
-O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**. Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um.
+Os **context_processors** são usados para disponibilizar conteudos em todas as páginas do site sem a utilização de alguma view em específico.
+O seu conteudo é disponibilizado como contexto de templates em **_OPTIONS.context\_processors_** de **_TEMPLATES_** que se encontra em **_settings.py_**.
+```python
+TEMPLATES = [
+    {
+      ...
+      'OPTIONS': {
+          'context_processors': [
+            ...
+            'cart.context_processors.cart',
+            'books.context_processors.announcement',
+          ],
+      },
+    },
+]
+```
+Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um. Para mais informações sobre **_context\_processors_** você pode [consultar a documentação do django](https://docs.djangoproject.com/en/5.1/ref/templates/api/#:~:text=processor%20adds%20a)
 
 ## Forms
 No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
