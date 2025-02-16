@@ -421,7 +421,7 @@ TEMPLATES = [
     },
 ]
 ```
-Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um. Para mais informações sobre **_context\_processors_** você pode [consultar a documentação do django](https://docs.djangoproject.com/en/5.1/ref/templates/api/#:~:text=processor%20adds%20a)
+Ele funciona de forma semelhante ao context das views mas no entanto disponibilizada para todos os templates do site e não apenas para um. Para mais informações sobre **_context\_processors_** você pode [consultar a documentação do django](https://docs.djangoproject.com/en/5.1/topics/templates/#context).
 
 ## Forms
 No geral os forms têm a mesma caracteristica, eles fazem referência a um **_model_** com os seus respectivos campos. Usamos o dicionário **_widgets_** para adicionar alguns atributos como classes Bootstrap, placeholder, maxlength e muito mais, tudo isto em **_class Meta_**. **PaymentForm** é a única Exceção, ele não faz a referência a algum **_model_** diretamente.
