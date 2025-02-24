@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='authors',
             name='image',
-            field=models.ImageField(blank=True, default='author_default_img.jpg', upload_to=books.models.authors_image_file_path, verbose_name='Imagem do autor'),
+            field=models.ImageField(blank=True, default='author_default_img.jpg', verbose_name='Imagem do autor'),
         ),
     ]

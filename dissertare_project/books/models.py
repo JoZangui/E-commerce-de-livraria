@@ -36,41 +36,6 @@ def books_image_file_path(instance, filename):
     return os.path.join(books_image_path, filename)
 
 
-def authors_image_file_path(instance, filename):
-    """
-    configura o diretório das imagens dos autores dos livros
-    para um directório com o nome do usuário
-    """
-    authors_path = os.path.join('authors', 'images')
-    return os.path.join(authors_path, filename)
-
-
-class Authors(models.Model):
-
-    name = models.CharField(max_length=30, verbose_name='Nome do autor')
-    image = models.ImageField(
-        upload_to=authors_image_file_path,
-        verbose_name='Imagem do autor',
-        blank=True)
-    biography = models.TextField(max_length=400, verbose_name='Biografia do autor')
-    registration_date = models.DateTimeField(default=timezone.now, verbose_name='Registado em')
-
-    def __str__(self) -> str:
-        return f'ID: {self.id} - Nome: {self.name}'
-
-    def save(self, *args, **kwargs):
-        super().save()
-
-        img = Image.open(self.image.path)
-
-        if img.height > 940 or img.width > 640:
-            output_size = (940, 640)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
-
-    class Meta:
-        verbose_name_plural = 'Authors'
-
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
@@ -83,7 +48,7 @@ class Category(models.Model):
 
 class Books(models.Model):
 
-    author = models.ForeignKey(Authors, on_delete=models.CASCADE, verbose_name='Autor do livro')
+    author = models.CharField(max_length=50, verbose_name='Autor', default='unknow')
     file = models.FileField(
         upload_to=books_pdf_file_path,
         verbose_name='Arquivo',

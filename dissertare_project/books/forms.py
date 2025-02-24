@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Books, Authors, Announcement
+from .models import Books, Announcement
 
 
 class BookForm(ModelForm):
@@ -50,29 +50,6 @@ class BookForm(ModelForm):
             'is_sale': forms.CheckboxInput(attrs={'class': 'form-check-input is_sale'}),
 
             'sale_price': forms.NumberInput(attrs={'class': 'form-control sale_price', 'min': 0})
-        }
-
-
-class AuthorsForm(ModelForm):
-    class Meta:
-        model = Authors
-        fields = ['name', 'image', 'biography']
-
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder':'Nome do autor',
-                'maxlength': '50',
-                'autofocus': True}),
-            
-            'image': forms.FileInput(attrs={'class': 'form-control'}),
-
-            'biography': forms.Textarea(attrs={
-                'class': 'form-control not-resizable',
-                'cols':'30',
-                'rows': '10',
-                'placeholder': 'adicione uma biografia para o autor',
-                'maxlength': '400'})
         }
 
 

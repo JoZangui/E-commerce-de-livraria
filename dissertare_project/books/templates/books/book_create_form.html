@@ -34,21 +34,6 @@
                     <label class="form-label" for="{{book_form.comment.id_for_label}}">{{book_form.comment.label}}</label>
                     {{book_form.comment}}
                 </div>
-                
-                <div class="mb-3">
-                    {{book_form.author.errors}}
-                    <label class="form-label" for="{{book_form.author.id_for_label}}">{{book_form.author.label}}<span class="text-danger">*</span></label>
-                    <br>
-                    <div class="row d-flex justify-content-start align-items-center p-0 m-0">
-                        <div class="col-auto px-0">
-                            {{book_form.author}}
-                        </div>
-                        <div class="col-auto">
-                            <a href="{% url 'register-author' %}" class="btn btn-sm btn-outline-success">Adicionar novo autor</a>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="mb-3">
                     {{book_form.category.errors}}
                     <label class="form-label" for="{{book_form.category.id_for_label}}">{{book_form.category.label}}<span class="text-danger">*</span></label>

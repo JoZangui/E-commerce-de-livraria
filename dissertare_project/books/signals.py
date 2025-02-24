@@ -3,7 +3,7 @@ import os
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 
-from books.models import Books, Authors
+from books.models import Books
 from django.conf import settings
 
 # media path
@@ -56,31 +56,3 @@ def delete_old_book_pdf_file_signal(sender, instance:Books, **kwargs):
             # elimina o antigo arquivo PDF caso o usuário tenha carregado um novo
             if new_book_pdf != old_book_pdf:
                 os.unlink(old_book_pdf.path)
-
-
-@receiver(pre_save, sender=Authors)
-def delete_old_author_image_file_signal(sender, instance:Authors, **kwargs):
-    """
-    Exclui o arquivo de imagem do autor ao adicionar uma nova imagem
-    """
-    # verifica se o autor já existe na base de dados
-    if (Authors.objects.filter(id=instance.id)):
-        author = Authors.objects.get(id=instance.id)
-        new_author_image = instance.image
-        old_author_image = author.image
-
-        # verifica se o arquivo ou diretório existe
-        if os.path.exists(old_author_image.path):
-            # elimina a antiga imagem caso o usuário tenha carregado uma nova imagem
-            print(old_author_image.path)
-            if new_author_image != old_author_image:
-                os.unlink(old_author_image.path)
-
-
-@receiver(post_delete, sender=Authors)
-def delete_author_files_signal(sender, instance:Authors,**kwargs):
-    """
-    Exclui o arquivo associado ao autor e limpa todos os atributos no campo quando excluir um autor da base de dados.
-    """
-    instance.image.delete(save=False)
-

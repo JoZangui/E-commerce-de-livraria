@@ -51,7 +51,7 @@
                         </div>
                         <div class="title-author text-center">
                             <h5 class="fw-bold" title="{{book.title}}">{{book.title|truncatechars:16}}</h5>
-                            <h6><a class="text-dark" href="">{{book.author.name|truncatechars:16}}</a></h6>
+                            <h6><span class="text-dark">{{book.author|truncatechars:16}}</span></h6>
                             <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary w-100">Detalhes</a>
                         </div>
                     </div>

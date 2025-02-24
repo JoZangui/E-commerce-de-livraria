@@ -26,9 +26,9 @@
                             <!-- titulo e autor -->
                             <div class="text text-center">
                                 <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
-                                <a href="" class="author text-dark">
-                                    <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
-                                </a>
+                                <span class="author text-dark">
+                                    <h2 class="fs-6" title="{{book.author}}">{{book.author}}</h2>
+                                </span>
                                 <!-- botão -->
                                 <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary mt-3 w-100">
                                     Detalhes
@@ -59,9 +59,9 @@
                             </div>
                             <div class="text text-center">
                                 <h1 class="fs-6 fw-bold" title="{{book.title}}">{{book.title}}</h1>
-                                <a href="" class="author text-dark">
-                                    <h2 class="fs-6" title="{{book.author.name}}">{{book.author.name}}</h2>
-                                </a>
+                                <span class="author text-dark">
+                                    <h2 class="fs-6" title="{{book.author}}">{{book.author}}</h2>
+                                </span>
                                 <a href="{% url 'book-detail' book.id %}" class="btn btn-sm btn-outline-primary mt-3 w-100">
                                     Detalhes
                                 </a>
@@ -122,7 +122,7 @@
                      <br>
                      <span>
                          <strong>Autor(a):</strong>
-                         {{editor_choice.author.name}}
+                         {{editor_choice.author}}
                      </span>
                      <br>
                      <br>
